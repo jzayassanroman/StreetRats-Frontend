@@ -1,0 +1,115 @@
+<!-- src/app/features/crear-cuenta/crear-cuenta.component.html -->
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">CREAR CUENTA</h1>
+    <form [formGroup]="usuarioForm" *ngIf="step === 1" (ngSubmit)="onSubmitUsuario()">
+      <!-- Campos del usuario -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          Username
+        </label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Username"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+          Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Password"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <button
+          type="submit"
+          [disabled]="usuarioForm.invalid"
+          class="bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+        >
+          CREAR USUARIO
+        </button>
+      </div>
+    </form>
+
+    <form [formGroup]="clienteForm" *ngIf="step === 2" (ngSubmit)="onSubmitCliente()">
+      <!-- Campos del cliente -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="nombre">
+          Nombre
+        </label>
+        <input
+          id="nombre"
+          type="text"
+          formControlName="nombre"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Nombre"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="apellido">
+          Apellido
+        </label>
+        <input
+          id="apellido"
+          type="text"
+          formControlName="apellido"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Apellido"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="gmail">
+          Gmail
+        </label>
+        <input
+          id="gmail"
+          type="email"
+          formControlName="gmail"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Gmail"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="telefono">
+          Teléfono
+        </label>
+        <input
+          id="telefono"
+          type="text"
+          formControlName="telefono"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Teléfono"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="direccion">
+          Dirección
+        </label>
+        <input
+          id="direccion"
+          type="text"
+          formControlName="direccion"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Dirección"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <button
+          type="submit"
+          [disabled]="clienteForm.invalid"
+          class="bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+        >
+          CREAR CLIENTE
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
