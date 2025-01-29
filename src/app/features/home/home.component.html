@@ -1,0 +1,35 @@
+<div class="flex flex-col items-center">
+  <!-- Menú de categorías -->
+  <div class="flex flex-row gap-36 text-center items-center justify-center mt-2 border-b-2 pb-1  w-full">
+    <p class="cursor-pointer hover:text-gray-700">SUDADERAS</p>
+    <p class="cursor-pointer hover:text-gray-700">CAMISETAS</p>
+    <p class="cursor-pointer hover:text-gray-700">PANTALONES</p>
+    <p class="cursor-pointer hover:text-gray-700">ZAPATOS</p>
+    <p class="cursor-pointer hover:text-gray-700">ACCESORIOS</p>
+    <p class="cursor-pointer hover:text-gray-700">CAMISAS</p>
+  </div>
+
+  <!-- Contenedor del carrusel -->
+  <div class="relative w-full  mx-auto overflow-hidden rounded-lg shadow-lg ">
+    <div class="relative w-full h-[680px] bg-gray-200 overflow-hidden">
+      <div class="flex transition-transform duration-700 ease-in-out"
+           [ngStyle]="{'transform': 'translateX(' + (-currentIndex * 100) + '%)', 'transition': smoothTransition ? 'transform 0.7s ease-in-out' : 'none'}">
+
+        <!-- Imagen duplicada al final -->
+        <img [src]="images[images.length - 1]" class="w-full h-[700px]  flex-shrink-0 object-fill" />
+
+        <!-- Imágenes originales -->
+        <img *ngFor="let image of images" [src]="image" class="w-full h-[700px] object-fill flex-shrink-0 " />
+
+        <!-- Imagen duplicada al inicio -->
+        <img [src]="images[0]" class="w-full h-[700px] object-fill flex-shrink-0" />
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+</div>
