@@ -23,7 +23,13 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "public",
+                "output": "/public"
               }
             ],
             "styles": [
@@ -33,6 +39,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -48,6 +60,12 @@
               "outputHashing": "all"
             },
             "development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.ts"
+                }
+              ],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -81,7 +99,13 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets",
+                "output": "/assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "public",
+                "output": "/public"
               }
             ],
             "styles": [
@@ -94,6 +118,43 @@
     }
   },
   "cli": {
-    "analytics": false
-  }
+    "analytics": false
+  },
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": "bdc7849d-bc7a-412e-8f94-145b22826098",
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": "01e3f68c-8621-4e2c-899a-b9ee8b905c14",
+  "analytics": "df551e9a-a50c-43cd-b8d5-c2e083d8ce8f",
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false,
+  "analytics": false
 }
