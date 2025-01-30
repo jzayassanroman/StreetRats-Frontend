@@ -28,9 +28,11 @@ export class CrearCuentaComponent {
     this.clienteForm = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
-      gmail: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]], // Ensure email validation
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -55,8 +57,13 @@ export class CrearCuentaComponent {
 
   onSubmitCliente(): void {
     if (this.clienteForm.valid && this.userId) {
-      const clienteData = { ...this.clienteForm.value, id_usuario: this.userId }; // Incluir el ID del usuario
-      console.log('Cliente data:', clienteData);
+      const clienteData = {
+        ...this.clienteForm.value,
+        id_usuario: this.userId
+      }; // Include user ID, username, and password
+
+      console.log('Cliente data:', clienteData); // Log the request payload
+
       this.clienteService.crearCliente(clienteData).subscribe({
         next: (response: any) => console.log('Cliente creado:', response),
         error: (err: HttpErrorResponse) => {

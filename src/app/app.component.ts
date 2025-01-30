@@ -13,7 +13,7 @@ import {LoginComponent} from './features/login/login.component';
     CrearCuentaComponent,
     RouterOutlet,
     HttpClientModule,
-    LoginComponent
+    // LoginComponent
   ],
   styleUrl: './app.component.css'
 })
