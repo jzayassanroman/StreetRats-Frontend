@@ -15,9 +15,31 @@
     </a>
     <a routerLink="#" class="mt-3 font-mono  text-1xl">INICIAR SESIÓN</a>
     <a routerLink="#" >
-      <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45"  class="bi bi-cart2" viewBox="0 0 16 16">
+      <svg  (click)="toggleCarrito()" xmlns="http://www.w3.org/2000/svg" width="45" height="45"  class="bi bi-cart2" viewBox="0 0 16 16">
         <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
       </svg>
     </a>
+    <!-- Fondo oscuro al abrir el carrito -->
+    <div *ngIf="carritoAbierto" class="fixed inset-0 bg-black bg-opacity-50 z-40" (click)="toggleCarrito()"></div>
+
+    <!-- Carrito Deslizante -->
+    <div [ngClass]="{'translate-x-0': carritoAbierto, 'translate-x-full': !carritoAbierto}"
+         class="fixed right-0 top-0 w-96 h-screen bg-white shadow-lg p-6 transition-transform duration-300 z-50 overflow-y-auto">
+
+      <!-- Botón Cerrar -->
+      <button (click)="toggleCarrito()" class="absolute top-4 right-4 text-xl fill-black">✖</button>
+
+      <!-- Contenido del Carrito -->
+      <h2 class="text-3xl font-bold mb-6">Carrito</h2>
+      <div class="flex flex-col items-center text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+        </svg>
+        <p class="mt-6 text-lg font-medium">El carrito está vacío</p>
+        <button class="mt-6 px-6 py-3 bg-gray-800 text-white rounded-lg">Empezar a comprar</button>
+      </div>
+    </div>
+
   </div>
 </div>
