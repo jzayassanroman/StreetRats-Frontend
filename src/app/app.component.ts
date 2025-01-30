@@ -4,6 +4,9 @@ import {CrearCuentaComponent} from './features/crear-cuenta/crear-cuenta.compone
 import {RouterOutlet} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import {LoginComponent} from './features/login/login.component';
+import {NavbarComponent} from './features/navbar/navbar.component';
+import {AboutUsComponent} from './features/about-us/about-us.component';
+import {FooterComponent} from './features/footer/footer.component';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +16,12 @@ import {LoginComponent} from './features/login/login.component';
     CrearCuentaComponent,
     RouterOutlet,
     HttpClientModule,
+    NavbarComponent,
+    FooterComponent
     // LoginComponent
   ],
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
+  
 })
 export class AppComponent {
   title = 'StreetRatsFront';
