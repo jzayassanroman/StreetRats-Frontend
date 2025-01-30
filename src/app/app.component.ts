@@ -7,6 +7,7 @@ import {LoginComponent} from './features/login/login.component';
 import {NavbarComponent} from './features/navbar/navbar.component';
 import {AboutUsComponent} from './features/about-us/about-us.component';
 import {FooterComponent} from './features/footer/footer.component';
+import {PaginaProductoComponent} from './features/pagina-producto/pagina-producto.component';
 
 @Component({
   selector: 'app-root',
@@ -17,11 +18,12 @@ import {FooterComponent} from './features/footer/footer.component';
     RouterOutlet,
     HttpClientModule,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    PaginaProductoComponent
     // LoginComponent
   ],
   styleUrl: './app.component.css',
-  
+
 })
 export class AppComponent {
   title = 'StreetRatsFront';
