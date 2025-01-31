@@ -36,5 +36,10 @@ export class ProductoServiceService {
   getTipos(): Observable<string[]> {
     return this.http.get<string[]>('http://localhost:8001/productos/tipos');
   }
+  // Método para eliminar un producto
+  eliminarProducto(id: number): Observable<void> {
+    const url = `http://localhost:8001/productos/eliminar/${id}`; // URL corregida
+    return this.http.delete<void>(url);
+  }
 
 }

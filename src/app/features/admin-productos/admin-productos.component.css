@@ -13,3 +13,13 @@
 .p-4 { padding: 1rem; }
 .max-w-7xl { max-width: 80rem; }
 .mx-auto { margin-left: auto; margin-right: auto; }
+.trash-icon {
+  cursor: pointer; /* Cambia el cursor a una mano */
+  color: #ff4444; /* Color rojo */
+  font-size: 1.2em; /* Tamaño del ícono */
+  transition: color 0.3s ease; /* Transición suave */
+}
+
+.trash-icon:hover {
+  color: #cc0000; /* Color rojo más oscuro al pasar el mouse */
+}

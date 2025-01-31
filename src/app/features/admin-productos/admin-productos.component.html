@@ -102,8 +102,7 @@
         <td class="p-2">{{ producto.id_talla.descripcion }}</td>
         <td class="p-2 flex gap-2">
           <button class="bg-yellow-500 text-white px-2 py-1 rounded">✎</button>
-          <button class="bg-red-500 text-white px-2 py-1 rounded">🗑</button>
-        </td>
+          <button class="bg-red-500 text-white px-2 py-1 rounded" (click)="eliminarProducto(producto.id)">🗑</button>        </td>
       </tr>
       </tbody>
     </table>

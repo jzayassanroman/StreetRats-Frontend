@@ -108,4 +108,23 @@ export class AdminProductosComponent implements OnInit {
     };
   }
 
+  eliminarProducto(id: number | undefined) {
+    if (id === undefined) {
+      console.error('El ID del producto es undefined');
+      return;
+    }
+
+    if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+      this.productoService.eliminarProducto(id).subscribe({
+        next: () => {
+          console.log('Producto eliminado exitosamente');
+          this.cargarProductos(); // Recargar la lista de productos después de eliminar
+        },
+        error: (error) => {
+          console.error('Error al eliminar el producto:', error);
+        }
+      });
+    }
+  }
+
 }
