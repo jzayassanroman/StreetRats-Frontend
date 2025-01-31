@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
-import { Navigation, Pagination } from 'swiper/modules';
 import {NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-home',
   imports: [
     NgStyle,
-    NgClass,
     NgFor,
-    NgIf,
     NgStyle
   ],
   templateUrl: './home.component.html',
