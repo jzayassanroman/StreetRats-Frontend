@@ -1,13 +1,18 @@
+
 import { Component, OnInit } from '@angular/core';
 import { Producto, ProductService } from '../../services/producto.service';
 import { CommonModule } from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+
 
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
   standalone: true,
-  imports: [CommonModule],
-  styleUrls: ['./productos.component.css']
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  styleUrls: ['./productos.component.css'],
+  providers: [ProductService]
 })
 export class ProductosComponent implements OnInit {
   productos: Producto[] = [];

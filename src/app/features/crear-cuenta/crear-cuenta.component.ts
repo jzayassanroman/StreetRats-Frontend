@@ -31,8 +31,6 @@ export class CrearCuentaComponent {
       email: ['', [Validators.required, Validators.email]], // Ensure email validation
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 

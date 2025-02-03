@@ -6,6 +6,7 @@ import { LoginComponent } from './features/login/login.component';
 import { NavbarComponent } from './features/navbar/navbar.component';
 import { AboutUsComponent } from './features/about-us/about-us.component';
 import { FooterComponent } from './features/footer/footer.component';
+import {ProductosComponent} from './features/productos/productos.component';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ import { FooterComponent } from './features/footer/footer.component';
     HttpClientModule,
     NavbarComponent,
     FooterComponent,
+    ProductosComponent,
     // LoginComponent
   ],
 })

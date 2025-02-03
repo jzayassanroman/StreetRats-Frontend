@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import {NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
 
 @Component({
