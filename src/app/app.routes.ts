@@ -6,6 +6,7 @@ import {LoginComponent} from './features/login/login.component';
 import {CrearCuentaComponent} from './features/crear-cuenta/crear-cuenta.component';
 import {ProductosComponent} from './features/productos/productos.component';
 import {VerificacionComponent} from './features/verificacion/verificacion.component';
+import {ProductoinComponent} from './features/productoin/productoin.component';
 
 
 
@@ -17,6 +18,8 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'listadoproducto', component: ProductosComponent},
   {path: 'verificar', component: VerificacionComponent},
+  { path: 'productoin/:id', component: ProductoinComponent }
+
 
 
 ];
