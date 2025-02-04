@@ -1,0 +1,85 @@
+<div class="max-w-xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+  <h2 class="text-xl font-bold mb-4">Entrega</h2>
+  <form [formGroup]="paymentForm" class="space-y-3">
+    <input formControlName="pais" class="w-full p-2 border rounded" placeholder="País" />
+    <div *ngIf="paymentForm.get('pais')?.invalid && paymentForm.get('pais')?.touched" class="text-red-500">
+      País es requerido.
+    </div>
+
+    <div class="flex space-x-2">
+      <input formControlName="nombre" class="w-1/2 p-2 border rounded" placeholder="Nombre" />
+      <input formControlName="apellidos" class="w-1/2 p-2 border rounded" placeholder="Apellidos" />
+    </div>
+    <div *ngIf="paymentForm.get('nombre')?.invalid && paymentForm.get('nombre')?.touched" class="text-red-500">
+      Nombre es requerido.
+    </div>
+    <div *ngIf="paymentForm.get('apellidos')?.invalid && paymentForm.get('apellidos')?.touched" class="text-red-500">
+      Apellidos son requeridos.
+    </div>
+
+    <input formControlName="direccion" class="w-full p-2 border rounded" placeholder="Dirección" />
+    <div *ngIf="paymentForm.get('direccion')?.invalid && paymentForm.get('direccion')?.touched" class="text-red-500">
+      Dirección es requerida.
+    </div>
+
+    <div class="flex space-x-2">
+      <input formControlName="codigoPostal" class="w-1/3 p-2 border rounded" placeholder="Código Postal" />
+      <input formControlName="ciudad" class="w-1/3 p-2 border rounded" placeholder="Ciudad" />
+      <input formControlName="provincia" class="w-1/3 p-2 border rounded" placeholder="Provincia" />
+    </div>
+    <div *ngIf="paymentForm.get('codigoPostal')?.invalid && paymentForm.get('codigoPostal')?.touched" class="text-red-500">
+      Código Postal debe tener 5 dígitos.
+    </div>
+    <div *ngIf="paymentForm.get('ciudad')?.invalid && paymentForm.get('ciudad')?.touched" class="text-red-500">
+      Ciudad es requerida.
+    </div>
+    <div *ngIf="paymentForm.get('provincia')?.invalid && paymentForm.get('provincia')?.touched" class="text-red-500">
+      Provincia es requerida.
+    </div>
+
+    <input formControlName="telefono" class="w-full p-2 border rounded" placeholder="Teléfono" />
+    <div *ngIf="paymentForm.get('telefono')?.invalid && paymentForm.get('telefono')?.touched" class="text-red-500">
+      Teléfono debe tener 9 dígitos.
+    </div>
+
+    <h2 class="text-xl font-bold mt-6">Método de Pago</h2>
+    <select formControlName="paymentMethod" class="w-full p-2 border rounded" (change)="changePaymentMethod()">
+      <option value="tarjeta">Tarjeta de crédito</option>
+      <option value="paypal">PayPal</option>
+    </select>
+
+    <div *ngIf="paymentForm.get('paymentMethod')?.value === 'tarjeta'" class="space-y-3">
+      <input formControlName="numeroTarjeta" class="w-full p-2 border rounded" placeholder="Número de tarjeta" />
+      <div *ngIf="paymentForm.get('numeroTarjeta')?.invalid && paymentForm.get('numeroTarjeta')?.touched" class="text-red-500">
+        Número de tarjeta debe tener 16 dígitos.
+      </div>
+      <input formControlName="fechaCaducidad" class="w-1/2 p-2 border rounded" placeholder="MM/YY" />
+      <div *ngIf="paymentForm.get('fechaCaducidad')?.invalid && paymentForm.get('fechaCaducidad')?.touched" class="text-red-500">
+        Fecha de caducidad debe tener el formato MM/YY.
+      </div>
+      <input formControlName="cvv" class="w-1/2 p-2 border rounded" placeholder="CVV" />
+      <div *ngIf="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched" class="text-red-500">
+        CVV debe tener 3 dígitos.
+      </div>
+      <input formControlName="titular" class="w-full p-2 border rounded" placeholder="Nombre del titular" />
+      <div *ngIf="paymentForm.get('titular')?.invalid && paymentForm.get('titular')?.touched" class="text-red-500">
+        Nombre del titular es requerido.
+      </div>
+    </div>
+
+    <div *ngIf="paymentForm.get('paymentMethod')?.value === 'paypal'" class="space-y-3">
+      <input formControlName="email" class="w-full p-2 border rounded" placeholder="Correo electrónico" />
+      <div *ngIf="paymentForm.get('email')?.invalid && paymentForm.get('email')?.touched" class="text-red-500">
+        Correo electrónico es requerido y debe ser válido.
+      </div>
+      <input formControlName="password" type="password" class="w-full p-2 border rounded" placeholder="Contraseña" />
+      <div *ngIf="paymentForm.get('password')?.invalid && paymentForm.get('password')?.touched" class="text-red-500">
+        Contraseña es requerida.
+      </div>
+    </div>
+
+    <button (click)="processPayment()" class="w-full p-3 bg-black text-white font-bold rounded mt-3">
+      Pagar Ahora
+    </button>
+  </form>
+</div>
