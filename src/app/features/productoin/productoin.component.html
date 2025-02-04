@@ -34,18 +34,18 @@
       <p class="mt-5 text-gray-600 text-lg">{{ producto?.descripcion ?? '' }}</p>
 
       <!-- Selector de cantidad y botón de carrito -->
+      <!-- Selector de cantidad y botón de carrito -->
       <div class="flex items-center mt-8 gap-6">
         <div class="flex items-center border rounded-lg bg-gray-200 px-3 py-2">
           <button (click)="cambiarCantidad(-1)" class="px-4 py-2 text-gray-700">-</button>
           <span class="px-6 text-lg text-gray-700">{{ cantidad }}</span>
           <button (click)="cambiarCantidad(1)" class="px-4 py-2 text-gray-700">+</button>
         </div>
-        <button
-          class="px-8 py-3 bg-gray-900 text-white rounded-lg shadow-lg hover:bg-gray-800 transition text-lg"
-        >
+        <button (click)="agregarAlCarrito()" class="px-8 py-3 bg-gray-900 text-white rounded-lg shadow-lg hover:bg-gray-800 transition text-lg">
           Agregar al carrito
         </button>
       </div>
+
 
       <!-- Valoración -->
       <p class="mt-8 text-gray-500 text-md">
