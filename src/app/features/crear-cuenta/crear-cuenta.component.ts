@@ -4,6 +4,7 @@ import { ClienteService } from '../../services/cliente.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { UsuarioService } from '../../services/usuario.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-crear-cuenta',
@@ -14,12 +15,16 @@ import { UsuarioService } from '../../services/usuario.service';
   imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
 })
 export class CrearCuentaComponent {
+
+
   usuarioForm: FormGroup;
   clienteForm: FormGroup;
   step = 1;
   userId: string | null = null;
 
-  constructor(private fb: FormBuilder, private clienteService: ClienteService, private usuarioService: UsuarioService) {
+
+
+  constructor(private router:Router,private fb: FormBuilder, private clienteService: ClienteService, private usuarioService: UsuarioService) {
     this.usuarioForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -72,5 +77,9 @@ export class CrearCuentaComponent {
     } else {
       console.log('Formulario de cliente inválido o falta el ID de usuario');
     }
+    this.router.navigate(['/verificar']);
+
   }
+
+
 }

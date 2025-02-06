@@ -4,13 +4,14 @@ import { Producto, ProductService } from '../../services/producto.service';
 import { CommonModule } from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {RouterLink} from '@angular/router';
 
 
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, RouterLink],
   styleUrls: ['./productos.component.css'],
   providers: [ProductService]
 })

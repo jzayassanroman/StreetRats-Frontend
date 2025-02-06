@@ -1,2 +1,5 @@
+.relative.group:hover .absolute {
+  z-index: 50;
+}
 
 

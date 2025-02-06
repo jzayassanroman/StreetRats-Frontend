@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
+import {ProductosComponent} from '../productos/productos.component';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +9,8 @@ import {NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
     NgClass,
     NgFor,
     NgIf,
-    NgStyle
+    NgStyle,
+    ProductosComponent
   ],
   templateUrl: './home.component.html',
   standalone: true,
@@ -16,9 +18,9 @@ import {NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
 })
 export class HomeComponent {
   images = [
-    'assets/modelo1.webp',
-    'assets/modelo2.webp',
-    'assets/modelo3.avif'
+    'assets/home1.png',
+    'assets/home2.png',
+    'assets/home3.png',
   ];
 
   currentIndex = 1; // Iniciamos en 1 para evitar ver la imagen duplicada del inicio
