@@ -5,6 +5,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {ValoracionesService} from '../../services/valoraciones.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-productoin',
@@ -29,6 +30,8 @@ export class ProductoinComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    window.scrollTo(0, 0); // Esto asegura que la vista empiece desde arriba
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.productService.getProductoById(+id).subscribe((data) => {
@@ -62,12 +65,21 @@ export class ProductoinComponent implements OnInit {
     };
 
     this.valoracionesService.enviarValoracion(valoracionData).subscribe(() => {
-      alert('Valoración enviada correctamente');
+      Swal.fire({
+        title: '¡Gracias por tu valoración!',
+        text: 'Tu comentario ha sido enviado con éxito.',
+        icon: 'success',
+        confirmButtonText: 'Cerrar',
+        timer: 3000,
+        timerProgressBar: true
+      });
+
       this.comentario = '';
       this.estrellasSeleccionadas = 0;
       this.cargarValoraciones(this.producto!.id); // Refrescar las valoraciones
     });
   }
+
 
   cambiarCantidad(valor: number) {
     if (this.cantidad + valor > 0) {

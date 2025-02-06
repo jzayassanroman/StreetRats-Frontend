@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { UsuarioService } from '../../services/usuario.service';
 import {Router} from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-crear-cuenta',
@@ -45,12 +46,25 @@ export class CrearCuentaComponent {
         next: (response: any) => {
           console.log('Usuario creado:', response);
           this.userId = response.id; // Guardar el ID del usuario
-          console.log('User ID:', this.userId); // Log the userId to ensure it is set
           this.step = 2;
+
+          Swal.fire({
+            title: '¡Usuario creado!',
+            text: 'Tu cuenta ha sido creada con éxito. Ahora completa tu información personal.',
+            icon: 'success',
+            confirmButtonText: 'Continuar',
+            timer: 3000,
+            timerProgressBar: true
+          });
         },
         error: (err: HttpErrorResponse) => {
           console.error('Error al crear usuario:', err);
-          alert(`Error: ${err.message}\nDetalles: ${err.error.error}`);
+          Swal.fire({
+            title: 'Error al crear usuario',
+            text: err.error?.error || 'Ha ocurrido un error inesperado.',
+            icon: 'error',
+            confirmButtonText: 'Intentar de nuevo'
+          });
         }
       });
     } else {
@@ -58,28 +72,44 @@ export class CrearCuentaComponent {
     }
   }
 
+
   onSubmitCliente(): void {
     if (this.clienteForm.valid && this.userId) {
       const clienteData = {
         ...this.clienteForm.value,
         id_usuario: this.userId
-      }; // Include user ID, username, and password
-
-      console.log('Cliente data:', clienteData); // Log the request payload
+      };
 
       this.clienteService.crearCliente(clienteData).subscribe({
-        next: (response: any) => console.log('Cliente creado:', response),
+        next: (response: any) => {
+          console.log('Cliente creado:', response);
+
+          Swal.fire({
+            title: '¡Cuenta completada!',
+            text: 'Tu cuenta ha sido creada correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Ir a verificar',
+            timer: 3000,
+            timerProgressBar: true
+          }).then(() => {
+            this.router.navigate(['/verificar']);
+          });
+        },
         error: (err: HttpErrorResponse) => {
           console.error('Error al crear cliente:', err);
-          alert(`Error: ${err.message}\nDetalles: ${err.error.error}`);
+          Swal.fire({
+            title: 'Error al completar el registro',
+            text: err.error?.error || 'Ha ocurrido un error inesperado.',
+            icon: 'error',
+            confirmButtonText: 'Intentar de nuevo'
+          });
         }
       });
     } else {
       console.log('Formulario de cliente inválido o falta el ID de usuario');
     }
-    this.router.navigate(['/verificar']);
-
   }
+
 
 
 }
