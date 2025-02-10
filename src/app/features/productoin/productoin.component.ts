@@ -1,16 +1,12 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService, Producto } from '../../services/producto.service';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
 import {ValoracionesService} from '../../services/valoraciones.service';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {CartService} from '../../services/cartService';
-import {NavbarComponent} from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-productoin',
@@ -32,8 +28,7 @@ export class ProductoinComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService,
-    private valoracionesService: ValoracionesService
+    private valoracionesService: ValoracionesService,
     private productService: ProductService,
     private cdr: ChangeDetectorRef,
     private cartService:CartService
@@ -55,7 +50,12 @@ export class ProductoinComponent implements OnInit {
         };
       });
     }
+
+    // Cargar carrito desde LocalStorage si existe
+    const carritoGuardado = localStorage.getItem('carrito');
+    this.carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
   }
+
   cargarValoraciones(idProducto: number) {
     this.valoracionesService.obtenerValoraciones(idProducto).subscribe((data) => {
       this.valoraciones = data;
@@ -89,13 +89,10 @@ export class ProductoinComponent implements OnInit {
 
       this.comentario = '';
       this.estrellasSeleccionadas = 0;
-      this.cargarValoraciones(this.producto!.id); // Refrescar las valoraciones
+      if (this.producto) {
+        this.cargarValoraciones(this.producto.id); // Refrescar las valoraciones
+      }
     });
-  }
-
-    // Cargar carrito desde LocalStorage si existe
-    const carritoGuardado = localStorage.getItem('carrito');
-    this.carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
   }
 
   cambiarCantidad(valor: number) {
@@ -128,7 +125,6 @@ export class ProductoinComponent implements OnInit {
     };
 
     this.cartService.addToCart(productoCarrito);
-    this.cdr.detectChanges()// Usamos el servicio
+    this.cdr.detectChanges(); // Usamos el servicio
   }
-
 }

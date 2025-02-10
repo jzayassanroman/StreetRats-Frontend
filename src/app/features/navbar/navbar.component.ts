@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
-import {CommonModule} from '@angular/common';
+import {CommonModule, CurrencyPipe} from '@angular/common';
 import {CartService} from '../../services/cartService';
 
 @Component({
@@ -10,19 +10,16 @@ import {CartService} from '../../services/cartService';
   templateUrl: './navbar.component.html',
   imports: [CommonModule,CurrencyPipe],
   standalone: true,
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 
   providers: [AuthService]
 })
 export class NavbarComponent implements OnInit {
   carritoAbierto: boolean = false;
   isLoggedIn: boolean = false;
+  carrito: any[] = [];
 
-  constructor(public authService: AuthService, private router: Router) {}
-
-  ngOnInit() {
-    this.checkLoginStatus();
-  }
+  constructor(public authService: AuthService, private router: Router, protected cartService:CartService) {}
 
   checkLoginStatus() {
     this.isLoggedIn = !!localStorage.getItem('token'); // Verifica si hay token guardado
@@ -34,11 +31,9 @@ export class NavbarComponent implements OnInit {
     this.isLoggedIn = false;
     this.router.navigate(['/login']);
   }
-  carrito: any[] = [];
-
-  constructor(private router:Router, protected cartService:CartService) {}
 
   ngOnInit(): void {
+    this.checkLoginStatus();
     this.cartService.cart$.subscribe(cart => {
       this.carrito = cart;
     });
@@ -82,5 +77,9 @@ export class NavbarComponent implements OnInit {
   }
   navigateToAbout() {
     this.router.navigate(['/about-us']); // Redirige a la página de inicio
+  }
+
+  navigateToPayment() {
+    this.router.navigate(['/payment']); // Redirige a la página de inicio
   }
 }
