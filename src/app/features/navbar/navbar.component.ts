@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, CurrencyPipe} from '@angular/common';
+import {Router} from '@angular/router';
+import {CartService} from '../../services/cartService';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule,CurrencyPipe],
   standalone: true,
   styleUrls: ['./navbar.component.css']
 })
@@ -12,32 +14,36 @@ export class NavbarComponent implements OnInit {
   carritoAbierto: boolean = false;
   carrito: any[] = [];
 
-  constructor() {}
+  constructor(private router:Router, protected cartService:CartService) {}
 
   ngOnInit(): void {
-    this.cargarCarrito();
-
-    // Escuchar eventos de actualización del carrito
-    window.addEventListener('carritoActualizado', () => {
-      this.cargarCarrito();
+    this.cartService.cart$.subscribe(cart => {
+      this.carrito = cart;
     });
+    if(this.carrito.length === 0) {
+      this.carrito = this.cartService.getCart();
+    }
   }
-
   toggleCarrito() {
     this.carritoAbierto = !this.carritoAbierto;
   }
 
   cargarCarrito() {
     const carritoGuardado = localStorage.getItem('carrito');
+    console.log("Carrito guardado:", carritoGuardado);
     this.carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
-
   }
 
   eliminarDelCarrito(index: number) {
-    this.carrito.splice(index, 1);
-    localStorage.setItem('carrito', JSON.stringify(this.carrito));
-
-    // Disparar el evento para actualizar otras partes de la app
-    window.dispatchEvent(new Event('carritoActualizado'));
+    this.cartService.removeFromCart(index);
   }
+
+
+  navigateToProductos(){
+    this.router.navigate(['/listadoproducto']);
+  }
+  calcularTotal(): number {
+    return this.carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+  }
+
 }
