@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService, Producto } from '../../services/producto.service';
 import {CommonModule} from '@angular/common';
@@ -6,6 +6,11 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {ValoracionesService} from '../../services/valoraciones.service';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import {CartService} from '../../services/cartService';
+import {NavbarComponent} from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-productoin',
@@ -22,14 +27,23 @@ export class ProductoinComponent implements OnInit {
   estrellasSeleccionadas: number = 0;
   comentario: string = '';
   valoraciones: any[] = [];
+  carrito: any[] = [];
+  carritoAbierto: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
     private valoracionesService: ValoracionesService
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef,
+    private cartService:CartService
   ) {}
 
   ngOnInit() {
+    this.cartService.cart$.subscribe(cart => {
+      console.log("Carrito actualizado:", cart); // ✅ Verifica que se actualiza
+      this.carrito = cart;
+    });
     window.scrollTo(0, 0); // Esto asegura que la vista empiece desde arriba
 
     const id = this.route.snapshot.paramMap.get('id');
@@ -40,7 +54,6 @@ export class ProductoinComponent implements OnInit {
           imagenes: typeof data.imagen === 'string' ? JSON.parse(data.imagen) : data.imagen
         };
       });
-      this.cargarValoraciones(+id);
     }
   }
   cargarValoraciones(idProducto: number) {
@@ -80,6 +93,10 @@ export class ProductoinComponent implements OnInit {
     });
   }
 
+    // Cargar carrito desde LocalStorage si existe
+    const carritoGuardado = localStorage.getItem('carrito');
+    this.carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
+  }
 
   cambiarCantidad(valor: number) {
     if (this.cantidad + valor > 0) {
@@ -91,5 +108,27 @@ export class ProductoinComponent implements OnInit {
     this.tallaSeleccionada = talla;
   }
 
+  toggleCarrito() {
+    this.carritoAbierto = !this.carritoAbierto;
+  }
+
+  agregarAlCarrito() {
+    if (!this.producto || !this.tallaSeleccionada) {
+      alert('Selecciona una talla antes de añadir al carrito.');
+      return;
+    }
+
+    const productoCarrito = {
+      id: this.producto.id,
+      nombre: this.producto.nombre,
+      precio: this.producto.precio,
+      talla: this.tallaSeleccionada,
+      cantidad: this.cantidad,
+      imagen: this.producto.imagenes?.[0] || ''
+    };
+
+    this.cartService.addToCart(productoCarrito);
+    this.cdr.detectChanges()// Usamos el servicio
+  }
 
 }
