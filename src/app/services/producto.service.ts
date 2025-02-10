@@ -18,13 +18,13 @@ export interface Producto {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8000/productos/all';
+  private apiUrl = 'http://localhost:8000/productos';
   productos: Producto[] = [];
 
   constructor(private http: HttpClient) {}
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiUrl);
+    return this.http.get<Producto[]>(`${this.apiUrl}/all`);
   }
 
   getProductosData(): void {
@@ -32,5 +32,9 @@ export class ProductService {
       console.log(data); // Verifica si 'imagenes' existe en cada objeto de producto
       this.productos = data;
     });
+  }
+
+  getProductoById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/find/${id}`);
   }
 }

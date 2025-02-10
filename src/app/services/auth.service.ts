@@ -13,4 +13,10 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
     return this.http.post<any>(this.apiUrl, { username, password });
   }
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token'); // Verifica si hay un token en localStorage
+  }
+  logout() {
+    localStorage.removeItem('token'); // Borra el token
+  }
 }

@@ -45,6 +45,10 @@
         </button>
       </div>
 
+      <p (click)="navitageToRegistro()" class="mt-4 text-center text-black cursor-pointer hover:underline">
+        Si no tienes cuenta ¡Regístrate!
+      </p>
+
       <!-- Mensaje de error -->
       <p *ngIf="errorMessage" class="mt-2 text-sm text-red-500 text-center">{{ errorMessage }}</p>
     </form>
