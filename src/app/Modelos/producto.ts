@@ -6,11 +6,11 @@ export interface Producto {
   precio: number;
   imagen: string;
   sexo: string;
-  id_color: {
+  color: {
     id: number;
     descripcion: string
   };
-  id_talla: {
+  talla: {
     id: number;
     descripcion: string
   };
@@ -23,6 +23,6 @@ export interface CrearProducto {
   precio: number;
   imagen: string;
   sexo: string;
-  id_color: number;
-  id_talla: number;
+  color: number;
+  talla: number;
 }

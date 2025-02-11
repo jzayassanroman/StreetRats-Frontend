@@ -1,10 +1,74 @@
 <div class="p-4 max-w-5xl mx-auto">
   <div class="flex justify-between items-center py-4">
-    <input type="text" placeholder="Buscar" class="w-1/3 p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition" (click)="mostrarFormulario = true">
+    <!-- Filtro por búsqueda -->
+    <input type="text" placeholder="Buscar por nombre o descripción" [(ngModel)]="busqueda"
+           class="w-1/3 p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+    <!-- Filtro por tipo -->
+    <select [(ngModel)]="filtroTipo" (change)="aplicarFiltros()" class="p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
+      <option value="">Todos los Tipos</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+    </select>
+
+    <!-- Filtro por sexo -->
+    <select [(ngModel)]="filtroSexo" (change)="aplicarFiltros()" class="p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
+      <option value="">Todos los Sexos</option>
+      <option *ngFor="let sexo of sexos" [value]="sexo">{{ sexo }}</option>
+    </select>
+
+    <!-- Botón de buscar -->
+    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+            (click)="buscarProductos()">Buscar</button>
+  </div>
+
+  <!-- Filtros restablecer -->
+  <div class="flex justify-between mt-4">
+    <button class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600" (click)="restablecerFiltros()">
+      Restablecer Filtros
+    </button>
+  </div>
+
+  <button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition" (click)="mostrarFormulario = true">
       + Agregar Producto
     </button>
   </div>
+<button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition" (click)="mostrarFormularioTalla = true">
+    + Agregar Talla
+  </button>
+
+<button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition" (click)="mostrarFormularioColor = true">
+    + Agregar Color
+  </button>
+
+
+
+<!-- Formulario para agregar Talla -->
+<div *ngIf="mostrarFormularioTalla" class="bg-white shadow-lg rounded-xl p-6 my-6 border">
+  <h2 class="text-xl font-semibold mb-4 text-gray-700">Agregar Talla</h2>
+  <input [(ngModel)]="nuevaTalla" placeholder="Descripción de la talla" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
+  <div class="flex justify-end gap-3 mt-4">
+    <button class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition" (click)="agregarTalla()">
+      Guardar
+    </button>
+    <button class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition" (click)="mostrarFormularioTalla = false">
+      Cancelar
+    </button>
+  </div>
+</div>
+
+<!-- Formulario para agregar Color -->
+<div *ngIf="mostrarFormularioColor" class="bg-white shadow-lg rounded-xl p-6 my-6 border">
+  <h2 class="text-xl font-semibold mb-4 text-gray-700">Agregar Color</h2>
+  <input [(ngModel)]="nuevoColor" placeholder="Descripción del color" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
+  <div class="flex justify-end gap-3 mt-4">
+    <button class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition" (click)="agregarColor()">
+      Guardar
+    </button>
+    <button class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition" (click)="mostrarFormularioColor = false">
+      Cancelar
+    </button>
+  </div>
+</div>
 
   <!-- Formulario para agregar producto -->
   <!-- Formulario para agregar o editar producto -->
@@ -40,15 +104,15 @@
         </select>
       </div>
       <div>
-        <label for="id_talla" class="block text-gray-600 font-medium">Talla</label>
-        <select #selectTalla formControlName="id_talla" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
-          <option *ngFor="let talla of id_talla" [value]="talla.id" [selected]="productoSeleccionado?.id_talla">{{ talla.descripcion }}</option>
+        <label for="talla" class="block text-gray-600 font-medium">Talla</label>
+        <select #selectTalla formControlName="talla" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
+          <option *ngFor="let t of talla" [value]="t.id">{{ t.descripcion }}</option>
         </select>
       </div>
       <div>
-        <label for="id_color" class="block text-gray-600 font-medium">Color</label>
-        <select #selectColor formControlName="id_color" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
-          <option *ngFor="let color of id_color" [value]="color.id" [selected]="productoSeleccionado?.id_color">{{ color.descripcion }}</option>
+        <label for="color" class="block text-gray-600 font-medium">Color</label>
+        <select #selectColor formControlName="color" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
+          <option *ngFor="let c of color" [value]="c.id">{{ c.descripcion }}</option>
         </select>
       </div>
       <div class="col-span-2 flex justify-end gap-3 mt-4">
@@ -61,8 +125,15 @@
       </div>
     </form>
   </div>
+  <!-- Mensaje cuando no hay productos filtrados -->
+  <p *ngIf="productosFiltrados.length > 0">
+    Productos filtrados encontrados: {{ productosFiltrados.length }}
+  </p>
+  <p *ngIf="productosFiltrados.length === 0">
+    No se encontraron productos
+  </p>
 
-  </div>
+  <!-- Tabla de productos -->
   <div class="overflow-x-auto">
     <table class="min-w-full bg-white border rounded">
       <thead>
@@ -80,7 +151,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let producto of productos" class="border-t">
+      <tr *ngFor="let producto of productosFiltrados" class="border-t">
         <td class="p-2">{{ producto.id }}</td>
         <td class="p-2">{{ producto.nombre }}</td>
         <td class="p-2">{{ producto.descripcion }}</td>
@@ -90,8 +161,8 @@
           <img [src]="producto.imagen" alt="Producto" class="h-12 w-12 object-cover" />
         </td>
         <td class="p-2">{{ producto.sexo }}</td>
-        <td class="p-2">{{ producto.id_color.descripcion }}</td>
-        <td class="p-2">{{ producto.id_talla.descripcion }}</td>
+        <td class="p-2">{{ producto.color.descripcion }}</td>
+        <td class="p-2">{{ producto.talla.descripcion }}</td>
         <td class="p-2 flex gap-2">
           <button (click)="editarProducto(producto)">✏️</button>
           <button class="bg-red-500 text-white px-2 py-1 rounded" (click)="eliminarProducto(producto.id)">🗑</button>        </td>

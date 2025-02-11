@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
 import {CrearProducto, Producto} from '../Modelos/producto';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,7 @@ export class ProductoServiceService {
   constructor(private http: HttpClient) {}
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiUrl);
+    return this.http.get<Producto[]>(this.apiUrl+"?XDEBUG_SESSION_START=15597");
   }
 
   crearProducto(producto: CrearProducto): Observable<any> {
@@ -55,11 +56,40 @@ export class ProductoServiceService {
     precio: number;
     imagen: string;
     sexo: string;
-    id_color: number;
-    id_talla: number
+    color: number;
+    talla: number
   }) {
     console.log('ID del producto a editar:', producto.id);
-    return this.http.put(`/api/productos/editar/${producto.id}`, producto);
+    return this.http.put(`/api/productos/editar/${producto.id}`+"?XDEBUG_SESSION_START=11833", producto);
   }
+  // Método para realizar búsqueda con filtros
+  buscarProductos(busqueda: string, filtroTipo: string, filtroSexo: string): Observable<Producto[]> {
+    const params = {
+      nombre: busqueda || '',  // ✅ Corregido
+      tipo: filtroTipo || '',  // ✅ Corregido
+      sexo: filtroSexo || '' ,  // ✅ Corregido
+      XDEBUG_SESSION_START :15597
+
+    };
+
+    console.log('Parámetros enviados a la API:', params);
+
+    return this.http.get<Producto[]>('/api/productos/buscar', { params }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error al buscar productos:', error);
+        return throwError(error);
+      })
+    );
+  }
+  // Método para crear una nueva talla
+  crearColor(color: { descripcion: string }): Observable<any> {
+    return this.http.post('/api/color/crear', color);
+  }
+
+  crearTalla(talla: { descripcion: string }): Observable<any> {
+    return this.http.post('/api/tallas/crear', talla);
+  }
+
+
 
 }
