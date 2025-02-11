@@ -78,6 +78,19 @@ export class ProductosComponent implements OnInit {
     });
   }
 
+  ordenarCategorias(a: any, b: any): number {
+    const ordenPersonalizado = [
+      'Nuevos Productos',
+      'Mejor Valorados',
+      'Hecho por StreetRats',
+      'Para el Verano',
+      'Para el Otoño',
+      'Para el Invierno',
+      'Para la Primavera'
+    ];
+    return ordenPersonalizado.indexOf(a.key) - ordenPersonalizado.indexOf(b.key);
+  }
+
   prevSlide(productoId: number): void {
     if (this.productos.length === 0) return;
     const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
