@@ -8,6 +8,7 @@ import {ProductosComponent} from './features/productos/productos.component';
 import {VerificacionComponent} from './features/verificacion/verificacion.component';
 import {ProductoinComponent} from './features/productoin/productoin.component';
 import {PaymentComponent} from './features/payment/payment.component';
+import {AdminProductosComponent} from './features/admin-productos/admin-productos.component';
 
 
 
@@ -20,7 +21,9 @@ export const routes: Routes = [
   {path: 'listadoproducto', component: ProductosComponent},
   {path: 'verificar', component: VerificacionComponent},
   { path: 'productoin/:id', component: ProductoinComponent },
-  { path: 'payment', component: PaymentComponent }
+  { path: 'payment', component: PaymentComponent },
+  {path: 'adminproductos', component: AdminProductosComponent}
+
 
 
 

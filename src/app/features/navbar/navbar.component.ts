@@ -7,8 +7,13 @@ import {CartService} from '../../services/cartService';
 
 @Component({
   selector: 'app-navbar',
+  imports: [
+    RouterLink,
+    NgClass,
+    CommonModule,
+    CurrencyPipe
+  ],
   templateUrl: './navbar.component.html',
-  imports: [CommonModule,CurrencyPipe],
   standalone: true,
   styleUrls: ['./navbar.component.css'],
 
