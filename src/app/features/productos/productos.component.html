@@ -10,7 +10,7 @@
         <!-- Carrusel -->
         <div class="relative h-80 overflow-hidden bg-white mt-5">
           <button (click)="prevSlide(i); $event.stopPropagation()"
-                  class="absolute left-2 top-3/4 transform -translate-y-1/2 text-black text-2xl font-bold z-10">
+                  class="absolute left-2 top-1/2 transform -translate-y-1/2 text-black text-2xl font-bold z-10">
             ‹
           </button>
 
@@ -19,13 +19,13 @@
                class="w-[270px] h-[400px] object-cover transition-opacity duration-500">
 
           <button (click)="nextSlide(i); $event.stopPropagation()"
-                  class="absolute right-2 top-3/4 transform -translate-y-1/2 text-black text-2xl font-bold z-10">
+                  class="absolute right-2 top-1/2 transform -translate-y-1/2 text-black text-2xl font-bold z-10">
             ›
           </button>
         </div>
 
         <!-- Indicadores del carrusel -->
-        <div class="flex justify-center mt- ">
+        <div class="flex justify-center mt-6 ">
           <span *ngFor="let img of producto.imagenes; let idx = index"
                 class="h-2 w-2 mx-1 rounded-full"
                 [ngClass]="idx === currentIndexes[i] ? 'bg-black' : 'bg-gray-400'">
