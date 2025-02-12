@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class VerificacionService {
-  private apiUrl = 'http://localhost:8000/clientes/clientes/verificar-codigo';
+  private apiUrl = '/api/clientes/clientes/verificar-codigo';
 
   constructor(private http: HttpClient) {}
 

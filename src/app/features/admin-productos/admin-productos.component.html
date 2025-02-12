@@ -154,7 +154,7 @@
       <tr *ngFor="let producto of productosFiltrados" class="border-t">
         <td class="p-2">{{ producto.id }}</td>
         <td class="p-2">{{ producto.nombre }}</td>
-        <td class="p-2">{{ producto.descripcion }}</td>
+        <td class="p-2">{{ producto.descripcion ? producto.descripcion : 'Sin descripcion'}}</td>
         <td class="p-2">{{ producto.tipo }}</td>
         <td class="p-2">${{ producto.precio }}</td>
         <td class="p-2">

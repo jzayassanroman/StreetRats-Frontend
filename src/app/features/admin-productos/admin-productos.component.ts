@@ -10,7 +10,9 @@ import {Producto} from '../../Modelos/producto';
   selector: 'app-admin-productos',
   imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-productos.component.html',
-  styleUrl: './admin-productos.component.css'
+  standalone: true,
+  styleUrl: './admin-productos.component.css',
+  providers: [ProductoServiceService]
 })
 
 export class AdminProductosComponent implements OnInit {
@@ -71,56 +73,27 @@ export class AdminProductosComponent implements OnInit {
       tallas: this.productoService.getTallas(),
       colores: this.productoService.getColores(),
       sexos: this.productoService.getSexos(),
-      tipos: this.productoService.getTipos(), // 🔹 Cargar tipos
+      tipos: this.productoService.getTipos(),
       productos: this.productoService.getProductos()
-
     }).subscribe(({tallas, colores, sexos, tipos, productos}) => {
       this.talla = tallas;
       this.color = colores;
       this.sexos = sexos;
-      this.tipos = tipos; // 🔹 Asignar tipos
-      this.productos = productos;
-      this.productosFiltrados = [...productos]; // Asegurar copia independiente
-      console.log('Colores cargados:', this.color); // Verifica que los colores se carguen
-      console.log('Tallas cargadas:', this.talla); // Verifica que las tallas se carguen
+      this.tipos = tipos;
+      this.productos = productos.map(producto => ({
+        ...producto,
+        descripcion: producto.descripcion || 'Sin descripción'
+      }));
+      this.productosFiltrados = [...this.productos];
 
-      this.productos = productos;
+      console.log('Productos final:', this.productosFiltrados);
 
-      console.log('Productos final:', this.productos);
+      this.cdRef.detectChanges(); // 🔹 Forzar actualización en la vista
     });
   }
 
-  // agregarProducto() {
-  //   console.log("Datos enviados:", this.nuevoProducto);  // Verificar los datos antes de enviarlos
-  //
-  //   if (!this.nuevoProducto) {
-  //     console.error('Datos inválidos:', this.nuevoProducto);
-  //     return;
-  //   }
-  //
-  //   // Convertir talla y color a números antes de enviar
-  //   const producto = {
-  //     nombre: this.nuevoProducto.nombre,
-  //     descripcion: this.nuevoProducto.descripcion,
-  //     tipo: this.nuevoProducto.tipo,
-  //     precio: this.nuevoProducto.precio,
-  //     imagen: this.nuevoProducto.imagen,
-  //     sexo: this.nuevoProducto.sexo,
-  //     talla: Number(this.nuevoProducto.talla.id),  // Convertir talla a número
-  //     color: Number(this.nuevoProducto.color.id)   // Convertir color a número
-  //   };
-  //
-  //   // Enviar los datos convertidos al backend
-  //   this.productoService.crearProducto(producto).subscribe(response => {
-  //     console.log('Producto creado exitosamente:', response);
-  //
-  //     this.cargarProductos();  // Recargar la lista de productos
-  //
-  //     this.cancelarFormulario();  // Limpiar el formulario
-  //   }, error => {
-  //     console.error('Error al crear producto:', error);
-  //   });
-  // }
+
+
   agregarProducto() {
     console.log("Datos enviados:", this.nuevoProducto);  // Verificar los datos antes de enviarlos
 
@@ -179,15 +152,6 @@ export class AdminProductosComponent implements OnInit {
     }
   }
 
-  // editarProducto(producto: Producto) {
-  //   this.productoSeleccionado = {...producto};
-  //   this.mostrarFormulario = true;
-  //   this.productoForm.patchValue({
-  //     ...producto,
-  //     talla: producto.talla.id,
-  //     color: producto.color.id
-  //   });
-  // }
 
   editarProducto(producto: Producto) {
     this.productoSeleccionado = { ...producto }; // Clonamos el producto seleccionado
@@ -213,30 +177,7 @@ export class AdminProductosComponent implements OnInit {
 
 
 
-  // guardarCambios() {
-  //   if (this.productoSeleccionado) {
-  //     console.log('Producto a enviar:', this.productoSeleccionado);
-  //
-  //     const valueTalla = this.selectTalla?.nativeElement.value;
-  //     const valueColor = this.selectColor?.nativeElement.value;
-  //
-  //     // Enviar solo el ID de la talla y el color
-  //     const producto = {
-  //       ...this.productoForm.value,   // Copia los valores del producto a editar
-  //       talla: valueTalla,
-  //       color: valueColor
-  //     };
-  //
-  //     // Enviar los datos convertidos al backend
-  //     this.productoService.editarProducto(producto).subscribe(response => {
-  //       console.log('Producto actualizado exitosamente:', response);
-  //       this.cargarProductos();
-  //       this.cancelarFormulario();
-  //     }, error => {
-  //       console.error('Error al editar producto:', error);
-  //     });
-  //   }
-  // }
+
   guardarCambios() {
     if (this.productoSeleccionado) {
       const productoEditado = {
