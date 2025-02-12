@@ -6,19 +6,28 @@ export interface Producto {
   id: number;
   nombre: string;
   descripcion: string;
-  tipo: string;
+  tipo: TipoProducto;
   precio: number;
   imagenes: string[];
   sexo: string;
-  id_talla: number;
-  id_color: number;
+  talla: number;
+  color: number;
 }
+export enum TipoProducto {
+  CAMISETAS = 'CAMISETAS',
+  SUDADERAS = 'SUDADERAS',
+  PANTALONES = 'PANTALONES',
+  ZAPATOS = 'ZAPATOS',
+  ACCESORIOS = 'ACCESORIOS'
+}
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8000/productos';
+  private apiUrl = 'http://localhost:8001/productos';
   productos: Producto[] = [];
 
   constructor(private http: HttpClient) {}
@@ -36,5 +45,8 @@ export class ProductService {
 
   getProductoById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/find/${id}`);
+  }
+  getProductosPorTipo(tipo: TipoProducto): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${this.apiUrl}?tipo=${tipo}`);
   }
 }

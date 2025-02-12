@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Producto, ProductService } from '../../services/producto.service';
+import {Producto, ProductService, TipoProducto} from '../../services/producto.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,6 +15,8 @@ import { RouterLink } from '@angular/router';
 })
 export class ProductosComponent implements OnInit {
   productos: Producto[] = [];
+  tiposDisponibles = Object.values(TipoProducto);
+  tipoSeleccionado: TipoProducto | null = null;
   currentIndexes: { [key: number]: number } = {};
   categorias: { [key: string]: Producto[] } = {
     'Nuevos Productos': [],
@@ -26,9 +28,26 @@ export class ProductosComponent implements OnInit {
     'Para la Primavera': []
   };
 
+  cargarProductos(): void {
+    if (this.tipoSeleccionado) {
+      this.productService.getProductosPorTipo(this.tipoSeleccionado).subscribe((data) => {
+        this.productos = data;
+      });
+    } else {
+      this.productService.getProductos().subscribe((data) => {
+        this.productos = data;
+      });
+    }
+  }
+  seleccionarTipo(tipo: TipoProducto): void {
+    this.tipoSeleccionado = tipo;
+    this.cargarProductos();
+  }
+
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
+    this.cargarProductos();
     this.productService.getProductos().subscribe((data) => {
       this.productos = data.map(producto => ({
         ...producto,
