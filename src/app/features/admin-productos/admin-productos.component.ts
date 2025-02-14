@@ -205,6 +205,7 @@ export class AdminProductosComponent implements OnInit {
   // Método para aplicar los filtros
   aplicarFiltros() {
     console.log("Productos antes del filtrado:", this.productos);
+
     this.productoService.buscarProductos(this.busqueda, this.filtroTipo, this.filtroSexo)
       .subscribe((productos: Producto[]) => {
         console.log('Productos recibidos en Angular:', productos);
@@ -216,17 +217,13 @@ export class AdminProductosComponent implements OnInit {
 
         this.productosFiltrados = productos.map(producto => ({
           ...producto,
-          imagenes: producto.imagenes || [] // Asegúrate de que imagenes es un array
+          imagenes: producto.imagen ? JSON.parse(producto.imagen) : [] // 🔹 Convierte el string en array
         }));
 
         console.log('Productos filtrados:', this.productosFiltrados);
-
-        // 🔹 Forzar actualización en la vista
-        this.cdRef.detectChanges();
-      }, error => {
-        console.error('Error al buscar productos:', error);
       });
   }
+
   // Función para buscar productos (se ejecuta al hacer clic en el botón de búsqueda)
   buscarProductos() {
     this.aplicarFiltros();
