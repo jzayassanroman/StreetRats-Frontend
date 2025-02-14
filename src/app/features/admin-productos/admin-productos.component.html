@@ -29,16 +29,16 @@
   </div>
 
   <button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition" (click)="mostrarFormulario = true">
-      + Agregar Producto
-    </button>
-  </div>
-<button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition" (click)="mostrarFormularioTalla = true">
-    + Agregar Talla
+    + Agregar Producto
   </button>
+</div>
+<button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition" (click)="mostrarFormularioTalla = true">
+  + Agregar Talla
+</button>
 
 <button class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition" (click)="mostrarFormularioColor = true">
-    + Agregar Color
-  </button>
+  + Agregar Color
+</button>
 
 
 
@@ -70,103 +70,113 @@
   </div>
 </div>
 
-  <!-- Formulario para agregar producto -->
-  <!-- Formulario para agregar o editar producto -->
-  <div *ngIf="mostrarFormulario" class="bg-white shadow-lg rounded-xl p-6 my-6 border">
-    <h2 class="text-xl font-semibold mb-4 text-gray-700">{{ productoSeleccionado ? 'Editar Producto' : 'Agregar Producto' }}</h2>
-    <form [formGroup]="productoForm" (ngSubmit)="productoSeleccionado ? guardarCambios() : agregarProducto()" class="grid grid-cols-2 gap-4">
-      <div class="col-span-2">
-        <label for="nombre" class="block text-gray-600 font-medium">Nombre</label>
-        <input formControlName="nombre"  id="nombre" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div class="col-span-2">
-        <label for="descripcion" class="block text-gray-600 font-medium">Descripción</label>
-        <input formControlName="descripcion" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label for="tipo" class="block text-gray-600 font-medium">Tipo</label>
-        <select formControlName="tipo" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
-          <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
-        </select>
-      </div>
-      <div>
-        <label for="precio" class="block text-gray-600 font-medium">Precio</label>
-        <input formControlName="precio" type="number" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div class="col-span-2">
-        <label for="imagen" class="block text-gray-600 font-medium">Imagen (URL)</label>
-        <input formControlName="imagen" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label for="sexo" class="block text-gray-600 font-medium">Sexo</label>
-        <select formControlName="sexo" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
-          <option *ngFor="let sexo of sexos" [value]="sexo">{{ sexo }}</option>
-        </select>
-      </div>
-      <div>
-        <label for="talla" class="block text-gray-600 font-medium">Talla</label>
-        <select #selectTalla formControlName="talla" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
-          <option *ngFor="let t of talla" [value]="t.id">{{ t.descripcion }}</option>
-        </select>
-      </div>
-      <div>
-        <label for="color" class="block text-gray-600 font-medium">Color</label>
-        <select #selectColor formControlName="color" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
-          <option *ngFor="let c of color" [value]="c.id">{{ c.descripcion }}</option>
-        </select>
-      </div>
-      <div class="col-span-2 flex justify-end gap-3 mt-4">
-        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition">
-          Guardar
-        </button>
-        <button type="button" (click)="cancelarFormulario()" class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
-          Cancelar
-        </button>
-      </div>
-    </form>
-  </div>
-  <!-- Mensaje cuando no hay productos filtrados -->
-  <p *ngIf="productosFiltrados.length > 0">
-    Productos filtrados encontrados: {{ productosFiltrados.length }}
-  </p>
-  <p *ngIf="productosFiltrados.length === 0">
-    No se encontraron productos
-  </p>
+<!-- Formulario para agregar producto -->
+<!-- Formulario para agregar o editar producto -->
+<div *ngIf="mostrarFormulario" class="bg-white shadow-lg rounded-xl p-6 my-6 border">
+  <h2 class="text-xl font-semibold mb-4 text-gray-700">{{ productoSeleccionado ? 'Editar Producto' : 'Agregar Producto' }}</h2>
+  <form [formGroup]="productoForm" (ngSubmit)="productoSeleccionado ? guardarCambios() : agregarProducto()" class="grid grid-cols-2 gap-4">
+    <div class="col-span-2">
+      <label for="nombre" class="block text-gray-600 font-medium">Nombre</label>
+      <input formControlName="nombre"  id="nombre" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div class="col-span-2">
+      <label for="descripcion" class="block text-gray-600 font-medium">Descripción</label>
+      <input formControlName="descripcion" id="descripcion" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label for="tipo" class="block text-gray-600 font-medium">Tipo</label>
+      <select formControlName="tipo" id="tipo" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
+        <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="precio" class="block text-gray-600 font-medium">Precio</label>
+      <input formControlName="precio" id="precio" type="number" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div class="col-span-2">
+      <label for="imagen" class="block text-gray-600 font-medium">Imagen (URL)</label>
+      <input formControlName="imagen" id="imagen" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label for="sexo" class="block text-gray-600 font-medium">Sexo</label>
+      <select formControlName="sexo" id="sexo" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
+        <option *ngFor="let sexo of sexos" [value]="sexo">{{ sexo }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="talla" class="block text-gray-600 font-medium">Talla</label>
+      <select #selectTalla formControlName="talla" id="talla" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
+        <option *ngFor="let t of talla" [value]="t.id">{{ t.descripcion }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="color" class="block text-gray-600 font-medium">Color</label>
+      <select #selectColor formControlName="color" id="color" class="w-full p-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500">
+        <option *ngFor="let c of color" [value]="c.id">{{ c.descripcion }}</option>
+      </select>
+    </div>
+    <div class="col-span-2 flex justify-end gap-3 mt-4">
+      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition">
+        Guardar
+      </button>
+      <button type="button" (click)="cancelarFormulario()" class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
+<!-- Mensaje cuando no hay productos filtrados -->
+<p *ngIf="productosFiltrados.length > 0">
+  Productos filtrados encontrados: {{ productosFiltrados.length }}
+</p>
+<p *ngIf="productosFiltrados.length === 0">
+  No se encontraron productos
+</p>
 
-  <!-- Tabla de productos -->
-  <div class="overflow-x-auto">
-    <table class="min-w-full bg-white border rounded">
-      <thead>
-      <tr class="bg-gray-200 text-left">
-        <th class="p-2">ID</th>
-        <th class="p-2">Nombre</th>
-        <th class="p-2">Descripción</th>
-        <th class="p-2">Tipo</th>
-        <th class="p-2">Precio</th>
-        <th class="p-2">Imagen</th>
-        <th class="p-2">Sexo</th>
-        <th class="p-2">Color</th>
-        <th class="p-2">Talla</th>
-        <th class="p-2">Acciones</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let producto of productosFiltrados" class="border-t">
-        <td class="p-2">{{ producto.id }}</td>
-        <td class="p-2">{{ producto.nombre }}</td>
-        <td class="p-2">{{ producto.descripcion ? producto.descripcion : 'Sin descripcion'}}</td>
-        <td class="p-2">{{ producto.tipo }}</td>
-        <td class="p-2">${{ producto.precio }}</td>
-        <td class="p-2">
-          <img [src]="producto.imagen" alt="Producto" class="h-12 w-12 object-cover" />
-        </td>
-        <td class="p-2">{{ producto.sexo }}</td>
-        <td class="p-2">{{ producto.color.descripcion }}</td>
-        <td class="p-2">{{ producto.talla.descripcion }}</td>
-        <td class="p-2 flex gap-2">
-          <button (click)="editarProducto(producto)">✏️</button>
-          <button class="bg-red-500 text-white px-2 py-1 rounded" (click)="eliminarProducto(producto.id)">🗑</button>        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- Tabla de productos -->
+<!-- Tabla de productos -->
+<div class="overflow-x-auto">
+  <table class="min-w-full bg-white border rounded">
+    <thead>
+    <tr class="bg-gray-200 text-left">
+      <th class="p-2">ID</th>
+      <th class="p-2">Nombre</th>
+      <th class="p-2">Descripción</th>
+      <th class="p-2">Tipo</th>
+      <th class="p-2">Precio</th>
+      <th class="p-2">Imágenes</th>
+      <th class="p-2">Sexo</th>
+      <th class="p-2">Color</th>
+      <th class="p-2">Talla</th>
+      <th class="p-2">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let producto of productosFiltrados" class="border-t">
+      <td class="p-2">{{ producto.id }}</td>
+      <td class="p-2">{{ producto.nombre }}</td>
+      <td class="p-2">{{ producto.descripcion ? producto.descripcion : 'Sin descripcion'}}</td>
+      <td class="p-2">{{ producto.tipo }}</td>
+      <td class="p-2">${{ producto.precio }}</td>
+      <td class="p-2">
+        <div class="carousel" id="carouselAdmin{{ producto.id }}">
+          <div class="carousel-inner">
+            <div *ngFor="let img of producto.imagenes; let i = index" class="carousel-item" [class.active]="i === 0">
+              <img [src]="img" class="d-block w-100" alt="Imagen {{ i }}">
+            </div>
+          </div>
+          <button class="carousel-control-prev" (click)="producto.id && prevSlide(producto.id)">&#10094;</button>
+          <button class="carousel-control-next" (click)="producto.id && nextSlide(producto.id)">&#10095;</button>
+        </div>
+      </td>
+      <td class="p-2">{{ producto.sexo }}</td>
+      <td class="p-2">{{ producto.color.descripcion }}</td>
+      <td class="p-2">{{ producto.talla.descripcion }}</td>
+      <td class="p-2 flex gap-2">
+        <button (click)="editarProducto(producto)">✏️</button>
+        <button class="bg-red-500 text-white px-2 py-1 rounded" (click)="eliminarProducto(producto.id)">🗑</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

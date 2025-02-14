@@ -21,6 +21,7 @@ export class AdminProductosComponent implements OnInit {
   mostrarFormularioTalla: boolean = false;
   mostrarFormularioColor: boolean = false;
   productos: Producto[] = [];
+  imagenes: string[] = []; // Array para las imágenes
   productosFiltrados: Producto[] = []; // Productos filtrados para mostrar
   busqueda: string = ''; // Valor de la búsqueda
   filtroTipo: string = ''; // Filtro por tipo
@@ -75,14 +76,16 @@ export class AdminProductosComponent implements OnInit {
       sexos: this.productoService.getSexos(),
       tipos: this.productoService.getTipos(),
       productos: this.productoService.getProductos()
-    }).subscribe(({tallas, colores, sexos, tipos, productos}) => {
+    }).subscribe(({ tallas, colores, sexos, tipos, productos }) => {
+      console.log("Productos recibidos:", productos);
       this.talla = tallas;
       this.color = colores;
       this.sexos = sexos;
       this.tipos = tipos;
       this.productos = productos.map(producto => ({
         ...producto,
-        descripcion: producto.descripcion || 'Sin descripción'
+        descripcion: producto.descripcion || 'Sin descripción',
+        imagenes: producto.imagenes || [] // Asegúrate de que imagenes es un array
       }));
       this.productosFiltrados = [...this.productos];
 
@@ -91,6 +94,7 @@ export class AdminProductosComponent implements OnInit {
       this.cdRef.detectChanges(); // 🔹 Forzar actualización en la vista
     });
   }
+
 
 
 
@@ -164,7 +168,7 @@ export class AdminProductosComponent implements OnInit {
       descripcion: producto.descripcion,
       tipo: producto.tipo,
       precio: producto.precio,
-      imagen: producto.imagen,
+      imagen: producto.imagenes ? producto.imagenes.join(', ') : '', // Convertimos el array a una cadena separada por comas
       sexo: producto.sexo,
       talla: producto.talla?.id, // Asignamos solo el ID de la talla
       color: producto.color?.id  // Asignamos solo el ID del color
@@ -172,7 +176,6 @@ export class AdminProductosComponent implements OnInit {
 
     console.log('Producto cargado en el formulario:', this.productoForm.value);
   }
-
 
 
 
@@ -201,6 +204,7 @@ export class AdminProductosComponent implements OnInit {
 
   // Método para aplicar los filtros
   aplicarFiltros() {
+    console.log("Productos antes del filtrado:", this.productos);
     this.productoService.buscarProductos(this.busqueda, this.filtroTipo, this.filtroSexo)
       .subscribe((productos: Producto[]) => {
         console.log('Productos recibidos en Angular:', productos);
@@ -210,7 +214,10 @@ export class AdminProductosComponent implements OnInit {
           return;
         }
 
-        this.productosFiltrados = productos;
+        this.productosFiltrados = productos.map(producto => ({
+          ...producto,
+          imagenes: producto.imagenes || [] // Asegúrate de que imagenes es un array
+        }));
 
         console.log('Productos filtrados:', this.productosFiltrados);
 
@@ -254,6 +261,39 @@ export class AdminProductosComponent implements OnInit {
 
 
 
+  }
+  prevSlide(carouselId: number) {
+    const carousel = document.getElementById(`carouselAdmin${carouselId}`);
+    if (carousel) {
+      const items = carousel.getElementsByClassName('carousel-item');
+      const activeItem = carousel.querySelector('.carousel-item.active');
+      if (items && activeItem) {
+        let newIndex = Array.from(items).indexOf(activeItem) - 1;
+        if (newIndex < 0) newIndex = items.length - 1;
+        this.setActiveSlide(items, newIndex);
+      }
+    }
+  }
+
+  nextSlide(carouselId: number) {
+    const carousel = document.getElementById(`carouselAdmin${carouselId}`);
+    if (carousel) {
+      const items = carousel.getElementsByClassName('carousel-item');
+      const activeItem = carousel.querySelector('.carousel-item.active');
+      if (items && activeItem) {
+        let newIndex = Array.from(items).indexOf(activeItem) + 1;
+        if (newIndex >= items.length) newIndex = 0;
+        this.setActiveSlide(items, newIndex);
+      }
+    }
+  }
+
+
+
+  setActiveSlide(items: HTMLCollectionOf<Element>, newIndex: number) {
+    Array.from(items).forEach((item, index) => {
+      item.classList.toggle('active', index === newIndex);
+    });
   }
   cancelarFormularioTalla() {
     this.mostrarFormularioTalla = false;

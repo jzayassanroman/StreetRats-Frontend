@@ -4,16 +4,11 @@ export interface Producto {
   descripcion: string;
   tipo: string;
   precio: number;
-  imagen: string;
+  imagen?: string;
+  imagenes?: string[]; // Añadir este campo
   sexo: string;
-  color: {
-    id: number;
-    descripcion: string
-  };
-  talla: {
-    id: number;
-    descripcion: string
-  };
+  color: { id: number; descripcion: string };
+  talla: { id: number; descripcion: string };
 }
 
 export interface CrearProducto {
