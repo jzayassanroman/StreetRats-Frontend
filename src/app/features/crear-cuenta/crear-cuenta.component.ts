@@ -17,13 +17,10 @@ import Swal from 'sweetalert2';
 })
 export class CrearCuentaComponent {
 
-
   usuarioForm: FormGroup;
   clienteForm: FormGroup;
   step = 1;
   userId: string | null = null;
-
-
 
   constructor(private router:Router,private fb: FormBuilder, private clienteService: ClienteService, private usuarioService: UsuarioService) {
     this.usuarioForm = this.fb.group({
@@ -46,6 +43,7 @@ export class CrearCuentaComponent {
         next: (response: any) => {
           console.log('Usuario creado:', response);
           this.userId = response.id; // Guardar el ID del usuario
+          localStorage.setItem('userId', response.id);
           this.step = 2;
 
           Swal.fire({
@@ -71,7 +69,6 @@ export class CrearCuentaComponent {
       console.log('Formulario de usuario inválido');
     }
   }
-
 
   onSubmitCliente(): void {
     if (this.clienteForm.valid && this.userId) {
