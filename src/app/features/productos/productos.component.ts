@@ -16,6 +16,9 @@ import { RouterLink } from '@angular/router';
 export class ProductosComponent implements OnInit {
   productos: Producto[] = [];
   currentIndexes: { [key: number]: number } = {};
+  productosVisibles: { [key: string]: number } = {};
+  productosPorPagina = 8; // Límite inicial de productos por categoría
+
   categorias: { [key: string]: Producto[] } = {
     'Nuevos Productos': [],
     'Mejor Valorados': [],
@@ -35,13 +38,9 @@ export class ProductosComponent implements OnInit {
         imagenes: producto.imagenes ?? [] // Asegurar que siempre haya un array de imágenes
       }));
 
-      // Ordenar productos por ID descendente
       this.productos.sort((a, b) => b.id - a.id);
-
-      // Obtener los últimos 80 productos
       this.categorias["Nuevos Productos"] = this.productos.slice(0, 80);
 
-      // Inicializar índices del carrusel
       this.productos.forEach(producto => {
         this.currentIndexes[producto.id] = 0;
       });
@@ -54,7 +53,6 @@ export class ProductosComponent implements OnInit {
       const productosInvierno = [1, 2, 3, 4];
       const productosPrimavera = [1, 2, 3, 4];
 
-      // Asignar productos a sus categorías manualmente
       this.productos.forEach(producto => {
         if (productosStreetRats.includes(producto.id)) {
           this.categorias["Hecho por StreetRats"].push(producto);
@@ -75,7 +73,32 @@ export class ProductosComponent implements OnInit {
           this.categorias["Para la Primavera"].push(producto);
         }
       });
+
+      // Inicializar cantidad de productos visibles por categoría
+      for (const key in this.categorias) {
+        this.productosVisibles[key] = this.productosPorPagina;
+      }
     });
+  }
+
+  verMas(categoria: string): void {
+    this.productosVisibles[categoria] += this.productosPorPagina;
+  }
+
+  verMenos(categoria: string): void {
+    if (this.productosVisibles[categoria] > this.productosPorPagina) {
+      this.productosVisibles[categoria] -= this.productosPorPagina;
+    }
+  }
+
+  prevSlide(productoId: number): void {
+    const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
+    this.currentIndexes[productoId] = this.currentIndexes[productoId] === 0 ? total - 1 : this.currentIndexes[productoId] - 1;
+  }
+
+  nextSlide(productoId: number): void {
+    const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
+    this.currentIndexes[productoId] = this.currentIndexes[productoId] === total - 1 ? 0 : this.currentIndexes[productoId] + 1;
   }
 
   ordenarCategorias(a: any, b: any): number {
@@ -89,17 +112,5 @@ export class ProductosComponent implements OnInit {
       'Para la Primavera'
     ];
     return ordenPersonalizado.indexOf(a.key) - ordenPersonalizado.indexOf(b.key);
-  }
-
-  prevSlide(productoId: number): void {
-    if (this.productos.length === 0) return;
-    const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
-    this.currentIndexes[productoId] = this.currentIndexes[productoId] === 0 ? total - 1 : this.currentIndexes[productoId] - 1;
-  }
-
-  nextSlide(productoId: number): void {
-    if (this.productos.length === 0) return;
-    const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
-    this.currentIndexes[productoId] = this.currentIndexes[productoId] === total - 1 ? 0 : this.currentIndexes[productoId] + 1;
   }
 }
