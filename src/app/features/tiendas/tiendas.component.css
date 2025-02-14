@@ -9,7 +9,13 @@
   min-height: 300px; /* Ensure a minimum height for the container */
 }
 #map {
-  width: 100%;  /* Ajusta el ancho al contenedor */
-  height: 500px; /* Define una altura fija */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 5px); /* Ajusta el valor según lo que falte */
+  bottom: 0;
+  z-index: 0;
 }
+
 
