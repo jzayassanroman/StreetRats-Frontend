@@ -9,12 +9,14 @@ import {VerificacionComponent} from './features/verificacion/verificacion.compon
 import {ProductoinComponent} from './features/productoin/productoin.component';
 import {PaymentComponent} from './features/payment/payment.component';
 import {AdminProductosComponent} from './features/admin-productos/admin-productos.component';
+import {TiendasComponent} from './features/tiendas/tiendas.component';
 
 
 
 export const routes: Routes = [
 
   {path: '', component: HomeComponent},
+  { path: 'tiendas', component: TiendasComponent },
   {path: 'about-us', component: AboutUsComponent},
   {path: 'crear-cuenta',component: CrearCuentaComponent},
   {path: 'login', component: LoginComponent},

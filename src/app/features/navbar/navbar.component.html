@@ -1,7 +1,7 @@
 <div class="navbar flex flex-row justify-between items-center border-b border-black">
   <div class="pages flex p-10 ml-14 gap-10 text-2xl">
-    <a routerLink="/shop" class="font-mono">SHOP</a>
-    <a routerLink="/tienda" class="font-mono">TIENDA</a>
+    <a (click)="navigateToProductos()" class="font-mono">SHOP</a>
+    <a (click)="navigateToTiendas()" class="font-mono">TIENDAS</a>
     <a (click)="navigateToAbout()" class="font-mono">ABOUT US</a>
   </div>
   <div class="flex flex-row w-32 items-center justify-center">

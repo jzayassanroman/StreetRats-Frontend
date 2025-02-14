@@ -87,4 +87,10 @@ export class NavbarComponent implements OnInit {
   navigateToPayment() {
     this.router.navigate(['/payment']); // Redirige a la página de inicio
   }
+  navigateToProducto() {
+    this.router.navigate(['/listadoproducto']); // Redirige a la página de inicio
+  }
+  navigateToTiendas() {
+    this.router.navigate(['/tiendas']); // Redirige a la página de inicio
+  }
 }
