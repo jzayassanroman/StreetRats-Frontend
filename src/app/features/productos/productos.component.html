@@ -1,22 +1,25 @@
 <div class="container mx-auto px-4 py-10 flex flex-col items-center">
   <div *ngFor="let categoria of categorias | keyvalue: ordenarCategorias; let i = index"
-       [ngStyle]="{ 'margin-bottom': '4rem' }">
-    <h2 class="text-4xl font-serif text-center mb-12 border-b-2 border-gray-300 pb-2">
+       class="mb-16"> <!-- Cambiado a clase Tailwind -->
+    <h2 class="text-3xl font-serif text-center mb-8 border-b-2 border-gray-300 pb-3 tracking-wide">
       {{ categoria.key }}
     </h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center">
-      <div *ngFor="let producto of categoria.value | slice:0:productosVisibles[categoria.key]" class="cursor-pointer flex flex-col items-center">
+      <div *ngFor="let producto of categoria.value | slice:0:productosVisibles[categoria.key]"
+           class="cursor-pointer flex flex-col items-center">
         <div class="bg-gray-100 shadow-lg p-4 w-[300px] h-[420px] flex flex-col items-center justify-center"
              [routerLink]="['/productoin', producto.id]">
           <div class="relative w-[270px] h-[350px] overflow-hidden bg-white flex items-center justify-center">
-            <button (click)="prevSlide(producto.id); $event.stopPropagation()" class="absolute left-2 text-black text-2xl font-bold z-10">
+            <button (click)="prevSlide(producto.id); $event.stopPropagation()"
+                    class="absolute left-2 text-black text-3xl font-light z-10 hover:text-gray-700 transition-colors">
               ‹
             </button>
             <img [src]="producto.imagenes[currentIndexes[producto.id]]"
                  alt="{{ producto.nombre }}"
                  class="w-full h-full object-cover transition-opacity duration-500">
-            <button (click)="nextSlide(producto.id); $event.stopPropagation()" class="absolute right-2 text-black text-2xl font-bold z-10">
+            <button (click)="nextSlide(producto.id); $event.stopPropagation()"
+                    class="absolute right-2 text-black text-3xl font-light z-10 hover:text-gray-700 transition-colors">
               ›
             </button>
           </div>
@@ -27,17 +30,21 @@
             </span>
           </div>
         </div>
-        <div class="text-center mt-3 w-full">
-          <h3 class="text-lg font-semibold font-serif">{{ producto.nombre }}</h3>
-          <p class="text-xl font-bold font-serif">€{{ producto.precio }}</p>
+        <div class="text-center mt-4 w-full space-y-1"> <!-- Añadido space-y-1 para espaciado consistente -->
+          <h3 class="text-xl font-serif tracking-wide">{{ producto.nombre }}</h3>
+          <p class="text-lg font-serif font-medium">{{ producto.precio }}€</p>
         </div>
       </div>
     </div>
-    <div class="flex space-x-4 mt-4 justify-center">
-      <button *ngIf="categoria.value.length > productosVisibles[categoria.key]" (click)="verMas(categoria.key)" class="px-4 py-2 border border-black bg-white text-black hover:bg-blue-100 mt-4 font-serif">
+    <div class="flex space-x-4 mt-6 justify-center">
+      <button *ngIf="categoria.value.length > productosVisibles[categoria.key]"
+              (click)="verMas(categoria.key)"
+              class="px-6 py-2 border border-black bg-white text-black hover:bg-blue-100 transition-colors duration-300 text-sm font-serif tracking-wide">
         Ver más
       </button>
-      <button *ngIf="productosVisibles[categoria.key] > productosPorPagina" (click)="verMenos(categoria.key)" class="px-4 py-2 border border-black bg-white text-black hover:bg-red-100 mt-4 font-serif">
+      <button *ngIf="productosVisibles[categoria.key] > productosPorPagina"
+              (click)="verMenos(categoria.key)"
+              class="px-6 py-2 border border-black bg-white text-black hover:bg-red-100 transition-colors duration-300 text-sm font-serif tracking-wide">
         Ver menos
       </button>
     </div>

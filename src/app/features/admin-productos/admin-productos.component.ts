@@ -5,6 +5,8 @@ import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {forkJoin} from 'rxjs';
 import {Producto} from '../../Modelos/producto';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-admin-productos',
@@ -49,7 +51,7 @@ export class AdminProductosComponent implements OnInit {
   @ViewChild('selectColor') selectColor: ElementRef | undefined;
 
 
-  constructor(private productoService: ProductoServiceService, private fb: FormBuilder,private cdRef: ChangeDetectorRef) {
+  constructor(private productoService: ProductoServiceService, private fb: FormBuilder,private cdRef: ChangeDetectorRef, private location: Location) {
     // Inicializa el formulario aquí
     this.productoForm = this.fb.group({
       id: [this.productoSeleccionado ? this.productoSeleccionado.id : null],
@@ -317,6 +319,9 @@ export class AdminProductosComponent implements OnInit {
         this.cargarProductos();
       });
     }
+  }
+  volverAtras() {
+    this.location.back();
   }
 
 }

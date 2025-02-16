@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import {ValoracionesService} from '../../services/valoraciones.service';
 
 @Component({
   selector: 'app-productos',
@@ -29,7 +30,7 @@ export class ProductosComponent implements OnInit {
     'Para la Primavera': []
   };
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService,private valoracionesService: ValoracionesService) {}
 
   ngOnInit(): void {
     this.productService.getProductos().subscribe((data) => {
@@ -80,6 +81,8 @@ export class ProductosComponent implements OnInit {
       }
     });
   }
+
+
 
   verMas(categoria: string): void {
     this.productosVisibles[categoria] += this.productosPorPagina;
