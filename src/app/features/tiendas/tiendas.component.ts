@@ -1,14 +1,14 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import 'leaflet-defaulticon-compatibility';
-import { ChangeDetectorRef } from '@angular/core';
 import 'leaflet/dist/leaflet.css';
 
+// Icono personalizado dorado
 const customIcon = L.icon({
   iconUrl: 'assets/marker-icon-2x-gold.png',
   iconRetinaUrl: 'assets/marker-icon-2x-gold.png',
-  iconSize: [25, 41], // Ajusta el tamaño según el icono
+  iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
 });
@@ -18,50 +18,60 @@ const customIcon = L.icon({
   standalone: true,
   templateUrl: './tiendas.component.html',
   styleUrls: ['./tiendas.component.css'],
-  imports: [HttpClientModule],
+  imports: [],
 })
 export class TiendasComponent implements AfterViewInit {
   private map!: L.Map;
 
-  ngAfterViewInit(): void {
-    console.log('ngAfterViewInit called');
+  constructor(private http: HttpClient) {}
 
+  ngAfterViewInit(): void {
     this.map = L.map('map', {
-      center: [40.4168, -3.7038], // Madrid como punto inicial
+      center: [40.4168, -3.7038], // Centrado en Madrid
       zoom: 6,
       dragging: true,
-      scrollWheelZoom: false,
+      scrollWheelZoom: true,
     });
 
-    console.log('Map initialized');
+    // Capas base del mapa
+    const baseMaps = {
+      'Mapa Estándar': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+      }),
+      'Vista Satélite': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenTopoMap contributors',
+      }),
+      'Modo Noche': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; CartoDB',
+      }),
+    };
 
-    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(this.map);
+    // Añadir la capa estándar por defecto
+    baseMaps['Mapa Estándar'].addTo(this.map);
 
-    this.map.on('load', () => {
-      this.map.invalidateSize();
-    });
+    // Control de capas (para cambiar entre ellas)
+    L.control.layers(baseMaps).addTo(this.map);
 
-    console.log('Tile layer added and map size invalidated');
+    // Obtener tiendas desde el backend y agregar los marcadores
+    this.http.get<any[]>('http://localhost:8000/tiendas').subscribe(
+      (tiendas) => {
+        tiendas.forEach((tienda) => {
+          console.log(`Añadiendo marcador para ${tienda.name}`);
 
-    const tiendas = [
-      { name: 'Tienda 1', lat: 40.4168, lng: -3.7038 },
-      { name: 'Tienda 2', lat: 41.3879, lng: 2.16992 }
-    ];
+          // Crear y añadir marcadores con el icono dorado directamente al mapa
+          L.marker([tienda.lat, tienda.lng], { icon: customIcon })
+            .bindPopup(`<b>${tienda.name}</b><br>Ubicación: ${tienda.lat}, ${tienda.lng}`)
+            .addTo(this.map);
+        });
 
-    tiendas.forEach(tienda => {
-      console.log(`Adding marker for ${tienda.name}`);
-      L.marker([tienda.lat, tienda.lng], { icon: customIcon })
-        .addTo(this.map)
-        .bindPopup(tienda.name);
-    });
-
-    setTimeout(() => {
-      this.map.invalidateSize();
-      console.log('Map size invalidated after timeout');
-    }, 500);
-
+        // Ajustar tamaño del mapa después de cargar los marcadores
+        setTimeout(() => {
+          this.map.invalidateSize();
+        }, 500);
+      },
+      (error) => {
+        console.error('Error obteniendo tiendas:', error);
+      }
+    );
   }
-
 }
