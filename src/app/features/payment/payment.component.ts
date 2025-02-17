@@ -14,6 +14,8 @@ import { CommonModule } from '@angular/common';
 })
 export class PaymentComponent implements OnInit {
   paymentForm!: FormGroup;
+  carrito: any[] = [];
+  total: number = 0;
 
   constructor(private fb: FormBuilder) {}
 
@@ -36,6 +38,15 @@ export class PaymentComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+    const carritoGuardado = localStorage.getItem('carrito');
+    if (carritoGuardado) {
+      this.carrito = JSON.parse(carritoGuardado);
+      this.calcularTotal();
+    }
+  }
+
+  calcularTotal() {
+    this.total = parseFloat(this.carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0).toFixed(2));
   }
 
   changePaymentMethod() {
@@ -45,7 +56,7 @@ export class PaymentComponent implements OnInit {
       this.paymentForm.get('numeroTarjeta')?.setValidators([Validators.required, Validators.pattern(/^\d{16}$/)]);
       this.paymentForm.get('fechaCaducidad')?.setValidators([Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]);
       this.paymentForm.get('cvv')?.setValidators([Validators.required, Validators.pattern(/^\d{3}$/)]);
-      this.paymentForm.get('titular')?.setValidators(Validators.required);
+      this.paymentForm.get('titular')?.setValidators([Validators.required]);
 
       this.paymentForm.get('email')?.clearValidators();
       this.paymentForm.get('password')?.clearValidators();
@@ -53,7 +64,7 @@ export class PaymentComponent implements OnInit {
 
     } else {
       this.paymentForm.get('email')?.setValidators([Validators.required, Validators.email]);
-      this.paymentForm.get('password')?.setValidators(Validators.required);
+      this.paymentForm.get('password')?.setValidators([Validators.required]);
 
       this.paymentForm.get('numeroTarjeta')?.clearValidators();
       this.paymentForm.get('fechaCaducidad')?.clearValidators();
@@ -67,11 +78,12 @@ export class PaymentComponent implements OnInit {
       });
     }
 
+    // 🔥 IMPORTANTE: Actualiza los validadores
     ['numeroTarjeta', 'fechaCaducidad', 'cvv', 'titular', 'email', 'password'].forEach(field => {
       this.paymentForm.get(field)?.updateValueAndValidity();
-      this.paymentForm.get(field)?.markAsTouched();
     });
 
+    this.paymentForm.markAsPristine(); // Evita que se marquen errores antes de tocar los campos
     this.paymentForm.patchValue({ paymentMethod: selectedMethod });
   }
 
