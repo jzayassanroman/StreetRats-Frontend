@@ -10,6 +10,7 @@ import {Producto} from '../../Modelos/producto';
   selector: 'app-admin-productos',
   imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule],
   templateUrl: './admin-productos.component.html',
+  standalone: true,
   styleUrl: './admin-productos.component.css'
 })
 

@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CartService } from '../../services/cartService';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-productoin',
@@ -26,14 +27,15 @@ export class ProductoinComponent implements OnInit {
   valoraciones: any[] = [];
   carrito: any[] = [];
   carritoAbierto: boolean = false;
-  idProducto: number | undefined ; // Asegúrate de obtener el ID del producto correctamente
+  idProducto: number | undefined; // Asegúrate de obtener el ID del producto correctamente
 
   constructor(
     private route: ActivatedRoute,
     private valoracionesService: ValoracionesService,
     private productService: ProductService,
     private cdr: ChangeDetectorRef,
-    private cartService: CartService
+    private cartService: CartService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -65,8 +67,10 @@ export class ProductoinComponent implements OnInit {
 
   cargarValoraciones(idProducto: number) {
     this.valoracionesService.obtenerValoraciones(idProducto).subscribe((data) => {
-      this.valoraciones = data;
-      this.calcularMediaEstrellas();
+      if (data) {
+        this.valoraciones = data;
+        this.calcularMediaEstrellas();
+      }
     });
   }
 
@@ -88,13 +92,18 @@ export class ProductoinComponent implements OnInit {
 
     const valoracionData = {
       id_producto: this.producto.id,
-      id_cliente: localStorage.getItem('userId'), // Esto se debe cambiar por el cliente autenticado
       estrellas: this.estrellasSeleccionadas,
       valoracion: this.comentario,
       fecha: new Date().toISOString().split('T')[0]
     };
 
-    this.valoracionesService.enviarValoracion(valoracionData).subscribe(() => {
+    console.log('Valoración enviada:', valoracionData);
+
+    // Obtén el token JWT desde localStorage
+    const token = localStorage.getItem('token');
+    console.log(token);
+
+    this.valoracionesService.enviarValoracion(valoracionData, token).subscribe(() => {
       Swal.fire({
         title: '¡Gracias por tu valoración!',
         text: 'Tu comentario ha sido enviado con éxito.',
@@ -109,6 +118,13 @@ export class ProductoinComponent implements OnInit {
       if (this.producto) {
         this.cargarValoraciones(this.producto.id); // Refrescar las valoraciones
       }
+    }, error => {
+      Swal.fire({
+        title: 'Error',
+        text: error.error?.message || 'No se pudo enviar la valoración',
+        icon: 'error',
+        confirmButtonText: 'Cerrar'
+      });
     });
   }
 
@@ -145,5 +161,5 @@ export class ProductoinComponent implements OnInit {
     this.cdr.detectChanges(); // Usamos el servicio
   }
 
-  protected readonly Math = Math;
+  protected readonly Math: Math = Math;
 }

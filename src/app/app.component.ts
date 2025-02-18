@@ -7,6 +7,7 @@ import { NavbarComponent } from './features/navbar/navbar.component';
 import { AboutUsComponent } from './features/about-us/about-us.component';
 import { FooterComponent } from './features/footer/footer.component';
 import {ProductosComponent} from './features/productos/productos.component';
+import {EditarClienteComponent} from './features/editar-cliente/editar-cliente.component';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ import {ProductosComponent} from './features/productos/productos.component';
     NavbarComponent,
     FooterComponent,
     ProductosComponent,
+    EditarClienteComponent
+
     // LoginComponent
   ],
 })
