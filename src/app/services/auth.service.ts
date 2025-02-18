@@ -100,4 +100,6 @@ export class AuthService {
   getUser() {
     return this.http.get<{ id: number }>('http://localhost:8000/usuarios/api/user');
   }
+
+
 }

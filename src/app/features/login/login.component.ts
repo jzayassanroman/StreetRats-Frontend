@@ -80,9 +80,6 @@ export class LoginComponent {
     });
   }
 
-
-
-
   navitageToRegistro(){
     this.router.navigate(['/crear-cuenta']);
   }
