@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 
@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   providers: [AuthService]
-
 })
 export class LoginComponent {
   username = '';
@@ -22,14 +21,19 @@ export class LoginComponent {
   errorMessage = '';
 
   authService = inject(AuthService);
-  constructor(private router:Router) {
+  constructor(private router: Router) {
   }
 
   onSubmit() {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
         console.log('Login exitoso:', response);
+
         localStorage.setItem('token', response.token);
+
+        // Extraer la ID del cliente del token (asumiendo JWT)
+        const payload = JSON.parse(atob(response.token.split('.')[1]));
+        localStorage.setItem('clienteId', payload.clienteId); // Guarda la ID del cliente
 
         Swal.fire({
           title: '¡Inicio de Sesión Correcto!',
@@ -40,7 +44,7 @@ export class LoginComponent {
           showConfirmButton: false
         }).then(() => {
           this.router.navigate(['']).then(() => {
-            window.location.reload(); // Recarga la página para actualizar el navbar
+            window.location.reload();
           });
         });
       },
@@ -55,7 +59,8 @@ export class LoginComponent {
     });
   }
 
-  navitageToRegistro(){
+
+  navitageToRegistro() {
     this.router.navigate(['/crear-cuenta']);
   }
 }

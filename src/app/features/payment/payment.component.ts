@@ -4,20 +4,23 @@ import Swal from 'sweetalert2';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { PedidoService } from '../../services/pedido.service';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
   templateUrl: './payment.component.html',
   imports: [FormsModule, HttpClientModule, CommonModule, ReactiveFormsModule],
-  styleUrls: ['./payment.component.css']
+  styleUrls: ['./payment.component.css'],
+  providers: [PedidoService]
 })
 export class PaymentComponent implements OnInit {
   paymentForm!: FormGroup;
   carrito: any[] = [];
   total: number = 0;
+  clienteId: number = 15; // ⚠️ Ajusta esto con el ID del usuario logueado
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private pedidoService: PedidoService) {}
 
   ngOnInit(): void {
     this.paymentForm = this.fb.group({
@@ -38,9 +41,14 @@ export class PaymentComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+
     const carritoGuardado = localStorage.getItem('carrito');
     if (carritoGuardado) {
-      this.carrito = JSON.parse(carritoGuardado);
+      this.carrito = JSON.parse(carritoGuardado).map((item: any) => ({
+        ...item,
+        talla: item.talla || 'No especificado',
+        color: item.color || 'Color predeterminado' // ✅ Asegura que el color se muestra
+      }));
       this.calcularTotal();
     }
   }
@@ -78,12 +86,11 @@ export class PaymentComponent implements OnInit {
       });
     }
 
-    // 🔥 IMPORTANTE: Actualiza los validadores
     ['numeroTarjeta', 'fechaCaducidad', 'cvv', 'titular', 'email', 'password'].forEach(field => {
       this.paymentForm.get(field)?.updateValueAndValidity();
     });
 
-    this.paymentForm.markAsPristine(); // Evita que se marquen errores antes de tocar los campos
+    this.paymentForm.markAsPristine();
     this.paymentForm.patchValue({ paymentMethod: selectedMethod });
   }
 
@@ -98,11 +105,45 @@ export class PaymentComponent implements OnInit {
       return;
     }
 
-    Swal.fire({
-      title: '🎉 ¡Pago Exitoso!',
-      text: `Tu pago con ${this.paymentForm.get('paymentMethod')?.value === 'tarjeta' ? 'Tarjeta de Crédito' : 'PayPal'} ha sido procesado correctamente.`,
-      icon: 'success',
-      confirmButtonColor: '#1a202c',
+    // ✅ Construcción del objeto pedido con la estructura correcta
+    const pedido = {
+      id_cliente: this.clienteId,
+      total: this.total,
+      estado: 'En curso', // Estado inicial
+      fecha: new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+      productos: this.carrito.map(item => ({
+        id_producto: item.id,
+        id_color: item.colorId || null, // ⚠️ Importante para la DB
+        id_talla: item.tallaId || null, // ⚠️ Importante para la DB
+        cantidad: item.cantidad,
+        subtotal: item.precio * item.cantidad
+      }))
+    };
+
+    console.log('Pedido enviado:', pedido); // 🔥 Verificar en consola antes de enviar
+
+    this.pedidoService.guardarPedido(pedido).subscribe({
+      next: (response) => {
+        Swal.fire({
+          title: '🎉 ¡Pago Exitoso!',
+          text: 'Tu pedido ha sido registrado correctamente.',
+          icon: 'success',
+          confirmButtonColor: '#1a202c',
+        });
+
+        localStorage.removeItem('carrito');
+        this.carrito = [];
+        this.total = 0;
+      },
+      error: (err) => {
+        Swal.fire({
+          title: '❌ Error en el pago',
+          text: 'Hubo un problema al procesar el pedido.',
+          icon: 'error',
+          confirmButtonColor: '#d33',
+        });
+        console.error('Error al guardar el pedido:', err);
+      }
     });
   }
 }
