@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
+import {jwtDecode} from 'jwt-decode';
 
 
 @Component({
@@ -28,8 +29,18 @@ export class LoginComponent {
   onSubmit() {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
-        console.log('Login exitoso:', response);
+        console.log('Login exitoso - respuesta completa:', response);
+
         localStorage.setItem('token', response.token);
+
+        // ✅ Extraemos el rol desde el token decodificado
+        const decoded: any = jwtDecode(response.token);
+        console.log("Token decodificado:", decoded);
+
+        const userRol = decoded.rol || 'Usuario sin rol'; // Intentamos obtener el rol desde el token
+        localStorage.setItem('rol', userRol);
+
+        console.log('Rol guardado en localStorage:', userRol);
 
         Swal.fire({
           title: '¡Inicio de Sesión Correcto!',
@@ -44,16 +55,18 @@ export class LoginComponent {
           });
         });
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error en el login:', error);
         Swal.fire({
           title: 'Error',
-          text: 'Usuario o contraseña incorrectos.',
-          icon: 'error',
-          confirmButtonText: 'Intentar de nuevo'
+          text: error.error?.message || 'Error en el inicio de sesión',
+          icon: 'error'
         });
       }
     });
   }
+
+
 
   navitageToRegistro(){
     this.router.navigate(['/crear-cuenta']);

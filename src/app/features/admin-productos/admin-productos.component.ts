@@ -170,7 +170,7 @@ export class AdminProductosComponent implements OnInit {
       descripcion: producto.descripcion,
       tipo: producto.tipo,
       precio: producto.precio,
-      imagen: producto.imagenes ? producto.imagenes.join(', ') : '', // Convertimos el array a una cadena separada por comas
+      imagen: producto.imagen,
       sexo: producto.sexo,
       talla: producto.talla?.id, // Asignamos solo el ID de la talla
       color: producto.color?.id  // Asignamos solo el ID del color
@@ -206,8 +206,6 @@ export class AdminProductosComponent implements OnInit {
 
   // Método para aplicar los filtros
   aplicarFiltros() {
-    console.log("Productos antes del filtrado:", this.productos);
-
     this.productoService.buscarProductos(this.busqueda, this.filtroTipo, this.filtroSexo)
       .subscribe((productos: Producto[]) => {
         console.log('Productos recibidos en Angular:', productos);

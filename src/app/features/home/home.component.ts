@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Navigation, Pagination } from 'swiper/modules';
 import {NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
 import {ProductosComponent} from '../productos/productos.component';
 

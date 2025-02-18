@@ -5,8 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './features/navbar/navbar.component';
 import { AboutUsComponent } from './features/about-us/about-us.component';
 import { FooterComponent } from './features/footer/footer.component';
-import { ProductosComponent } from './features/productos/productos.component';
 import { CommonModule } from '@angular/common';
+import {ProductosComponent} from './features/productos/productos.component';
+import {EditarClienteComponent} from './features/editar-cliente/editar-cliente.component';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,9 @@ import { CommonModule } from '@angular/common';
     FooterComponent,
     ProductosComponent,
     CommonModule,
+    EditarClienteComponent
+
+    // LoginComponent
   ],
 })
 export class AppComponent {
