@@ -34,14 +34,13 @@ export const routes: Routes = [
 
   //Rutas de Admin
   {
-    path: 'admin',
-    component: AdminProductosComponent,
+    path: 'admindashboard',
+    component: AdminDashboardComponent,
     canActivate: [roleGuardGuard], // Usa el guard
     data: { roles: ['Admin'] } // Solo admin puede acceder
   },
 
 
   { path: 'payment', component: PaymentComponent },
-  { path: 'admindashboard', component: AdminDashboardComponent },
   { path: 'adminproductos', component: AdminProductosComponent }
 ];

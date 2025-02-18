@@ -31,16 +31,27 @@ export class LoginComponent {
       next: (response) => {
         console.log('Login exitoso - respuesta completa:', response);
 
+        this.authService.handleAuthentication(response.token);
+
         localStorage.setItem('token', response.token);
 
         // ✅ Extraemos el rol desde el token decodificado
         const decoded: any = jwtDecode(response.token);
         console.log("Token decodificado:", decoded);
 
-        const userRol = decoded.rol || 'Usuario sin rol'; // Intentamos obtener el rol desde el token
-        localStorage.setItem('rol', userRol);
+        const userRol = decoded.rol; // ✅ Extraer correctamente el rol
+        if (userRol) {
+          localStorage.setItem('roles', userRol); // ✅ Guardar correctamente el rol
+        }
 
-        console.log('Rol guardado en localStorage:', userRol);
+        console.log('Rol guardado en localStorage:', localStorage.getItem('roles'));
+
+        if (userRol === 'Admin') {
+          this.router.navigate(['/admindashboard']);
+        } else {
+          this.router.navigate(['/']);
+
+        }
 
         Swal.fire({
           title: '¡Inicio de Sesión Correcto!',
@@ -50,9 +61,12 @@ export class LoginComponent {
           timerProgressBar: true,
           showConfirmButton: false
         }).then(() => {
-          this.router.navigate(['']).then(() => {
-            window.location.reload(); // Recarga la página para actualizar el navbar
-          });
+          if (userRol === 'Admin') {
+            this.router.navigate(['/admindashboard']);
+          } else {
+            this.router.navigate(['/']);
+            location.reload();
+          }
         });
       },
       error: (error) => {
@@ -65,6 +79,7 @@ export class LoginComponent {
       }
     });
   }
+
 
 
 
