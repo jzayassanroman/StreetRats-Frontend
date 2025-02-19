@@ -92,6 +92,11 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
+  getUserId(): number | null {
+    const decodedToken = this.decodeToken();
+    return decodedToken ? decodedToken.id : null; // Asumiendo que el id está en el payload
+  }
+
   logout() {
     localStorage.clear();
     this.isLoggedInSubject.next(false);

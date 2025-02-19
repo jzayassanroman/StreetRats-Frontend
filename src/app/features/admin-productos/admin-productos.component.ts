@@ -178,11 +178,6 @@ export class AdminProductosComponent implements OnInit {
 
     console.log('Producto cargado en el formulario:', this.productoForm.value);
   }
-
-
-
-
-
   guardarCambios() {
     if (this.productoSeleccionado) {
       const productoEditado = {
@@ -255,8 +250,6 @@ export class AdminProductosComponent implements OnInit {
         this.nuevaTalla = ''; // Limpiar el campo después de agregarlo
       });
     }
-
-
 
   }
   prevSlide(carouselId: number) {
