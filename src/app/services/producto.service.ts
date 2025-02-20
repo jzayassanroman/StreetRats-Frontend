@@ -12,6 +12,7 @@ export interface Producto {
   sexo: string;
   id_talla: number;
   id_color: number;
+  color?: string;
 }
 
 @Injectable({
@@ -37,4 +38,5 @@ export class ProductService {
   getProductoById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/find/${id}`);
   }
+
 }

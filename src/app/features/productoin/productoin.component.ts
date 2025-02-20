@@ -92,6 +92,7 @@ export class ProductoinComponent implements OnInit {
 
     const valoracionData = {
       id_producto: this.producto.id,
+      id_cliente: localStorage.getItem('userId'), // Esto se debe cambiar por el cliente autenticado
       estrellas: this.estrellasSeleccionadas,
       valoracion: this.comentario,
       fecha: new Date().toISOString().split('T')[0]
@@ -153,6 +154,8 @@ export class ProductoinComponent implements OnInit {
       nombre: this.producto.nombre,
       precio: this.producto.precio,
       talla: this.tallaSeleccionada,
+      idColor: this.producto.id_color, // ✅ Se obtiene directamente del producto
+      color: this.producto.color, // ✅ Se obtiene directamente del producto
       cantidad: this.cantidad,
       imagen: this.producto.imagenes?.[0] || ''
     };

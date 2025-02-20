@@ -160,43 +160,47 @@ export class AdminProductosComponent implements OnInit {
 
 
   editarProducto(producto: Producto) {
-    this.productoSeleccionado = { ...producto }; // Clonamos el producto seleccionado
+    this.productoSeleccionado = { ...producto }; // Clone the selected product
     this.mostrarFormulario = true;
 
-    // Cargamos las propiedades correctamente
+    // Concatenate the image URLs into a single string separated by commas
+    const imagenesConcatenadas = producto.imagenes ? producto.imagenes.join(',') : '';
+
+    // Load the properties correctly into the form
     this.productoForm.patchValue({
       id: producto.id,
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       tipo: producto.tipo,
       precio: producto.precio,
-      imagen: producto.imagen,
+      imagen: imagenesConcatenadas, // Assign the concatenated string of image URLs
       sexo: producto.sexo,
-      talla: producto.talla?.id, // Asignamos solo el ID de la talla
-      color: producto.color?.id  // Asignamos solo el ID del color
+      talla: producto.talla?.id, // Assign only the ID of the size
+      color: producto.color?.id  // Assign only the ID of the color
     });
 
+    // Ensure the images are assigned correctly
+    this.productoSeleccionado.imagenes = producto.imagenes ? producto.imagenes : [];
+
     console.log('Producto cargado en el formulario:', this.productoForm.value);
+    console.log('Imágenes del producto:', this.productoSeleccionado.imagenes);
   }
-
-
-
-
 
   guardarCambios() {
     if (this.productoSeleccionado) {
       const productoEditado = {
-        ...this.productoForm.value, // Obtiene los valores del formulario
+        ...this.productoForm.value, // Obtener los valores del formulario
         talla: this.productoForm.value.talla ? Number(this.productoForm.value.talla) : null,
-        color: this.productoForm.value.color ? Number(this.productoForm.value.color) : null
+        color: this.productoForm.value.color ? Number(this.productoForm.value.color) : null,
+        imagen: this.productoForm.value.imagen.split(',') // Convertir la cadena de URLs a un array
       };
 
       console.log('Producto editado antes de enviar:', productoEditado);
 
       this.productoService.editarProducto(productoEditado).subscribe(response => {
         console.log('Producto actualizado exitosamente:', response);
-        this.cargarProductos(); // Refresca la lista de productos
-        this.cancelarFormulario(); // Cierra el formulario
+        this.cargarProductos(); // Refrescar la lista de productos
+        this.cancelarFormulario(); // Cerrar el formulario
       }, error => {
         console.error('Error al editar producto:', error);
       });
@@ -215,18 +219,61 @@ export class AdminProductosComponent implements OnInit {
           return;
         }
 
-        this.productosFiltrados = productos.map(producto => ({
-          ...producto,
-          imagenes: producto.imagen ? JSON.parse(producto.imagen) : [] // 🔹 Convierte el string en array
-        }));
+        this.productosFiltrados = productos.map(producto => {
+          let imagenes: string[] = [];
+          if (typeof producto.imagen === 'string') {
+            try {
+              // Try to parse the imagen field as JSON
+              imagenes = JSON.parse(producto.imagen);
+              if (!Array.isArray(imagenes)) {
+                // If it's not an array, wrap it in an array
+                imagenes = [producto.imagen];
+              }
+            } catch (e) {
+              // If parsing fails, assume it's a single URL string
+              imagenes = [producto.imagen];
+            }
+          }
+          return {
+            ...producto,
+            imagenes: imagenes.filter((img): img is string => !!img) // Ensure imagenes is an array of strings
+          };
+        });
 
         console.log('Productos filtrados:', this.productosFiltrados);
       });
   }
 
-  // Función para buscar productos (se ejecuta al hacer clic en el botón de búsqueda)
+
   buscarProductos() {
-    this.aplicarFiltros();
+    console.log('Realizando búsqueda con:', this.busqueda, this.filtroTipo, this.filtroSexo);
+    this.productoService.buscarProductos(this.busqueda, this.filtroTipo, this.filtroSexo).subscribe(
+      (productos) => {
+        console.log('Productos encontrados:', productos);
+        this.productosFiltrados = productos.map(producto => {
+          let imagenes: string[] = [];
+          if (typeof producto.imagen === 'string') {
+            try {
+              // Try to parse the imagen field as JSON
+              imagenes = JSON.parse(producto.imagen);
+              if (!Array.isArray(imagenes)) {
+                // If it's not an array, wrap it in an array
+                imagenes = [producto.imagen];
+              }
+            } catch (e) {
+              // If parsing fails, assume it's a single URL string
+              imagenes = [producto.imagen];
+            }
+          }
+          return {
+            ...producto,
+            imagenes: imagenes.filter((img): img is string => !!img) // Ensure imagenes is an array of strings
+          };
+        });
+        console.log('Productos con imágenes:', this.productosFiltrados);
+      },
+      (error) => console.error('Error al buscar productos:', error)
+    );
   }
 
   restablecerFiltros() {

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
-import {CommonModule, CurrencyPipe} from '@angular/common';
+import {CommonModule, CurrencyPipe, NgClass} from '@angular/common';
 import {CartService} from '../../services/cartService';
 
 @Component({
@@ -87,10 +87,9 @@ export class NavbarComponent implements OnInit {
   navigateToPayment() {
     this.router.navigate(['/payment']); // Redirige a la página de inicio
   }
-  navigateToProducto() {
-    this.router.navigate(['/listadoproducto']); // Redirige a la página de inicio
-  }
+
   navigateToTiendas() {
     this.router.navigate(['/tiendas']); // Redirige a la página de inicio
   }
+
 }

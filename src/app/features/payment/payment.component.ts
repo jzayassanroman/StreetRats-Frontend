@@ -34,13 +34,22 @@ export class PaymentComponent implements OnInit {
       provincia: ['', Validators.required],
       telefono: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
       paymentMethod: ['tarjeta', Validators.required],
-      numeroTarjeta: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
-      fechaCaducidad: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
-      cvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
-      titular: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      numeroTarjeta: ['', [Validators.pattern(/^\d{16}$/)]],
+      fechaCaducidad: ['', [Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
+      cvv: ['', [Validators.pattern(/^\d{3}$/)]],
+      titular: [''],
+      email: ['', [Validators.email]],
+      password: ['']
     });
+
+    this.paymentForm.valueChanges.subscribe(() => {
+      // Forzar la actualización de la UI
+      this.paymentForm.get('numeroTarjeta')?.updateValueAndValidity({ emitEvent: false });
+      this.paymentForm.get('fechaCaducidad')?.updateValueAndValidity({ emitEvent: false });
+      this.paymentForm.get('cvv')?.updateValueAndValidity({ emitEvent: false });
+      this.paymentForm.get('titular')?.updateValueAndValidity({ emitEvent: false });
+    });
+
 
     const carritoGuardado = localStorage.getItem('carrito');
     if (carritoGuardado) {
@@ -70,7 +79,7 @@ export class PaymentComponent implements OnInit {
       this.paymentForm.get('password')?.clearValidators();
       this.paymentForm.patchValue({ email: '', password: '' });
 
-    } else {
+    } else { // Si elige PayPal
       this.paymentForm.get('email')?.setValidators([Validators.required, Validators.email]);
       this.paymentForm.get('password')?.setValidators([Validators.required]);
 
@@ -86,6 +95,7 @@ export class PaymentComponent implements OnInit {
       });
     }
 
+    // ✅ Actualizar validaciones y valores
     ['numeroTarjeta', 'fechaCaducidad', 'cvv', 'titular', 'email', 'password'].forEach(field => {
       this.paymentForm.get(field)?.updateValueAndValidity();
     });
@@ -94,7 +104,17 @@ export class PaymentComponent implements OnInit {
     this.paymentForm.patchValue({ paymentMethod: selectedMethod });
   }
 
+
   processPayment() {
+    console.log('Formulario válido:', this.paymentForm.valid);
+    console.log('Datos del formulario:', this.paymentForm.value);
+
+    Object.keys(this.paymentForm.controls).forEach(key => {
+      if (this.paymentForm.get(key)?.invalid) {
+        console.log(`❌ Error en ${key}:`, this.paymentForm.get(key)?.errors);
+      }
+    });
+
     if (this.paymentForm.invalid) {
       Swal.fire({
         title: '⚠️ Campos Incompletos',
@@ -146,4 +166,5 @@ export class PaymentComponent implements OnInit {
       }
     });
   }
+
 }
