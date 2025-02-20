@@ -186,6 +186,10 @@ export class AdminProductosComponent implements OnInit {
     console.log('Imágenes del producto:', this.productoSeleccionado.imagenes);
   }
 
+
+
+
+
   guardarCambios() {
     if (this.productoSeleccionado) {
       const productoEditado = {
@@ -244,7 +248,7 @@ export class AdminProductosComponent implements OnInit {
       });
   }
 
-
+  // Función para buscar productos (se ejecuta al hacer clic en el botón de búsqueda)
   buscarProductos() {
     console.log('Realizando búsqueda con:', this.busqueda, this.filtroTipo, this.filtroSexo);
     this.productoService.buscarProductos(this.busqueda, this.filtroTipo, this.filtroSexo).subscribe(

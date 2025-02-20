@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
@@ -24,7 +24,9 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
   carrito: any[] = [];
 
-  constructor(public authService: AuthService, private router: Router, protected cartService:CartService) {}
+  constructor(public authService: AuthService, private router: Router,
+              protected cartService:CartService,
+              private cdRef: ChangeDetectorRef) {}
 
   checkLoginStatus() {
     this.isLoggedIn = !!localStorage.getItem('token'); // Verifica si hay token guardado
@@ -38,6 +40,11 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.isLoggedIn$.subscribe(status => {
+      console.log('Navbar - Estado de autenticación:', status);
+      this.isLoggedIn = status;
+      this.cdRef.detectChanges();
+    });
     this.checkLoginStatus();
     this.cartService.cart$.subscribe(cart => {
       this.carrito = cart;
@@ -87,9 +94,13 @@ export class NavbarComponent implements OnInit {
   navigateToPayment() {
     this.router.navigate(['/payment']); // Redirige a la página de inicio
   }
-
+  navigateToProducto() {
+    this.router.navigate(['/listadoproducto']); // Redirige a la página de inicio
+  }
   navigateToTiendas() {
     this.router.navigate(['/tiendas']); // Redirige a la página de inicio
   }
-
+  navigateToEditarPerfil() {
+    this.router.navigate(['/editar-cliente']); // Redirige a la página de inicio
+  }
 }
