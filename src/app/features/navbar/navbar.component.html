@@ -1,85 +1,107 @@
-<div class="navbar flex flex-row justify-between items-center border-b border-black">
-  <div class="pages flex p-10 ml-14 gap-10 text-2xl">
-    <a (click)="navigateToProductos()" class="font-mono">SHOP</a>
-    <a (click)="navigateToTiendas()" class="font-mono">TIENDAS</a>
-    <a (click)="navigateToAbout()" class="font-mono">ABOUT US</a>
+<div class="navbar grid grid-cols-3 items-center border-b border-black bg-white">
+  <!-- Left section -->
+  <div class="pages flex p-8 ml-14 gap-12 text-lg">
+    <a (click)="navigateToProductos()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">SHOP</a>
+    <a (click)="navigateToTiendas()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">TIENDAS</a>
+    <a (click)="navigateToAbout()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">ABOUT US</a>
   </div>
-  <div class="flex flex-row w-32 items-center justify-center">
-    <img (click)="navigateToHome()" src="assets/Logo.png" alt="Logo">
+
+  <!-- Center section with logo -->
+  <div class="flex justify-center">
+    <img (click)="navigateToHome()" src="assets/Logo.png" alt="Logo" class="cursor-pointer w-32">
   </div>
-  <div class="flex flex-row p-10 gap-20 text-base">
-    <a routerLink="/search">
-      <svg class="flex flex-row items-center justify-center" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 50 50">
+
+  <!-- Right section -->
+  <div class="flex flex-row p-8 gap-12 items-center justify-end">
+    <a routerLink="/search" class="hover:opacity-70 transition-opacity duration-300">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 50 50" class="fill-black">
         <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"></path>
       </svg>
     </a>
 
-    <!-- Si NO está logueado, muestra INICIAR SESIÓN -->
-    <a *ngIf="!isLoggedIn" (click)="navigateToLogin()" class="mt-3 font-mono text-1xl">INICIAR SESIÓN</a>
+    <a *ngIf="!isLoggedIn" (click)="navigateToLogin()"
+       class="font-light tracking-widest text-sm hover:text-gray-600 transition-colors duration-300">
+      INICIAR SESIÓN
+    </a>
 
-    <!-- Si está logueado, muestra el icono de usuario con dropdown -->
     <div *ngIf="isLoggedIn" class="relative group">
-      <img src="assets/usuariologo.png" class="w-10 h-10 cursor-pointer" />
+      <img src="assets/usuariologo.png" class="w-8 h-8 cursor-pointer opacity-90 hover:opacity-100 transition-opacity duration-300" />
 
-      <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-md opacity-0 scale-y-0 group-hover:opacity-100 group-hover:scale-y-100 transform origin-top transition-all duration-300">
-        <a (click)="navigateToProfile()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">Ver Perfil</a>
-        <a (click)="navigateToProfile()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">Historial Pedidos</a>
-        <a (click)="navigateToEditarPerfil()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer">Editar Cliente</a>
-
-
-        <a (click)="logout()" class="block px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer">Cerrar Sesión</a>
+      <div class="absolute right-0 mt-2 w-56 bg-white border border-black shadow-lg
+                  opacity-0 scale-y-0 group-hover:opacity-100 group-hover:scale-y-100
+                  transform origin-top transition-all duration-300">
+        <a (click)="navigateToProfile()"
+           class="block px-6 py-3 text-sm font-light tracking-wide hover:bg-black hover:text-white transition-colors duration-300">
+          Ver Perfil
+        </a>
+        <a (click)="navigateToProfile()"
+           class="block px-6 py-3 text-sm font-light tracking-wide hover:bg-black hover:text-white transition-colors duration-300">
+          Historial Pedidos
+        </a>
+        <a (click)="navigateToEditarPerfil()"
+           class="block px-6 py-3 text-sm font-light tracking-wide hover:bg-black hover:text-white transition-colors duration-300">
+          Editar Cliente
+        </a>
+        <a (click)="logout()"
+           class="block px-6 py-3 text-sm font-light tracking-wide text-red-600 hover:bg-red-600 hover:text-white transition-colors duration-300">
+          Cerrar Sesión
+        </a>
       </div>
     </div>
 
-    <!-- Ícono del carrito -->
-    <a (click)="toggleCarrito()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" class="bi bi-cart2" viewBox="0 0 16 16">
+    <a (click)="toggleCarrito()" class="hover:opacity-70 transition-opacity duration-300">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" class="bi bi-cart2" viewBox="0 0 16 16">
         <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
       </svg>
     </a>
 
     <!-- Carrito Deslizante -->
     <div [ngClass]="{'translate-x-0': carritoAbierto, 'translate-x-full': !carritoAbierto}"
-         class="fixed right-0 top-0 w-96 h-screen bg-white shadow-lg p-6 transition-transform duration-300 z-50 overflow-y-auto">
+         class="fixed right-0 top-0 w-96 h-screen bg-white shadow-xl border-l border-black p-8 transition-transform duration-300 z-50 overflow-y-auto">
 
-      <!-- Botón Cerrar -->
-      <button (click)="toggleCarrito()" class="absolute top-4 right-4 text-xl fill-black">✖</button>
+      <button (click)="toggleCarrito()" class="absolute top-6 right-6 text-xl hover:opacity-70 transition-opacity duration-300">✖</button>
 
-      <!-- Contenido del Carrito -->
-      <h2 class="text-3xl font-bold mb-6">Carrito</h2>
+      <h2 class="text-2xl font-light tracking-wide mb-8">CARRITO</h2>
 
-      <!-- Si el carrito tiene productos, los muestra -->
       <div *ngIf="carrito.length > 0; else carritoVacio">
-
-        <div *ngFor="let item of carrito; let i = index" class="flex items-center justify-between mb-4">
-          <img *ngIf="item.imagenes?.length > 0" [src]="item.imagen?.[0]" alt="Producto" class="w-16 h-16 object-cover rounded-lg">
-          <div class="flex-1 ml-4 gap-3">
-            <p class="font-medium">{{ item.nombre }}</p>
-            <p class="text-sm text-gray-500 mt-1">Talla: {{ item.talla }}</p>
-            <p class="text-sm text-gray-500">Cantidad: {{ item.cantidad }}</p>
-            <p class="text-sm text-gray-500">Precio: {{ item.precio | currency }}</p>
-
+        <div *ngFor="let item of carrito; let i = index"
+             class="flex items-center justify-between mb-6 pb-6 border-b border-gray-200">
+          <img *ngIf="item.imagenes?.length > 0" [src]="item.imagen?.[0]"
+               alt="Producto" class="w-20 h-20 object-cover">
+          <div class="flex-1 ml-4">
+            <p class="font-light">{{ item.nombre }}</p>
+            <p class="text-sm text-gray-600 mt-2">Talla: {{ item.talla }}</p>
+            <p class="text-sm text-gray-600">Cantidad: {{ item.cantidad }}</p>
+            <p class="text-sm text-gray-600">{{ item.precio | currency }}</p>
           </div>
-          <button (click)="eliminarDelCarrito(i)" class="text-red-600">🗑</button>
-
+          <button (click)="eliminarDelCarrito(i)"
+                  class="text-black opacity-50 hover:opacity-100 transition-opacity duration-300">
+            ✕
+          </button>
         </div>
-        <div class="flex flex-row gap-6">
-          <p class="text-xl font-semibold  text-right mt-1">Total: {{ calcularTotal() | currency }}</p>
-          <button (click)="navigateToPayment()" class="border border-black pl-16 pr-16 rounded-md bg-black text-white pt-2 pb-2">Pagar ya</button>
-        </div>
-        <!-- Total del Carrito -->
 
+        <div class="mt-8 space-y-4">
+          <p class="text-lg font-light tracking-wide">Total: {{ calcularTotal() | currency }}</p>
+          <button (click)="navigateToPayment()"
+                  class="w-full bg-black text-white py-3 font-light tracking-wider
+                         hover:bg-gray-900 transition-colors duration-300">
+            PAGAR AHORA
+          </button>
+        </div>
       </div>
 
-      <!-- Mensaje si el carrito está vacío -->
       <ng-template #carritoVacio>
         <div class="flex flex-col items-center text-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-bag-check opacity-50">
             <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
             <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
           </svg>
-          <p class="mt-6 text-lg font-medium">El carrito está vacío</p>
-          <button (click)="navigateToProductos()" class="mt-6 px-6 py-3 bg-gray-800 text-white rounded-lg">Empezar a comprar</button>
+          <p class="mt-6 font-light tracking-wide">El carrito está vacío</p>
+          <button (click)="navigateToProductos()"
+                  class="mt-8 px-8 py-3 border border-black text-sm font-light tracking-wider
+                         hover:bg-black hover:text-white transition-colors duration-300">
+            EMPEZAR A COMPRAR
+          </button>
         </div>
       </ng-template>
     </div>

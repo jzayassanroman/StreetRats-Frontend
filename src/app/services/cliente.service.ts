@@ -16,6 +16,14 @@ export class ClienteService {
     return this.http.post<any>(this.apiUrl+'/crear', data);
   }
 
+  obtenerClientePorUsuario(): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<any>(`${this.apiUrl}/usuario`, { headers });
+  }
+
+
   editClienteYUsername(cliente: any, nuevoUsername: string): Observable<any> {
     const userId = this.authService.getUserId(); // Obtener el ID del usuario desde el token
 
@@ -29,10 +37,9 @@ export class ClienteService {
       email: cliente.email,
       telefono: cliente.telefono,
       direccion: cliente.direccion,
-      username: nuevoUsername // Si se quiere cambiar el username
+      username: nuevoUsername // Asegurar que el username se envía correctamente
     };
 
-    // Obtenemos el token del usuario para enviarlo en el encabezado
     const token = this.authService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 

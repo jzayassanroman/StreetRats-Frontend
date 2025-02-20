@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
-import { UsuarioService } from '../../services/usuario.service';
+import { Component, OnInit } from '@angular/core';
+import { ClienteService } from '../../services/cliente.service';
 import { AuthService } from '../../services/auth.service';
-import {ClienteService} from '../../services/cliente.service';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-editar-cliente',
@@ -13,31 +12,47 @@ import {FormsModule} from '@angular/forms';
   ],
   styleUrls: ['./editar-cliente.component.css']
 })
-export class EditarClienteComponent {
-  // Datos del cliente que se van a editar
-  cliente = {
-    nombre: '',
-    apellido: '',
-    email: '',
-    telefono: '',
-    direccion: ''
-  };
-
-  // El nuevo username que se quiere establecer
-  nuevoUsername: string = '';
+export class EditarClienteComponent implements OnInit {
+  cliente: any = {}; // Datos actuales del cliente
+  nuevoUsername: string = ''; // Campo opcional para cambiar username
 
   constructor(private clienteService: ClienteService, private authService: AuthService) {}
 
-  // Método para editar el cliente y el username
+  ngOnInit() {
+    this.obtenerDatosCliente();
+  }
+
+  // ✅ Obtener los datos del cliente logueado
+  obtenerDatosCliente() {
+    this.clienteService.obtenerClientePorUsuario().subscribe({
+      next: (cliente) => {
+        this.cliente = cliente;
+
+        // 🔹 Si el backend envía "username" dentro del objeto cliente, lo asignamos
+        if (cliente.username) {
+          this.nuevoUsername = cliente.username;
+        } else {
+          console.warn('⚠ El backend no envió el campo username');
+        }
+      },
+      error: (err) => console.error('Error al obtener datos del cliente', err)
+    });
+  }
+
+
+
+  // ✅ Guardar cambios del cliente
   onEditarCliente() {
-    // Aquí no necesitamos el clienteId explícitamente, ya que lo tomamos del token
-    this.clienteService.editClienteYUsername(this.cliente, this.nuevoUsername)
+    const clienteEditado = { ...this.cliente }; // Copia de los datos del cliente
+    clienteEditado.username = this.nuevoUsername; // Agregar el username al objeto
+
+    this.clienteService.editClienteYUsername(clienteEditado, this.nuevoUsername)
       .subscribe({
-        next: (response: any) => {
-          console.log('Cliente y username actualizados:', response);
-          alert('Cliente y username actualizados correctamente');
+        next: (response) => {
+          console.log('Cliente actualizado:', response);
+          alert('Cliente actualizado correctamente');
         },
-        error: (err: any) => {
+        error: (err) => {
           console.error('Error al actualizar:', err);
           alert('Hubo un error al actualizar el cliente');
         }
