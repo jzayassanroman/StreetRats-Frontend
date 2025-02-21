@@ -1,132 +1,315 @@
-<div class="flex justify-center items-start space-x-8 p-8">
-  <!-- Formulario de pago alineado a la izquierda -->
-  <div class="w-1/2 p-6 bg-gray-100 rounded-lg shadow-md">
-    <h2 class="text-xl font-bold mb-4">Entrega</h2>
-    <form [formGroup]="paymentForm" class="space-y-3">
-      <input formControlName="pais" class="w-full p-2 border rounded" placeholder="País" />
-      <div *ngIf="paymentForm.get('pais')?.invalid && paymentForm.get('pais')?.touched" class="text-red-500">
-        País es requerido.
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white py-16">
+  <div class="max-w-6xl mx-auto px-8 flex justify-between items-start space-x-12">
+    <!-- Formulario de pago -->
+    <div class="w-2/3 bg-white border-2 border-black p-12">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-light tracking-widest text-black">ENTREGA</h2>
+        <div class="mt-2 h-px w-24 bg-black mx-auto"></div>
       </div>
 
-      <div class="flex space-x-2">
-        <input formControlName="nombre" class="w-1/2 p-2 border rounded" placeholder="Nombre" />
-        <input formControlName="apellidos" class="w-1/2 p-2 border rounded" placeholder="Apellidos" />
-      </div>
-      <div *ngIf="paymentForm.get('nombre')?.invalid && paymentForm.get('nombre')?.touched" class="text-red-500">
-        Nombre es requerido.
-      </div>
-      <div *ngIf="paymentForm.get('apellidos')?.invalid && paymentForm.get('apellidos')?.touched" class="text-red-500">
-        Apellidos son requeridos.
-      </div>
-
-      <input formControlName="direccion" class="w-full p-2 border rounded" placeholder="Dirección" />
-      <div *ngIf="paymentForm.get('direccion')?.invalid && paymentForm.get('direccion')?.touched" class="text-red-500">
-        Dirección es requerida.
-      </div>
-
-      <div class="flex space-x-2">
-        <input formControlName="codigoPostal" class="w-1/3 p-2 border rounded" placeholder="Código Postal" />
-        <input formControlName="ciudad" class="w-1/3 p-2 border rounded" placeholder="Ciudad" />
-        <input formControlName="provincia" class="w-1/3 p-2 border rounded" placeholder="Provincia" />
-      </div>
-      <div *ngIf="paymentForm.get('codigoPostal')?.invalid && paymentForm.get('codigoPostal')?.touched" class="text-red-500">
-        Código Postal es requerido y debe ser un número de 5 dígitos.
-      </div>
-      <div *ngIf="paymentForm.get('ciudad')?.invalid && paymentForm.get('ciudad')?.touched" class="text-red-500">
-        Ciudad es requerida.
-      </div>
-      <div *ngIf="paymentForm.get('provincia')?.invalid && paymentForm.get('provincia')?.touched" class="text-red-500">
-        Provincia es requerida.
-      </div>
-
-      <input formControlName="telefono" class="w-full p-2 border rounded" placeholder="Teléfono" />
-      <div *ngIf="paymentForm.get('telefono')?.invalid && paymentForm.get('telefono')?.touched" class="text-red-500">
-        Teléfono es requerido y debe ser un número de 9 dígitos.
-      </div>
-
-      <h2 class="text-xl font-bold mt-6">Método de Pago</h2>
-      <select formControlName="paymentMethod" class="w-full p-2 border rounded" (change)="changePaymentMethod()">
-        <option value="tarjeta">Tarjeta de crédito</option>
-        <option value="paypal">PayPal</option>
-      </select>
-
-      <div *ngIf="paymentForm.get('paymentMethod')?.value === 'tarjeta'" class="space-y-3">
-        <input formControlName="numeroTarjeta" class="w-full p-2 border rounded" placeholder="Número de tarjeta" />
-        <div *ngIf="paymentForm.get('numeroTarjeta')?.invalid && paymentForm.get('numeroTarjeta')?.touched" class="text-red-500">
-          Número de tarjeta es requerido y debe ser un número de 16 dígitos.
+      <form [formGroup]="paymentForm" class="space-y-8">
+        <!-- Campo País -->
+        <div class="relative">
+          <input
+            formControlName="pais"
+            class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+            placeholder=" "
+          />
+          <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                      peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                      peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                      peer-placeholder-shown:text-gray-500
+                      text-xs -translate-y-3">
+            PAÍS
+          </label>
+          <div *ngIf="paymentForm.get('pais')?.invalid && paymentForm.get('pais')?.touched"
+               class="mt-1 text-xs text-black">
+            País es requerido.
+          </div>
         </div>
-        <input formControlName="fechaCaducidad" class="w-1/2 p-2 border rounded" placeholder="MM/YY" />
-        <div *ngIf="paymentForm.get('fechaCaducidad')?.invalid && paymentForm.get('fechaCaducidad')?.touched" class="text-red-500">
-          Fecha de caducidad es requerida y debe tener el formato MM/YY.
-        </div>
-        <input formControlName="cvv" class="w-1/2 p-2 border rounded" placeholder="CVV" />
-        <div *ngIf="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched" class="text-red-500">
-          CVV es requerido y debe ser un número de 3 dígitos.
-        </div>
-        <input formControlName="titular" class="w-full p-2 border rounded" placeholder="Nombre del titular" />
-        <div *ngIf="paymentForm.get('titular')?.invalid && paymentForm.get('titular')?.touched" class="text-red-500">
-          Nombre del titular es requerido.
-        </div>
-      </div>
 
-      <div *ngIf="paymentForm.get('paymentMethod')?.value === 'paypal'" class="space-y-3">
-        <input formControlName="email" class="w-full p-2 border rounded" placeholder="Correo electrónico" />
-        <div *ngIf="paymentForm.get('email')?.invalid && paymentForm.get('email')?.touched" class="text-red-500">
-          Correo electrónico es requerido y debe ser válido.
+        <!-- Nombre y Apellidos -->
+        <div class="flex space-x-6">
+          <div class="relative flex-1">
+            <input
+              formControlName="nombre"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              NOMBRE
+            </label>
+          </div>
+          <div class="relative flex-1">
+            <input
+              formControlName="apellidos"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              APELLIDOS
+            </label>
+          </div>
         </div>
-        <input formControlName="password" type="password" class="w-full p-2 border rounded" placeholder="Contraseña" />
-        <div *ngIf="paymentForm.get('password')?.invalid && paymentForm.get('password')?.touched" class="text-red-500">
-          Contraseña es requerida.
+
+        <!-- Dirección -->
+        <div class="relative">
+          <input
+            formControlName="direccion"
+            class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+            placeholder=" "
+          />
+          <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                      peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                      peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                      peer-placeholder-shown:text-gray-500
+                      text-xs -translate-y-3">
+            DIRECCIÓN
+          </label>
         </div>
-      </div>
 
-      <!-- Total de la compra -->
-      <div class="text-xl font-bold mt-4">Total: €{{ total }}</div>
+        <!-- Código Postal, Ciudad y Provincia -->
+        <div class="flex space-x-6">
+          <div class="relative flex-1">
+            <input
+              formControlName="codigoPostal"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              CÓDIGO POSTAL
+            </label>
+          </div>
+          <div class="relative flex-1">
+            <input
+              formControlName="ciudad"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              CIUDAD
+            </label>
+          </div>
+          <div class="relative flex-1">
+            <input
+              formControlName="provincia"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              PROVINCIA
+            </label>
+          </div>
+        </div>
 
-      <button (click)="processPayment()" class="w-full p-3 bg-black text-white font-bold rounded mt-3">
-        Pagar Ahora
-      </button>
-    </form>
-  </div>
+        <!-- Teléfono -->
+        <div class="relative">
+          <input
+            formControlName="telefono"
+            class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+            placeholder=" "
+          />
+          <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                      peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                      peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                      peer-placeholder-shown:text-gray-500
+                      text-xs -translate-y-3">
+            TELÉFONO
+          </label>
+        </div>
+
+        <!-- Método de Pago -->
+        <div class="mt-12 mb-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-light tracking-widest text-black">MÉTODO DE PAGO</h2>
+            <div class="mt-2 h-px w-24 bg-black mx-auto"></div>
+          </div>
+
+          <select
+            formControlName="paymentMethod"
+            (change)="changePaymentMethod()"
+            class="w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+          >
+            <option value="tarjeta">Tarjeta de crédito</option>
+            <option value="paypal">PayPal</option>
+          </select>
+        </div>
+
+        <!-- Campos Tarjeta -->
+        <div *ngIf="paymentForm.get('paymentMethod')?.value === 'tarjeta'" class="space-y-8">
+          <div class="relative">
+            <input
+              formControlName="numeroTarjeta"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              NÚMERO DE TARJETA
+            </label>
+          </div>
+
+          <div class="flex space-x-6">
+            <div class="relative flex-1">
+              <input
+                formControlName="fechaCaducidad"
+                class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+                placeholder=" "
+              />
+              <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                          peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                          peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                          peer-placeholder-shown:text-gray-500
+                          text-xs -translate-y-3">
+                FECHA CADUCIDAD (MM/YY)
+              </label>
+            </div>
+            <div class="relative flex-1">
+              <input
+                formControlName="cvv"
+                class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+                placeholder=" "
+              />
+              <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                          peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                          peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                          peer-placeholder-shown:text-gray-500
+                          text-xs -translate-y-3">
+                CVV
+              </label>
+            </div>
+          </div>
+
+          <div class="relative">
+            <input
+              formControlName="titular"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              TITULAR DE LA TARJETA
+            </label>
+          </div>
+        </div>
+
+        <!-- Campos PayPal -->
+        <div *ngIf="paymentForm.get('paymentMethod')?.value === 'paypal'" class="space-y-8">
+          <div class="relative">
+            <input
+              formControlName="email"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              CORREO ELECTRÓNICO
+            </label>
+          </div>
+
+          <div class="relative">
+            <input
+              formControlName="password"
+              type="password"
+              class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+              placeholder=" "
+            />
+            <label class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                        peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                        peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                        peer-placeholder-shown:text-gray-500
+                        text-xs -translate-y-3">
+              CONTRASEÑA
+            </label>
+          </div>
+        </div>
+
+        <!-- Total y Botón de Pago -->
+        <div class="mt-12 space-y-8">
+          <div class="text-2xl font-light tracking-wider text-center">TOTAL: €{{ total }}</div>
+          <button
+            (click)="processPayment()"
+            class="w-full bg-black text-white py-4 font-light tracking-widest hover:bg-gray-900 transition-colors duration-300"
+          >
+            PAGAR AHORA
+          </button>
+        </div>
+      </form>
+    </div>
 
   <!-- Detalles del pedido a la derecha -->
-  <div class="w-1/3 p-6 bg-white rounded-lg shadow-md">
-    <h2 class="text-xl font-bold mb-4">Detalles del Pedido</h2>
-    <div *ngFor="let item of carrito">
-      <div class="flex justify-between border-b py-2">
-        <span>{{ item.nombre }}</span>
-        <span>€{{ item.precio }} x {{ item.cantidad }}</span>
+    <div class="w-1/3 space-y-8">
+      <!-- Detalles del pedido -->
+      <div class="p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-xl font-bold mb-4">Detalles del Pedido</h2>
+        <div *ngFor="let item of carrito">
+          <div class="flex justify-between border-b py-2">
+            <span>{{ item.nombre }}</span>
+            <span>€{{ item.precio }} x {{ item.cantidad }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta de crédito -->
+      <div *ngIf="paymentForm.get('paymentMethod')?.value === 'tarjeta'"
+           class="w-[380px] h-64 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700
+              text-white rounded-2xl p-6 shadow-2xl z-50 border border-gray-600 bg-opacity-70 backdrop-blur-lg
+              transition-all duration-300 ease-in-out">
+        <!-- Logos y CVV -->
+        <div class="flex justify-between items-center">
+          <span class="text-sm font-semibold tracking-wide">TARJETA DE CRÉDITO</span>
+          <span class="text-sm font-semibold">CVV: {{ paymentForm.get('cvv')?.value || '***' }}</span>
+        </div>
+
+        <!-- Número de Tarjeta -->
+        <div class="mt-6 text-2xl font-mono tracking-widest text-center">
+          {{ paymentForm.get('numeroTarjeta')?.value || '**** **** **** ****' }}
+        </div>
+
+        <!-- Nombre del titular y fecha de expiración -->
+        <div class="flex justify-between mt-6 text-lg font-medium">
+          <span>{{ paymentForm.get('titular')?.value || 'TITULAR DE LA TARJETA' }}</span>
+          <span>Exp: {{ paymentForm.get('fechaCaducidad')?.value || '**/**' }}</span>
+        </div>
+
+        <!-- Diseño decorativo -->
+        <div class="absolute bottom-4 left-4 flex space-x-2">
+          <div class="w-8 h-8 bg-yellow-500 rounded-full"></div>
+          <div class="w-8 h-8 bg-red-600 rounded-full"></div>
+        </div>
       </div>
     </div>
-  </div>
+
+
 </div>
-
-<div *ngIf="paymentForm.get('paymentMethod')?.value === 'tarjeta'"
-     class="fixed bottom-24 right-10 w-[28rem] h-64 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700
-            text-white rounded-2xl p-6 shadow-2xl z-50 border border-gray-600 bg-opacity-70 backdrop-blur-lg">
-
-  <!-- Logos y CVV -->
-  <div class="flex justify-between items-center">
-    <span class="text-sm font-semibold tracking-wide">TARJETA DE CRÉDITO</span>
-    <span class="text-sm font-semibold">CVV: {{ paymentForm.get('cvv')?.value || '***' }}</span>
-  </div>
-
-  <!-- Número de Tarjeta -->
-  <div class="mt-6 text-2xl font-mono tracking-widest text-center">
-    {{ paymentForm.get('numeroTarjeta')?.value || '**** **** **** ****' }}
-  </div>
-
-  <!-- Nombre del titular y fecha de expiración -->
-  <div class="flex justify-between mt-6 text-lg font-medium">
-    <span>{{ paymentForm.get('titular')?.value || 'TITULAR DE LA TARJETA' }}</span>
-    <span>Exp: {{ paymentForm.get('fechaCaducidad')?.value || '**/**' }}</span>
-  </div>
-
-  <!-- Diseño decorativo -->
-  <div class="absolute bottom-4 left-4 flex space-x-2">
-    <div class="w-8 h-8 bg-yellow-500 rounded-full"></div>
-    <div class="w-8 h-8 bg-red-600 rounded-full"></div>
-  </div>
 </div>
-
 
