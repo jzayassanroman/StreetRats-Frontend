@@ -103,4 +103,8 @@ export class NavbarComponent implements OnInit {
   navigateToEditarPerfil() {
     this.router.navigate(['/editar-cliente']); // Redirige a la página de inicio
   }
+
+  navigateToHistorialPedido() {
+    this.router.navigate(['/historial-pedidos']); // Redirige a la página de inicio
+  }
 }
