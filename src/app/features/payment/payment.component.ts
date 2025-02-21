@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PedidoService } from '../../services/pedido.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-payment',
@@ -18,11 +19,26 @@ export class PaymentComponent implements OnInit {
   paymentForm!: FormGroup;
   carrito: any[] = [];
   total: number = 0;
-  clienteId: number = 15; // ⚠️ Ajusta esto con el ID del usuario logueado
+  clienteId: number | null = null; // Ahora se extrae dinámicamente del token
 
   constructor(private fb: FormBuilder, private pedidoService: PedidoService) {}
 
   ngOnInit(): void {
+    // Obtener el token desde localStorage
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        this.clienteId = decodedToken.id_cliente; // Extraer id_cliente del token
+        console.log('ID del Cliente obtenido:', this.clienteId);
+      } catch (error) {
+        console.error('Error al decodificar el token:', error);
+      }
+    } else {
+      console.warn('No se encontró un token en localStorage.');
+    }
+
     this.paymentForm = this.fb.group({
       pais: ['', Validators.required],
       nombre: ['', Validators.required],
@@ -42,21 +58,12 @@ export class PaymentComponent implements OnInit {
       password: ['']
     });
 
-    this.paymentForm.valueChanges.subscribe(() => {
-      // Forzar la actualización de la UI
-      this.paymentForm.get('numeroTarjeta')?.updateValueAndValidity({ emitEvent: false });
-      this.paymentForm.get('fechaCaducidad')?.updateValueAndValidity({ emitEvent: false });
-      this.paymentForm.get('cvv')?.updateValueAndValidity({ emitEvent: false });
-      this.paymentForm.get('titular')?.updateValueAndValidity({ emitEvent: false });
-    });
-
-
     const carritoGuardado = localStorage.getItem('carrito');
     if (carritoGuardado) {
       this.carrito = JSON.parse(carritoGuardado).map((item: any) => ({
         ...item,
         talla: item.talla || 'No especificado',
-        color: item.color || 'Color predeterminado' // ✅ Asegura que el color se muestra
+        color: item.color || 'Color predeterminado'
       }));
       this.calcularTotal();
     }
@@ -78,8 +85,7 @@ export class PaymentComponent implements OnInit {
       this.paymentForm.get('email')?.clearValidators();
       this.paymentForm.get('password')?.clearValidators();
       this.paymentForm.patchValue({ email: '', password: '' });
-
-    } else { // Si elige PayPal
+    } else {
       this.paymentForm.get('email')?.setValidators([Validators.required, Validators.email]);
       this.paymentForm.get('password')?.setValidators([Validators.required]);
 
@@ -95,7 +101,6 @@ export class PaymentComponent implements OnInit {
       });
     }
 
-    // ✅ Actualizar validaciones y valores
     ['numeroTarjeta', 'fechaCaducidad', 'cvv', 'titular', 'email', 'password'].forEach(field => {
       this.paymentForm.get(field)?.updateValueAndValidity();
     });
@@ -103,7 +108,6 @@ export class PaymentComponent implements OnInit {
     this.paymentForm.markAsPristine();
     this.paymentForm.patchValue({ paymentMethod: selectedMethod });
   }
-
 
   processPayment() {
     console.log('Formulario válido:', this.paymentForm.valid);
@@ -125,25 +129,34 @@ export class PaymentComponent implements OnInit {
       return;
     }
 
-    // ✅ Construcción del objeto pedido con la estructura correcta
+    if (!this.clienteId) {
+      Swal.fire({
+        title: '❌ Error',
+        text: 'No se pudo obtener el ID del cliente. Inicia sesión nuevamente.',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+      });
+      return;
+    }
+
     const pedido = {
       id_cliente: this.clienteId,
       total: this.total,
-      estado: 'En curso', // Estado inicial
-      fecha: new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+      estado: 'En curso',
+      fecha: new Date().toISOString().split('T')[0],
       productos: this.carrito.map(item => ({
         id_producto: item.id,
-        id_color: item.colorId || null, // ⚠️ Importante para la DB
-        id_talla: item.tallaId || null, // ⚠️ Importante para la DB
+        id_color: item.colorId || null,
+        id_talla: item.tallaId || null,
         cantidad: item.cantidad,
         subtotal: item.precio * item.cantidad
       }))
     };
 
-    console.log('Pedido enviado:', pedido); // 🔥 Verificar en consola antes de enviar
+    console.log('Pedido enviado:', pedido);
 
     this.pedidoService.guardarPedido(pedido).subscribe({
-      next: (response) => {
+      next: () => {
         Swal.fire({
           title: '🎉 ¡Pago Exitoso!',
           text: 'Tu pedido ha sido registrado correctamente.',
@@ -166,5 +179,4 @@ export class PaymentComponent implements OnInit {
       }
     });
   }
-
 }
