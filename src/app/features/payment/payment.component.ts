@@ -85,7 +85,8 @@ export class PaymentComponent implements OnInit {
       this.paymentForm.get('email')?.clearValidators();
       this.paymentForm.get('password')?.clearValidators();
       this.paymentForm.patchValue({ email: '', password: '' });
-    } else {
+
+    } else { // Si elige PayPal
       this.paymentForm.get('email')?.setValidators([Validators.required, Validators.email]);
       this.paymentForm.get('password')?.setValidators([Validators.required]);
 
@@ -101,6 +102,7 @@ export class PaymentComponent implements OnInit {
       });
     }
 
+    // ✅ Actualizar validaciones y valores
     ['numeroTarjeta', 'fechaCaducidad', 'cvv', 'titular', 'email', 'password'].forEach(field => {
       this.paymentForm.get(field)?.updateValueAndValidity();
     });
@@ -108,6 +110,7 @@ export class PaymentComponent implements OnInit {
     this.paymentForm.markAsPristine();
     this.paymentForm.patchValue({ paymentMethod: selectedMethod });
   }
+
 
   processPayment() {
     console.log('Formulario válido:', this.paymentForm.valid);
@@ -142,7 +145,7 @@ export class PaymentComponent implements OnInit {
     const pedido = {
       id_cliente: this.clienteId,
       total: this.total,
-      estado: 'En curso',
+      estado: 'en_curso', // ✅ Usa el mismo formato que en el backend
       fecha: new Date().toISOString().split('T')[0],
       productos: this.carrito.map(item => ({
         id_producto: item.id,
@@ -153,10 +156,10 @@ export class PaymentComponent implements OnInit {
       }))
     };
 
-    console.log('Pedido enviado:', pedido);
+    console.log('Pedido enviado:', pedido); // 🔥 Verificar en consola antes de enviar
 
     this.pedidoService.guardarPedido(pedido).subscribe({
-      next: () => {
+      next: (response) => {
         Swal.fire({
           title: '🎉 ¡Pago Exitoso!',
           text: 'Tu pedido ha sido registrado correctamente.',
@@ -179,4 +182,5 @@ export class PaymentComponent implements OnInit {
       }
     });
   }
+
 }

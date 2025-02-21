@@ -98,35 +98,38 @@
         <span>€{{ item.precio }} x {{ item.cantidad }}</span>
       </div>
     </div>
+    <div class="sticky top-0 h-screen flex justify-end">
+      <div *ngIf="paymentForm.get('paymentMethod')?.value === 'tarjeta'"
+           class="absolute top-24 -right-3 w-[28rem] h-64
+       bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white
+       rounded-2xl p-6 shadow-2xl z-[9999] border border-gray-600
+       bg-opacity-70 backdrop-blur-lg ">
+
+        <!-- Logos y CVV -->
+        <div class="flex justify-between items-center">
+          <span class="text-sm font-semibold tracking-wide">TARJETA DE CRÉDITO</span>
+          <span class="text-sm font-semibold">CVV: {{ paymentForm.get('cvv')?.value || '***' }}</span>
+        </div>
+
+        <!-- Número de Tarjeta -->
+        <div class="mt-6 text-2xl font-mono tracking-widest text-center">
+          {{ paymentForm.get('numeroTarjeta')?.value || '**** **** **** ****' }}
+        </div>
+
+        <!-- Nombre del titular y fecha de expiración -->
+        <div class="flex justify-between mt-6 text-lg font-medium">
+          <span>{{ paymentForm.get('titular')?.value || 'TITULAR DE LA TARJETA' }}</span>
+          <span>Exp: {{ paymentForm.get('fechaCaducidad')?.value || '**/**' }}</span>
+        </div>
+
+        <!-- Diseño decorativo -->
+        <div class="absolute bottom-4 left-4 flex space-x-2">
+          <div class="w-8 h-8 bg-yellow-500 rounded-full"></div>
+          <div class="w-8 h-8 bg-red-600 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>
-
-<div *ngIf="paymentForm.get('paymentMethod')?.value === 'tarjeta'"
-     class="fixed bottom-24 right-10 w-[28rem] h-64 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700
-            text-white rounded-2xl p-6 shadow-2xl z-50 border border-gray-600 bg-opacity-70 backdrop-blur-lg">
-
-  <!-- Logos y CVV -->
-  <div class="flex justify-between items-center">
-    <span class="text-sm font-semibold tracking-wide">TARJETA DE CRÉDITO</span>
-    <span class="text-sm font-semibold">CVV: {{ paymentForm.get('cvv')?.value || '***' }}</span>
-  </div>
-
-  <!-- Número de Tarjeta -->
-  <div class="mt-6 text-2xl font-mono tracking-widest text-center">
-    {{ paymentForm.get('numeroTarjeta')?.value || '**** **** **** ****' }}
-  </div>
-
-  <!-- Nombre del titular y fecha de expiración -->
-  <div class="flex justify-between mt-6 text-lg font-medium">
-    <span>{{ paymentForm.get('titular')?.value || 'TITULAR DE LA TARJETA' }}</span>
-    <span>Exp: {{ paymentForm.get('fechaCaducidad')?.value || '**/**' }}</span>
-  </div>
-
-  <!-- Diseño decorativo -->
-  <div class="absolute bottom-4 left-4 flex space-x-2">
-    <div class="w-8 h-8 bg-yellow-500 rounded-full"></div>
-    <div class="w-8 h-8 bg-red-600 rounded-full"></div>
-  </div>
-</div>
-
-

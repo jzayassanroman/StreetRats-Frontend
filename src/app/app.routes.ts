@@ -19,6 +19,7 @@ import {Rol} from './entity/Rol';
 import { TiendasComponent } from './features/tiendas/tiendas.component';
 import { AdminDashboardComponent } from './features/admin-dashboard/admin-dashboard.component';
 import {HistorialPedidosComponent} from './features/historial-pedidos/historial-pedidos.component';
+import {GestionPedidosComponent} from './features/gestion-pedidos/gestion-pedidos.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -37,6 +38,13 @@ export const routes: Routes = [
   {
     path: 'admindashboard',
     component: AdminDashboardComponent,
+    canActivate: [roleGuardGuard], // Usa el guard
+    data: { roles: ['Admin'] } // Solo admin puede acceder
+  },
+
+  {
+    path: 'gestion',
+    component: GestionPedidosComponent,
     canActivate: [roleGuardGuard], // Usa el guard
     data: { roles: ['Admin'] } // Solo admin puede acceder
   },
