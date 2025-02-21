@@ -34,7 +34,9 @@ export class AppComponent {
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.showNavbarFooter = !event.url.includes('/admindashboard') && !event.url.includes('/adminproductos');
+        this.showNavbarFooter =
+          !event.url.includes('/admindashboard') && !event.url.includes('/adminproductos')
+        && !event.url.includes('/gestion');
       }
     });
   }

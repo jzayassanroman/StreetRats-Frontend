@@ -20,6 +20,9 @@ export class AdminDashboardComponent {
   navigateToAdminProducto() {
     this.router.navigate(['/adminproductos']); // Redirige a la página de inicio
   }
+  navigateToGestion(){
+    this.router.navigate(['/gestion']);
+  }
   logout() {
     this.authService.logout();
     localStorage.removeItem('token');

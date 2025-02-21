@@ -6,11 +6,22 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PedidoService {
-  private apiUrl = '/api/pedidos/crear'; // Ajusta la URL según tu backend Symfony
+  private apiUrl = '/api/pedidos'; // Ajusta la URL según tu backend Symfony
 
   constructor(private http: HttpClient) {}
 
   guardarPedido(pedido: any): Observable<any> {
-    return this.http.post(this.apiUrl, pedido);
+    return this.http.post(this.apiUrl+'/crear', pedido);
   }
+
+  findall():Observable<any> {
+    return this.http.get(this.apiUrl+'/all');
+  }
+  deletePedido(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/eliminar/${id}`);
+  }
+  actualizarEstado(id: number, estado: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}/estado`, { estado });
+  }
+
 }

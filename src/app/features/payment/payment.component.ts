@@ -129,16 +129,17 @@ export class PaymentComponent implements OnInit {
     const pedido = {
       id_cliente: this.clienteId,
       total: this.total,
-      estado: 'En curso', // Estado inicial
-      fecha: new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+      estado: 'en_curso', // ✅ Usa el mismo formato que en el backend
+      fecha: new Date().toISOString().split('T')[0],
       productos: this.carrito.map(item => ({
         id_producto: item.id,
-        id_color: item.colorId || null, // ⚠️ Importante para la DB
-        id_talla: item.tallaId || null, // ⚠️ Importante para la DB
+        id_color: item.colorId || null,
+        id_talla: item.tallaId || null,
         cantidad: item.cantidad,
         subtotal: item.precio * item.cantidad
       }))
     };
+
 
     console.log('Pedido enviado:', pedido); // 🔥 Verificar en consola antes de enviar
 
