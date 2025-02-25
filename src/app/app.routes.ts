@@ -8,11 +8,11 @@ import {ProductosComponent} from './features/productos/productos.component';
 import {VerificacionComponent} from './features/verificacion/verificacion.component';
 import {ProductoinComponent} from './features/productoin/productoin.component';
 import {PaymentComponent} from './features/payment/payment.component';
+import {ProductosFiltradosComponent} from './productos-filtrados/productos-filtrados.component';
 
 
 
 export const routes: Routes = [
-
   {path: '', component: HomeComponent},
   {path: 'about-us', component: AboutUsComponent},
   {path: 'crear-cuenta',component: CrearCuentaComponent},
@@ -20,7 +20,8 @@ export const routes: Routes = [
   {path: 'listadoproducto', component: ProductosComponent},
   {path: 'verificar', component: VerificacionComponent},
   { path: 'productoin/:id', component: ProductoinComponent },
-  { path: 'payment', component: PaymentComponent }
+  { path: 'payment', component: PaymentComponent },
+  {path: 'productos-filtrados', component: ProductosFiltradosComponent}
 
 
 

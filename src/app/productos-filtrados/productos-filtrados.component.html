@@ -1,0 +1,69 @@
+<div class="container mx-auto px-4 py-10">
+  <!-- Filtros -->
+  <div class="filters flex flex-wrap justify-center gap-4 mb-8">
+    <select [(ngModel)]="filtroSexo" (change)="aplicarFiltros()" class="p-2 border rounded-md">
+      <option value="">Todos los sexos</option>
+      <option *ngFor="let sexo of sexos" [value]="sexo">{{ sexo }}</option>
+    </select>
+
+    <select [(ngModel)]="filtroTalla" class="p-2 border rounded-md">
+      <option value="">Todas las tallas</option>
+      <option *ngFor="let talla of tallas" [value]="talla.id">{{ talla.descripcion }}</option>
+    </select>
+
+    <input type="number" [(ngModel)]="precioMin" placeholder="Precio Mínimo" class="p-2 border rounded-md">
+    <input type="number" [(ngModel)]="precioMax" placeholder="Precio Máximo" class="p-2 border rounded-md">
+
+    <button (click)="aplicarFiltros()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+      Buscar
+    </button>
+  </div>
+
+  <div *ngIf="productosFiltrados.length === 0" class="text-center text-xl text-gray-500">
+    <p>No se encontraron productos.</p>
+  </div>
+
+  <!-- Título de la categoría -->
+  <h2 *ngIf="productosFiltrados.length > 0" class="text-4xl font-serif text-center mb-12 border-b-2 border-gray-300 pb-2">
+    {{ productosFiltrados[0]?.tipo }}
+  </h2>
+
+  <!-- Contenedor de las tarjetas -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-center">
+    <div *ngFor="let producto of productosFiltrados"
+         class="cursor-pointer flex flex-col items-center bg-white shadow-lg p-6 rounded-lg w-full h-[380px] max-w-[350px] hover:shadow-xl transition-shadow"
+         [routerLink]="['/productoin', producto.id]">
+
+      <div class="relative w-full h-[220px] overflow-hidden bg-gray-100 flex items-center justify-center rounded-md">
+        <button *ngIf="producto.imagenes && producto.imagenes.length > 0"
+                (click)="prevSlide(producto.id); $event.stopPropagation()"
+                class="absolute left-2 text-black text-2xl font-bold z-10 bg-white/50 px-2 py-1 rounded-md">
+          ‹
+        </button>
+
+        <img *ngIf="producto.imagenes && producto.imagenes.length > 0"
+             [src]="producto.imagenes[currentIndexes[producto.id]]"
+             alt="{{ producto.nombre }}"
+             class="w-full h-full object-cover transition-opacity duration-500">
+
+        <button *ngIf="producto.imagenes && producto.imagenes.length > 0"
+                (click)="nextSlide(producto.id); $event.stopPropagation()"
+                class="absolute right-2 text-black text-2xl font-bold z-10 bg-white/50 px-2 py-1 rounded-md">
+          ›
+        </button>
+      </div>
+
+      <div *ngIf="producto.imagenes && producto.imagenes.length > 0" class="flex justify-center mt-2">
+        <span *ngFor="let img of producto.imagenes; let idx = index"
+              class="h-2 w-2 mx-1 rounded-full"
+              [ngClass]="idx === currentIndexes[producto.id] ? 'bg-black' : 'bg-gray-400'">
+        </span>
+      </div>
+
+      <div class="text-center mt-3 w-full">
+        <h3 class="text-lg font-semibold font-serif">{{ producto.nombre }}</h3>
+        <p class="text-xl font-bold font-serif">€{{ producto.precio }}</p>
+      </div>
+    </div>
+  </div>
+</div>

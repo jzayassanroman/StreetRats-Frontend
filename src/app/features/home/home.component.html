@@ -1,28 +1,74 @@
 <div class="flex flex-col items-center w-full">
   <!-- Menú de categorías -->
   <div class="flex flex-row gap-36 text-center items-center justify-center mt-2 border-b-2 pb-1 w-full">
-    <p class="cursor-pointer hover:text-gray-700">SUDADERAS</p>
-    <p class="cursor-pointer hover:text-gray-700">CAMISETAS</p>
-    <p class="cursor-pointer hover:text-gray-700">PANTALONES</p>
-    <p class="cursor-pointer hover:text-gray-700">ZAPATOS</p>
-    <p class="cursor-pointer hover:text-gray-700">ACCESORIOS</p>
-    <p class="cursor-pointer hover:text-gray-700">CAMISAS</p>
+    <button (click)="filtrarPorCategoria(tipoProductoEnum.SUDADERA)">SUDADERAS</button>
+    <button (click)="filtrarPorCategoria(tipoProductoEnum.CAMISETA)">CAMISETAS</button>
+    <button (click)="filtrarPorCategoria(tipoProductoEnum.PANTALONES)">PANTALONES</button>
+    <button (click)="filtrarPorCategoria(tipoProductoEnum.ZAPATOS)">ZAPATOS</button>
+    <button (click)="filtrarPorCategoria(tipoProductoEnum.ACCESORIOS)">ACCESORIOS</button>
+    <button (click)="filtrarPorCategoria(tipoProductoEnum.CAMISA)">CAMISAS</button>
   </div>
 
   <!-- Contenedor del carrusel -->
   <div class="relative w-full mx-auto overflow-hidden rounded-lg shadow-lg">
     <div class="relative w-full h-[680px] bg-gray-200 overflow-hidden">
       <div class="flex transition-transform duration-700 ease-in-out"
-           [ngStyle]="{'transform': 'translateX(' + (-currentIndex * 100) + '%)', 'transition': smoothTransition ? 'transform 0.7s ease-in-out' : 'none'}">
-        <img [src]="images[images.length - 1]" class="w-full h-[700px] flex-shrink-0 object-fill" />
+           [ngStyle]="{'transform': 'translateX(' + (-productoIndices * 100) + '%)', 'transition': smoothTransition ? 'transform 0.7s ease-in-out' : 'none'}">
+        <img *ngIf="images && images.length > 0" [src]="images[images.length - 1]" class="w-full h-[700px] flex-shrink-0 object-fill" />
         <img *ngFor="let image of images" [src]="image" class="w-full h-[700px] object-fill flex-shrink-0" />
-        <img [src]="images[0]" class="w-full h-[700px] object-fill flex-shrink-0" />
+        <img *ngIf="images && images.length > 0" [src]="images[0]" class="w-full h-[700px] object-fill flex-shrink-0" />
       </div>
     </div>
   </div>
 
+  <!-- Mensaje cuando no hay productos -->
+  <div *ngIf="productos.length === 0 && !showError" class="w-full text-center text-xl text-gray-500 mt-4">
+    <p>No se han realizado búsquedas aún.</p>
+  </div>
+
+<!--  &lt;!&ndash; Mostrar productos filtrados &ndash;&gt;-->
+<!--  <div *ngIf="productos.length > 0" class="w-full flex flex-wrap justify-center gap-4 mt-4">-->
+<!--    <div *ngFor="let producto of productos" class="border p-4 rounded-lg shadow-lg w-60 text-center">-->
+<!--      <h3 class="font-bold">{{ producto.nombre }}</h3>-->
+<!--      <p>Precio: {{ producto.precio }}€</p>-->
+<!--      &lt;!&ndash; Mostrar solo la primera imagen &ndash;&gt;-->
+<!--      <img *ngIf="producto.imagenes && producto.imagenes"-->
+<!--           [src]="producto.imagenes[0]"-->
+<!--           alt="{{ producto.nombre }}"-->
+<!--           class="w-full h-40 object-cover mt-2" />-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <!-- Carrusel de imágenes por producto -->
+  <div *ngIf="productos.length > 0" class="flex flex-wrap justify-center gap-4 mt-4 w-full">
+    <div *ngFor="let producto of productos" class="cursor-pointer flex flex-col items-center">
+      <div class="bg-gray-100 shadow-lg p-4 w-[300px] h-[420px] flex flex-col items-center justify-center"
+           [routerLink]="['/productoin', producto.id]">
+        <div class="relative w-[270px] h-[350px] overflow-hidden bg-white flex items-center justify-center">
+          <button (click)="prevSlide(); $event.stopPropagation()" class="absolute left-2 text-black text-2xl font-bold z-10">‹</button>
+          <img *ngIf="producto.imagenes && producto.imagenes"
+               [src]="producto.imagenes[productoIndices[producto.id]]"
+               alt="{{ producto.nombre }}"
+               class="w-full h-full object-cover transition-opacity duration-500">
+          <button (click)="nextSlide(); $event.stopPropagation()" class="absolute right-2 text-black text-2xl font-bold z-10">›</button>
+        </div>
+        <div class="flex justify-center mt-2">
+          <span *ngFor="let img of producto.imagenes; let idx = index"
+                class="h-2 w-2 mx-1 rounded-full"
+                [ngClass]="idx === productoIndices[producto.id] ? 'bg-black' : 'bg-gray-400'">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay productos -->
+  <div *ngIf="productos.length === 0 && searchAttempted" class="w-full text-center text-xl text-gray-500 mt-4">
+    <p>No se encontraron productos con ese nombre.</p>
+  </div>
+
   <!-- Expande el contenedor de productos -->
   <div class="w-full flex justify-center">
-    <app-productos class="w-full max-w-screen-xl"></app-productos>
+    <app-productos [productos1]="productosFiltrados" class="w-full max-w-screen-xl"></app-productos>
   </div>
 </div>

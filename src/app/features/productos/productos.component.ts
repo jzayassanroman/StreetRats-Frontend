@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Producto, ProductService, TipoProducto} from '../../services/producto.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import {BusquedaService} from '../../services/busqueda.service';
 
 @Component({
   selector: 'app-productos',
@@ -15,6 +16,7 @@ import { RouterLink } from '@angular/router';
 })
 export class ProductosComponent implements OnInit {
   productos: Producto[] = [];
+  @Input() productos1: Producto[] = [];
   tiposDisponibles = Object.values(TipoProducto);
   tipoSeleccionado: TipoProducto | null = null;
   currentIndexes: { [key: number]: number } = {};
@@ -44,12 +46,13 @@ export class ProductosComponent implements OnInit {
     this.cargarProductos();
   }
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private busquedaService: BusquedaService) {}
 
   ngOnInit(): void {
     this.cargarProductos();
-    this.productService.getProductos().subscribe((data) => {
-      this.productos = data.map(producto => ({
+
+    this.productService.getProductos().subscribe((data: Producto[]) => {
+      this.productos = data.map((producto: Producto) => ({
         ...producto,
         imagenes: producto.imagenes ?? [] // Asegurar que siempre haya un array de imágenes
       }));
@@ -61,11 +64,11 @@ export class ProductosComponent implements OnInit {
       this.categorias["Nuevos Productos"] = this.productos.slice(0, 80);
 
       // Inicializar índices del carrusel
-      this.productos.forEach(producto => {
+      this.productos.forEach((producto: Producto) => {
         this.currentIndexes[producto.id] = 0;
       });
 
-      // Definir manualmente las categorías
+      // Asignar productos a sus categorías manualmente
       const productosStreetRats = [1, 2, 3, 4];
       const productosMejorValorados = [1, 2, 3, 4];
       const productosVerano = [1, 2, 3, 4];
@@ -74,7 +77,7 @@ export class ProductosComponent implements OnInit {
       const productosPrimavera = [1, 2, 3, 4];
 
       // Asignar productos a sus categorías manualmente
-      this.productos.forEach(producto => {
+      this.productos.forEach((producto: Producto) => {
         if (productosStreetRats.includes(producto.id)) {
           this.categorias["Hecho por StreetRats"].push(producto);
         }
@@ -96,6 +99,7 @@ export class ProductosComponent implements OnInit {
       });
     });
   }
+
 
   ordenarCategorias(a: any, b: any): number {
     const ordenPersonalizado = [

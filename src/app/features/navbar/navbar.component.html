@@ -9,9 +9,32 @@
   </div>
   <div class="flex flex-row p-10 gap-20 text-base">
     <a routerLink="/search">
-      <svg class="flex flex-row items-center justify-center" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 50 50">
-        <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"></path>
-      </svg>
+      <div class="relative flex items-center">
+        <!-- Contenedor para la lupa y la barra de búsqueda -->
+        <div class="flex items-center relative">
+          <!-- Barra de búsqueda que aparece a la izquierda de la lupa cuando está activada -->
+          <div *ngIf="showSearch"
+               class="transform transition-all duration-300 ease-in-out flex items-center bg-white border border-gray-300 rounded-lg shadow-md p-1 mr-2">
+            <input type="text"
+                   [(ngModel)]="searchTerm"
+                   class="w-56 p-2 border-none focus:outline-none"
+                   placeholder="Buscar producto...">
+            <button (click)="buscar()"
+                    class="px-3 py-2 bg-black text-white rounded-md ml-2">
+              🔍
+            </button>
+          </div>
+
+          <!-- Ícono de búsqueda que se mueve a la derecha -->
+          <span (click)="toggleSearch()"
+                class="cursor-pointer transition-all duration-300 ease-in-out"
+                [ngClass]="{'transform translate-x-2': showSearch, 'transform translate-x-0': !showSearch}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 50 50">
+              <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"></path>
+            </svg>
+          </span>
+        </div>
+      </div>
     </a>
 
     <!-- Si NO está logueado, muestra INICIAR SESIÓN -->
@@ -64,7 +87,6 @@
           <button (click)="navigateToPayment()" class="border border-black pl-16 pr-16 rounded-md bg-black text-white pt-2 pb-2">Pagar ya</button>
         </div>
         <!-- Total del Carrito -->
-
       </div>
 
       <!-- Mensaje si el carrito está vacío -->
