@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ValoracionesService {
-  private apiUrl = 'http://localhost:8000/valoraciones';
+  private apiUrl = '/api/valoraciones';
 
   constructor(private http: HttpClient) {}
 
@@ -14,7 +14,11 @@ export class ValoracionesService {
     return this.http.get<any[]>(`${this.apiUrl}/${idProducto}`);
   }
 
-  enviarValoracion(valoracionData: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, valoracionData);
+  enviarValoracion(valoracionData: any, token: string | null) {
+    return this.http.post(`${this.apiUrl}/nueva`, valoracionData, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,16 @@ export class CartService {
     }
 
     this.updateCart(currentCart);
+
+    Swal.fire({
+      title: "¡Producto añadido!",
+      text: `${product.nombre} se ha añadido al carrito.`,
+      icon: "success",
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000
+    });
   }
 
   removeFromCart(index: number) {

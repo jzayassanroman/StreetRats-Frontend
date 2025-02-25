@@ -12,6 +12,9 @@ export interface Producto {
   sexo: string;
   color: {id: number, descripcion: string},
   talla: {id: number, descripcion: string }
+  id_talla: number;
+  id_color: number;
+  color?: string;
 }
 export enum TipoProducto {
   CAMISETA = 'Camiseta',
@@ -28,7 +31,7 @@ export enum TipoProducto {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8001/productos';
+  private apiUrl = '/api/productos';
   productos: Producto[] = [];
 
   constructor(private http: HttpClient) {}
@@ -118,4 +121,5 @@ export class ProductService {
   getTiposDeProductos(): Observable<TipoProducto[]> {
     return of([TipoProducto.CAMISETA, TipoProducto.SUDADERA, TipoProducto.PANTALONES, TipoProducto.ZAPATOS, TipoProducto.ACCESORIOS,TipoProducto.CAMISA]); // Aquí devuelves los tipos.
   }
+
 }

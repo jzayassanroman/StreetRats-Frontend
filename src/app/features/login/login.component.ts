@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
+import {jwtDecode} from 'jwt-decode';
 
 
 @Component({
@@ -28,8 +29,29 @@ export class LoginComponent {
   onSubmit() {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
-        console.log('Login exitoso:', response);
+        console.log('Login exitoso - respuesta completa:', response);
+
+        this.authService.handleAuthentication(response.token);
+
         localStorage.setItem('token', response.token);
+
+        // ✅ Extraemos el rol desde el token decodificado
+        const decoded: any = jwtDecode(response.token);
+        console.log("Token decodificado:", decoded);
+
+        const userRol = decoded.rol; // ✅ Extraer correctamente el rol
+        if (userRol) {
+          localStorage.setItem('roles', userRol); // ✅ Guardar correctamente el rol
+        }
+
+        console.log('Rol guardado en localStorage:', localStorage.getItem('roles'));
+
+        if (userRol === 'Admin') {
+          this.router.navigate(['/admindashboard']);
+        } else {
+          this.router.navigate(['/']);
+
+        }
 
         Swal.fire({
           title: '¡Inicio de Sesión Correcto!',
@@ -39,17 +61,20 @@ export class LoginComponent {
           timerProgressBar: true,
           showConfirmButton: false
         }).then(() => {
-          this.router.navigate(['']).then(() => {
-            window.location.reload(); // Recarga la página para actualizar el navbar
-          });
+          if (userRol === 'Admin') {
+            this.router.navigate(['/admindashboard']);
+          } else {
+            this.router.navigate(['/']);
+            location.reload();
+          }
         });
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error en el login:', error);
         Swal.fire({
           title: 'Error',
-          text: 'Usuario o contraseña incorrectos.',
-          icon: 'error',
-          confirmButtonText: 'Intentar de nuevo'
+          text: error.error?.message || 'Error en el inicio de sesión',
+          icon: 'error'
         });
       }
     });

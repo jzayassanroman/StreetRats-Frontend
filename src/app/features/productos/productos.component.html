@@ -1,37 +1,52 @@
-<div class="container mx-auto px-4 py-10 flex flex-col items-center">
+<div class="container mx-auto px-4 py-16 flex flex-col items-center">
   <div *ngFor="let categoria of categorias | keyvalue: ordenarCategorias; let i = index"
-       [ngStyle]="{ 'margin-bottom': '4rem' }">
-    <h2 class="text-4xl font-serif text-center mb-12 border-b-2 border-gray-300 pb-2">
+       class="w-full mb-12">
+    <h2 class="text-4xl font-serif text-center mb-12 border-b border-gray-200 pb-6 tracking-wider uppercase">
       {{ categoria.key }}
     </h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center">
-      <div *ngFor="let producto of categoria.value" class="cursor-pointer flex flex-col items-center">
-        <div class="bg-gray-100 shadow-lg p-4 w-[300px] h-[420px] flex flex-col items-center justify-center"
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center">
+      <div *ngFor="let producto of categoria.value | slice:0:productosVisibles[categoria.key]"
+           class="cursor-pointer flex flex-col items-center group">
+        <div class="bg-white shadow-md hover:shadow-xl transition-shadow duration-300 p-6 w-[300px] h-[420px] flex flex-col items-center justify-center"
              [routerLink]="['/productoin', producto.id]">
-          <div class="relative w-[270px] h-[350px] overflow-hidden bg-white flex items-center justify-center">
-            <button (click)="prevSlide(producto.id); $event.stopPropagation()" class="absolute left-2 text-black text-2xl font-bold z-10">
+          <div class="relative w-[270px] h-[350px] overflow-hidden bg-gray-50 flex items-center justify-center">
+            <button (click)="prevSlide(producto.id); $event.stopPropagation()"
+                    class="absolute left-2 text-black text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:text-gray-600">
               ‹
             </button>
             <img [src]="producto.imagenes[currentIndexes[producto.id]]"
                  alt="{{ producto.nombre }}"
-                 class="w-full h-full object-cover transition-opacity duration-500">
-            <button (click)="nextSlide(producto.id); $event.stopPropagation()" class="absolute right-2 text-black text-2xl font-bold z-10">
+                 class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+            <button (click)="nextSlide(producto.id); $event.stopPropagation()"
+                    class="absolute right-2 text-black text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:text-gray-600">
               ›
             </button>
           </div>
-          <div class="flex justify-center mt-2">
+          <div class="flex justify-center mt-3">
             <span *ngFor="let img of producto.imagenes; let idx = index"
-                  class="h-2 w-2 mx-1 rounded-full"
-                  [ngClass]="idx === currentIndexes[producto.id] ? 'bg-black' : 'bg-gray-400'">
+                  class="h-1.5 w-1.5 mx-1 rounded-full transition-colors duration-300"
+                  [ngClass]="idx === currentIndexes[producto.id] ? 'bg-black' : 'bg-gray-300'">
             </span>
           </div>
         </div>
-        <div class="text-center mt-3 w-full">
-          <h3 class="text-lg font-semibold font-serif">{{ producto.nombre }}</h3>
-          <p class="text-xl font-bold font-serif">€{{ producto.precio }}</p>
+        <div class="text-center mt-6 w-full space-y-2">
+          <h3 class="text-xl font-serif tracking-wider">{{ producto.nombre }}</h3>
+          <p class="text-lg font-serif text-gray-900">{{ producto.precio }}€</p>
         </div>
       </div>
+    </div>
+    <div class="flex space-x-6 mt-12 justify-center">
+      <button *ngIf="categoria.value.length > productosVisibles[categoria.key]"
+              (click)="verMas(categoria.key)"
+              class="px-8 py-3 border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-all duration-300 text-sm font-serif tracking-widest uppercase">
+        Ver más
+      </button>
+      <button *ngIf="productosVisibles[categoria.key] > productosPorPagina"
+              (click)="verMenos(categoria.key)"
+              class="px-8 py-3 border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-all duration-300 text-sm font-serif tracking-widest uppercase">
+        Ver menos
+      </button>
     </div>
   </div>
 </div>

@@ -1,12 +1,13 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService, Producto } from '../../services/producto.service';
-import {ValoracionesService} from '../../services/valoraciones.service';
+import { ValoracionesService } from '../../services/valoraciones.service';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import {CartService} from '../../services/cartService';
+import { CartService } from '../../services/cartService';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-productoin',
@@ -14,27 +15,35 @@ import {CartService} from '../../services/cartService';
   imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './productoin.component.html',
   styleUrls: ['./productoin.component.css'],
-  providers: [ProductService,ValoracionesService]
+  providers: [ProductService, ValoracionesService]
 })
 export class ProductoinComponent implements OnInit {
   producto: Producto | null = null;
   cantidad: number = 1;
   tallaSeleccionada: string | null = null;
   estrellasSeleccionadas: number = 0;
+  mediaEstrellas: number = 0;
   comentario: string = '';
   valoraciones: any[] = [];
   carrito: any[] = [];
   carritoAbierto: boolean = false;
+  idProducto: number | undefined; // Asegúrate de obtener el ID del producto correctamente
 
   constructor(
     private route: ActivatedRoute,
     private valoracionesService: ValoracionesService,
     private productService: ProductService,
     private cdr: ChangeDetectorRef,
-    private cartService:CartService
+    private cartService: CartService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.idProducto = +params['id'];
+      this.cargarValoraciones(this.idProducto);
+    });
+
     this.cartService.cart$.subscribe(cart => {
       console.log("Carrito actualizado:", cart); // ✅ Verifica que se actualiza
       this.carrito = cart;
@@ -58,8 +67,20 @@ export class ProductoinComponent implements OnInit {
 
   cargarValoraciones(idProducto: number) {
     this.valoracionesService.obtenerValoraciones(idProducto).subscribe((data) => {
-      this.valoraciones = data;
+      if (data) {
+        this.valoraciones = data;
+        this.calcularMediaEstrellas();
+      }
     });
+  }
+
+  calcularMediaEstrellas() {
+    if (this.valoraciones.length > 0) {
+      const totalEstrellas = this.valoraciones.reduce((acc, valoracion) => acc + valoracion.estrellas, 0);
+      this.mediaEstrellas = totalEstrellas / this.valoraciones.length;
+    } else {
+      this.mediaEstrellas = 0;
+    }
   }
 
   seleccionarEstrellas(estrellas: number) {
@@ -71,13 +92,19 @@ export class ProductoinComponent implements OnInit {
 
     const valoracionData = {
       id_producto: this.producto.id,
-      id_cliente: 1, // Esto se debe cambiar por el cliente autenticado
+      id_cliente: localStorage.getItem('userId'), // Esto se debe cambiar por el cliente autenticado
       estrellas: this.estrellasSeleccionadas,
       valoracion: this.comentario,
       fecha: new Date().toISOString().split('T')[0]
     };
 
-    this.valoracionesService.enviarValoracion(valoracionData).subscribe(() => {
+    console.log('Valoración enviada:', valoracionData);
+
+    // Obtén el token JWT desde localStorage
+    const token = localStorage.getItem('token');
+    console.log(token);
+
+    this.valoracionesService.enviarValoracion(valoracionData, token).subscribe(() => {
       Swal.fire({
         title: '¡Gracias por tu valoración!',
         text: 'Tu comentario ha sido enviado con éxito.',
@@ -92,6 +119,13 @@ export class ProductoinComponent implements OnInit {
       if (this.producto) {
         this.cargarValoraciones(this.producto.id); // Refrescar las valoraciones
       }
+    }, error => {
+      Swal.fire({
+        title: 'Error',
+        text: error.error?.message || 'No se pudo enviar la valoración',
+        icon: 'error',
+        confirmButtonText: 'Cerrar'
+      });
     });
   }
 
@@ -120,6 +154,8 @@ export class ProductoinComponent implements OnInit {
       nombre: this.producto.nombre,
       precio: this.producto.precio,
       talla: this.tallaSeleccionada,
+      idColor: this.producto.id_color, // ✅ Se obtiene directamente del producto
+      color: this.producto.color, // ✅ Se obtiene directamente del producto
       cantidad: this.cantidad,
       imagen: this.producto.imagenes?.[0] || ''
     };
@@ -127,4 +163,6 @@ export class ProductoinComponent implements OnInit {
     this.cartService.addToCart(productoCarrito);
     this.cdr.detectChanges(); // Usamos el servicio
   }
+
+  protected readonly Math: Math = Math;
 }

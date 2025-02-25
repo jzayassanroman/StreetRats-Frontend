@@ -7,7 +7,7 @@ import {Usuario} from '../interfaces/UsuarioDTO';
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:8000/usuarios/api/registro';
+  private apiUrl = '/api/usuarios/api/registro';
 
   constructor(private http: HttpClient) {}
 

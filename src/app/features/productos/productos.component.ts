@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import {BusquedaService} from '../../services/busqueda.service';
+import {ValoracionesService} from '../../services/valoraciones.service';
 
 @Component({
   selector: 'app-productos',
@@ -20,6 +21,9 @@ export class ProductosComponent implements OnInit {
   tiposDisponibles = Object.values(TipoProducto);
   tipoSeleccionado: TipoProducto | null = null;
   currentIndexes: { [key: number]: number } = {};
+  productosVisibles: { [key: string]: number } = {};
+  productosPorPagina = 8; // Límite inicial de productos por categoría
+
   categorias: { [key: string]: Producto[] } = {
     'Nuevos Productos': [],
     'Mejor Valorados': [],
@@ -53,6 +57,11 @@ export class ProductosComponent implements OnInit {
 
     this.productService.getProductos().subscribe((data: Producto[]) => {
       this.productos = data.map((producto: Producto) => ({
+  constructor(private productService: ProductService,private valoracionesService: ValoracionesService) {}
+
+  ngOnInit(): void {
+    this.productService.getProductos().subscribe((data) => {
+      this.productos = data.map(producto => ({
         ...producto,
         imagenes: producto.imagenes ?? [] // Asegurar que siempre haya un array de imágenes
       }));
@@ -63,6 +72,7 @@ export class ProductosComponent implements OnInit {
       // Obtener los últimos 80 productos
       this.categorias["Nuevos Productos"] = this.productos.slice(0, 80);
 
+      this.productos.forEach(producto => {
       // Inicializar índices del carrusel
       this.productos.forEach((producto: Producto) => {
         this.currentIndexes[producto.id] = 0;
@@ -76,8 +86,7 @@ export class ProductosComponent implements OnInit {
       const productosInvierno = [1, 2, 3, 4];
       const productosPrimavera = [1, 2, 3, 4];
 
-      // Asignar productos a sus categorías manualmente
-      this.productos.forEach((producto: Producto) => {
+      this.productos.forEach(producto => {
         if (productosStreetRats.includes(producto.id)) {
           this.categorias["Hecho por StreetRats"].push(producto);
         }
@@ -97,9 +106,35 @@ export class ProductosComponent implements OnInit {
           this.categorias["Para la Primavera"].push(producto);
         }
       });
+
+      // Inicializar cantidad de productos visibles por categoría
+      for (const key in this.categorias) {
+        this.productosVisibles[key] = this.productosPorPagina;
+      }
     });
   }
 
+
+
+  verMas(categoria: string): void {
+    this.productosVisibles[categoria] += this.productosPorPagina;
+  }
+
+  verMenos(categoria: string): void {
+    if (this.productosVisibles[categoria] > this.productosPorPagina) {
+      this.productosVisibles[categoria] -= this.productosPorPagina;
+    }
+  }
+
+  prevSlide(productoId: number): void {
+    const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
+    this.currentIndexes[productoId] = this.currentIndexes[productoId] === 0 ? total - 1 : this.currentIndexes[productoId] - 1;
+  }
+
+  nextSlide(productoId: number): void {
+    const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
+    this.currentIndexes[productoId] = this.currentIndexes[productoId] === total - 1 ? 0 : this.currentIndexes[productoId] + 1;
+  }
 
   ordenarCategorias(a: any, b: any): number {
     const ordenPersonalizado = [

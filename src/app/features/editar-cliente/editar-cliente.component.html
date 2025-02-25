@@ -1,0 +1,96 @@
+<div class="container mx-auto p-8 max-w-4xl">
+
+  <!-- Formulario de edición de cliente -->
+  <form (ngSubmit)="onEditarCliente()" class="bg-white shadow-xl p-4 border border-gray-100">
+    <h2 class="text-center text-3xl font-light text-black tracking-wide mb-12 uppercase">
+      Editar Cliente
+    </h2>
+    <div class="grid grid-cols-2 gap-x-8 gap-y-6">
+      <!-- Nombre -->
+      <div class="mb-6">
+        <label for="nombre" class="block text-sm font-medium text-gray-600 uppercase tracking-wider mb-2">
+          Nombre
+        </label>
+        <input type="text" id="nombre" [(ngModel)]="cliente.nombre" name="nombre"
+               [attr.placeholder]="cliente.nombre ? cliente.nombre : 'Nombre'"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-none
+                      focus:border-black focus:outline-none transition-colors duration-300
+                      placeholder-gray-400"
+               required />
+      </div>
+
+      <!-- Apellido -->
+      <div class="mb-6">
+        <label for="apellido" class="block text-sm font-medium text-gray-600 uppercase tracking-wider mb-2">
+          Apellido
+        </label>
+        <input type="text" id="apellido" [(ngModel)]="cliente.apellido" name="apellido"
+               [attr.placeholder]="cliente.apellido ? cliente.apellido : 'Apellido'"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-none
+                      focus:border-black focus:outline-none transition-colors duration-300
+                      placeholder-gray-400"
+               required />
+      </div>
+
+      <!-- Email -->
+      <div class="mb-6">
+        <label for="email" class="block text-sm font-medium text-gray-600 uppercase tracking-wider mb-2">
+          Email
+        </label>
+        <input type="email" id="email" [(ngModel)]="cliente.email" name="email"
+               [attr.placeholder]="cliente.email ? cliente.email : 'Email'"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-none
+                      focus:border-black focus:outline-none transition-colors duration-300
+                      placeholder-gray-400"
+               required />
+      </div>
+
+      <!-- Teléfono -->
+      <div class="mb-6">
+        <label for="telefono" class="block text-sm font-medium text-gray-600 uppercase tracking-wider mb-2">
+          Teléfono
+        </label>
+        <input type="text" id="telefono" [(ngModel)]="cliente.telefono" name="telefono"
+               [attr.placeholder]="cliente.telefono ? cliente.telefono : 'Teléfono'"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-none
+                      focus:border-black focus:outline-none transition-colors duration-300
+                      placeholder-gray-400"
+               required />
+      </div>
+
+      <!-- Dirección -->
+      <div class="mb-6">
+        <label for="direccion" class="block text-sm font-medium text-gray-600 uppercase tracking-wider mb-2">
+          Dirección
+        </label>
+        <input type="text" id="direccion" [(ngModel)]="cliente.direccion" name="direccion"
+               [attr.placeholder]="cliente.direccion ? cliente.direccion : 'Dirección'"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-none
+                      focus:border-black focus:outline-none transition-colors duration-300
+                      placeholder-gray-400"
+               required />
+      </div>
+
+      <!-- Username -->
+      <div class="mb-6">
+        <label for="username" class="block text-sm font-medium text-gray-600 uppercase tracking-wider mb-2">
+           Username
+        </label>
+        <input type="text" id="username" [(ngModel)]="nuevoUsername" name="username"
+               [attr.placeholder]="nuevoUsername ? nuevoUsername : 'Nuevo Username'"
+               class="w-full px-4 py-3 border-2 border-gray-200 rounded-none
+                      focus:border-black focus:outline-none transition-colors duration-300
+                      placeholder-gray-400" />
+      </div>
+    </div>
+
+    <!-- Botón para confirmar la edición -->
+    <div class="flex justify-center mt-10">
+      <button type="submit"
+              class="w-1/2 bg-black text-white py-4 px-8 text-sm uppercase tracking-wider
+                     hover:bg-gray-900 transition-colors duration-300">
+        Guardar Cambios
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,11 +1,9 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {CommonModule, NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
+import { Component } from '@angular/core';
+import { Navigation, Pagination } from 'swiper/modules';
+import {NgClass, NgFor, NgIf, NgStyle} from '@angular/common';
 import {ProductosComponent} from '../productos/productos.component';
-import {Producto, ProductService, TipoProducto} from '../../services/producto.service';
-import {Router, RouterLink} from '@angular/router';
-import {NavbarComponent} from '../navbar/navbar.component';
-import {BusquedaService} from '../../services/busqueda.service';
-import {debounceTime, distinctUntilChanged} from 'rxjs';
 
 @Component({
   selector: 'app-home',

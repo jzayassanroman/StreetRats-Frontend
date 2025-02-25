@@ -1,56 +1,83 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-    <h1 class="text-2xl font-bold mb-6 text-center">INICIAR SESIÓN</h1>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
+  <div class="w-full max-w-md p-12 bg-white border-2 border-black">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl font-light tracking-widest text-black">INICIAR SESIÓN</h1>
+      <div class="mt-2 h-px w-24 bg-black mx-auto"></div>
+    </div>
 
     <form (ngSubmit)="onSubmit()">
       <!-- Campo Usuario -->
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-          Usuario
-        </label>
-        <input
-          id="username"
-          type="text"
-          [(ngModel)]="username"
-          name="username"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Usuario"
-          required
-        />
+      <div class="mb-8">
+        <div class="relative">
+          <input
+            id="username"
+            type="text"
+            [(ngModel)]="username"
+            name="username"
+            class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+            placeholder=" "
+            required
+          />
+          <label
+            for="username"
+            class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                   peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                   peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                   peer-placeholder-shown:text-gray-500
+                   text-xs -translate-y-3"
+          >
+            USUARIO
+          </label>
+        </div>
       </div>
 
       <!-- Campo Contraseña -->
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-          Contraseña
-        </label>
-        <input
-          id="password"
-          type="password"
-          [(ngModel)]="password"
-          name="password"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Contraseña"
-          required
-        />
+      <div class="mb-8">
+        <div class="relative">
+          <input
+            id="password"
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            class="peer w-full pt-8 pb-2 px-4 text-sm font-light bg-transparent border-b-2 border-gray-300 focus:border-black focus:outline-none transition-all duration-300"
+            placeholder=" "
+            required
+          />
+          <label
+            for="password"
+            class="absolute left-4 top-4 text-sm font-light tracking-wider text-gray-500 transition-all duration-300
+                   peer-focus:text-xs peer-focus:-translate-y-3 peer-focus:text-black
+                   peer-placeholder-shown:text-base peer-placeholder-shown:translate-y-0
+                   peer-placeholder-shown:text-gray-500
+                   text-xs -translate-y-3"
+          >
+            CONTRASEÑA
+          </label>
+        </div>
       </div>
 
       <!-- Botón de Iniciar Sesión -->
-      <div class="flex items-center justify-between">
+      <div class="mb-8">
         <button
           type="submit"
-          class="bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+          class="w-full bg-black text-white py-4 font-light tracking-widest hover:bg-gray-900 transition-colors duration-300"
         >
           INICIAR SESIÓN
         </button>
       </div>
 
-      <p (click)="navitageToRegistro()" class="mt-4 text-center text-black cursor-pointer hover:underline">
-        Si no tienes cuenta ¡Regístrate!
-      </p>
+      <div class="text-center">
+        <p (click)="navitageToRegistro()"
+           class="inline-block text-sm font-light text-black cursor-pointer border-b border-transparent hover:border-black transition-all duration-300">
+          Si no tienes cuenta ¡Regístrate!
+        </p>
+      </div>
 
       <!-- Mensaje de error -->
-      <p *ngIf="errorMessage" class="mt-2 text-sm text-red-500 text-center">{{ errorMessage }}</p>
+      <p *ngIf="errorMessage"
+         class="mt-6 text-sm font-light text-center text-black bg-red-50 border border-red-200 p-3">
+        {{ errorMessage }}
+      </p>
     </form>
   </div>
 </div>

@@ -1,8 +1,10 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
-import {CommonModule, CurrencyPipe} from '@angular/common';
+import {CommonModule, CurrencyPipe, NgClass} from '@angular/common';
 import {CartService} from '../../services/cartService';
 import {FormsModule} from '@angular/forms';
 import {Producto, ProductService} from '../../services/producto.service';
@@ -11,8 +13,13 @@ import {BusquedaService} from '../../services/busqueda.service';
 
 @Component({
   selector: 'app-navbar',
+  imports: [
+    RouterLink,
+    NgClass,
+    CommonModule,
+    CurrencyPipe
+  ],
   templateUrl: './navbar.component.html',
-  imports: [CommonModule, CurrencyPipe, FormsModule],
   standalone: true,
   styleUrls: ['./navbar.component.css'],
 
@@ -53,6 +60,9 @@ export class NavbarComponent implements OnInit {
   }
 
 
+  constructor(public authService: AuthService, private router: Router,
+              protected cartService:CartService,
+              private cdRef: ChangeDetectorRef) {}
   cargarProductos() {
     forkJoin({
       tallas: this.productoService.getTallas(),
@@ -93,6 +103,18 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.isLoggedIn$.subscribe(status => {
+      console.log('Navbar - Estado de autenticación:', status);
+      this.isLoggedIn = status;
+      this.cdRef.detectChanges();
+    });
+    this.checkLoginStatus();
+    this.cartService.cart$.subscribe(cart => {
+      this.carrito = cart;
+    });
+    if(this.carrito.length === 0) {
+      this.carrito = this.cartService.getCart();
+    }
     this.searchQuery = '';
     this.productos = [];
 
@@ -152,5 +174,18 @@ export class NavbarComponent implements OnInit {
 
   navigateToPayment() {
     this.router.navigate(['/payment']); // Redirige a la página de inicio
+  }
+  navigateToProducto() {
+    this.router.navigate(['/listadoproducto']); // Redirige a la página de inicio
+  }
+  navigateToTiendas() {
+    this.router.navigate(['/tiendas']); // Redirige a la página de inicio
+  }
+  navigateToEditarPerfil() {
+    this.router.navigate(['/editar-cliente']); // Redirige a la página de inicio
+  }
+
+  navigateToHistorialPedido() {
+    this.router.navigate(['/historial-pedidos']); // Redirige a la página de inicio
   }
 }
