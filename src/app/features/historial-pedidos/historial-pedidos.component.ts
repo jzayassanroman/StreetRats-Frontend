@@ -18,6 +18,7 @@ import { BrowserModule } from '@angular/platform-browser';
 export class HistorialPedidosComponent implements OnInit {
   pedidos: Pedido[] = [];
   Estado = Estado; // Exponer el enum para usarlo en la plantilla HTML
+  cargandoHistorial: boolean = false; // Variable para controlar el estado de carga
 
   constructor(
     private pedidoService: PedidoService,
@@ -35,9 +36,16 @@ export class HistorialPedidosComponent implements OnInit {
   }
 
   obtenerPedidos(clienteId: number): void {
+    this.cargandoHistorial = true; // Iniciar el loader
     this.pedidoService.getPedidos(clienteId).subscribe({
-      next: (data) => (this.pedidos = data),
-      error: (err) => console.error('Error cargando pedidos', err),
+      next: (data) => {
+        this.pedidos = data;
+        this.cargandoHistorial = false; // Detener el loader
+      },
+      error: (err) => {
+        console.error('Error cargando pedidos', err);
+        this.cargandoHistorial = false; // Detener el loader en caso de error
+      },
     });
   }
 

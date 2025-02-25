@@ -6,11 +6,12 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {forkJoin} from 'rxjs';
 import {Producto} from '../../Modelos/producto';
 import { Location } from '@angular/common';
+import {PreloaderComponent} from '../preloader/preloader.component';
 
 
 @Component({
   selector: 'app-admin-productos',
-  imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule, PreloaderComponent],
   templateUrl: './admin-productos.component.html',
   standalone: true,
   styleUrl: './admin-productos.component.css',
@@ -18,6 +19,9 @@ import { Location } from '@angular/common';
 })
 
 export class AdminProductosComponent implements OnInit {
+  cargando: boolean = true; // Nueva propiedad para controlar el estado de carga
+
+
   tipos: string[] = [];
   mostrarFormulario: boolean = false;
   mostrarFormularioTalla: boolean = false;
@@ -72,6 +76,9 @@ export class AdminProductosComponent implements OnInit {
   }
 
   cargarProductos() {
+    this.cargando = true;
+    this.cdRef.detectChanges();  // 🔹 Forzar actualización inmediata
+
     forkJoin({
       tallas: this.productoService.getTallas(),
       colores: this.productoService.getColores(),
@@ -79,7 +86,7 @@ export class AdminProductosComponent implements OnInit {
       tipos: this.productoService.getTipos(),
       productos: this.productoService.getProductos()
     }).subscribe(({ tallas, colores, sexos, tipos, productos }) => {
-      console.log("Productos recibidos:", productos);
+
       this.talla = tallas;
       this.color = colores;
       this.sexos = sexos;
@@ -87,15 +94,21 @@ export class AdminProductosComponent implements OnInit {
       this.productos = productos.map(producto => ({
         ...producto,
         descripcion: producto.descripcion || 'Sin descripción',
-        imagenes: producto.imagenes || [] // Asegúrate de que imagenes es un array
+        imagenes: producto.imagenes || []
       }));
       this.productosFiltrados = [...this.productos];
 
-      console.log('Productos final:', this.productosFiltrados);
-
-      this.cdRef.detectChanges(); // 🔹 Forzar actualización en la vista
+      setTimeout(() => {
+        this.cargando = false;
+        this.cdRef.detectChanges(); // 🔹 Forzar actualización en la vista
+      }, 500); // Agregar un pequeño retraso para permitir la visualización del preloader
+    }, error => {
+      console.error("Error cargando productos:", error);
+      this.cargando = false;
+      this.cdRef.detectChanges();
     });
   }
+
 
 
 
