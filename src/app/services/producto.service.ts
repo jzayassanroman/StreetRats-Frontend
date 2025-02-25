@@ -10,8 +10,8 @@ export interface Producto {
   precio: number;
   imagenes: string[];
   sexo: string;
-  color: {id: number, descripcion: string},
-  talla: {id: number, descripcion: string }
+  // color: {id: number, descripcion: string},
+  // talla: {id: number, descripcion: string }
   id_talla: number;
   id_color: number;
   color?: string;
@@ -69,7 +69,7 @@ export class ProductService {
   }
 
   buscarProductos(nombre: string): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:8001/productos/buscar?nombre=${nombre}`).pipe(
+    return this.http.get<any[]>(`${this.apiUrl}/buscar?nombre=${nombre}`).pipe(
       map((productos) => {
         return productos.map((producto) => ({
           ...producto,
@@ -91,13 +91,13 @@ export class ProductService {
     if (precioMin) params = params.set('precioMin', precioMin.toString());
     if (precioMax) params = params.set('precioMax', precioMax.toString());
 
-    return this.http.get<Producto[]>('http://localhost:8001/productos/filtros' + "?XDEBUG_SESSION_START=11816", { params });
+    return this.http.get<Producto[]>(`${this.apiUrl}/filtros`, { params });
   }
 
 
   // Método para obtener productos desde la API
   obtenerProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>('http://localhost:8001/productos');
+    return this.http.get<Producto[]>('/api/productos');
   }
 
   // 🔹 Agregar estos métodos si no están en tu servicio
@@ -106,7 +106,7 @@ export class ProductService {
   }
 
   getSexos(): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:8001/productos/sexos`);
+    return this.http.get<any[]>(`${this.apiUrl}/sexos`);
   }
   //
   // }

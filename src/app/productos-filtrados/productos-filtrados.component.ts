@@ -19,8 +19,8 @@ export class ProductosFiltradosComponent implements OnInit {
   filtroTipo: string = '';
   filtroSexo: string = '';
   filtroTalla: string = '';
-  precioMin?: number;
-  precioMax?: number;
+  precioMin!: number;
+  precioMax!: number;
   tipo:string='';
   tipos: string[] = [];
   sexos: string[] = [];

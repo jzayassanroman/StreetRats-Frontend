@@ -1,5 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd} from '@angular/router';
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -14,10 +13,10 @@ import {BusquedaService} from '../../services/busqueda.service';
 @Component({
   selector: 'app-navbar',
   imports: [
-    RouterLink,
     NgClass,
     CommonModule,
-    CurrencyPipe
+    CurrencyPipe,
+    FormsModule
   ],
   templateUrl: './navbar.component.html',
   standalone: true,
@@ -26,6 +25,7 @@ import {BusquedaService} from '../../services/busqueda.service';
   providers: [AuthService]
 })
 export class NavbarComponent implements OnInit {
+
   carritoAbierto: boolean = false;
   isLoggedIn: boolean = false;
   carrito: any[] = [];
@@ -38,9 +38,8 @@ export class NavbarComponent implements OnInit {
   busqueda: string = ''; // Valor de la búsqueda
   searchTerm: string = '';
 
-  constructor(public authService: AuthService, private router: Router, protected cartService:CartService,private productoService: ProductService,
-    private cdRef: ChangeDetectorRef,private busquedaService: BusquedaService) {}
-
+  constructor(public authService: AuthService, private router: Router, protected cartService:CartService, private productoService: ProductService,
+              private cdRef: ChangeDetectorRef, private busquedaService: BusquedaService) {}
 
   toggleSearch() {
     this.showSearch = !this.showSearch;
@@ -59,10 +58,6 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-
-  constructor(public authService: AuthService, private router: Router,
-              protected cartService:CartService,
-              private cdRef: ChangeDetectorRef) {}
   cargarProductos() {
     forkJoin({
       tallas: this.productoService.getTallas(),
@@ -83,13 +78,17 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-
   // Función para buscar productos (se ejecuta al hacer clic en el botón de búsqueda)
   buscar() {
     if (this.searchTerm.trim()) {
       this.busquedaService.setSearchTerm(this.searchTerm);
     }
-  }
+    // Obtener el elemento donde se muestra el resultado de la búsqueda
+    const resultadosBusqueda = document.getElementById('resultadosBusqueda');
+    if (resultadosBusqueda) {
+      // Hacer scroll hacia esa sección
+      resultadosBusqueda.scrollIntoView({ behavior: 'smooth' });
+    }  }
 
   checkLoginStatus() {
     this.isLoggedIn = !!localStorage.getItem('token'); // Verifica si hay token guardado
@@ -148,14 +147,12 @@ export class NavbarComponent implements OnInit {
     this.cartService.removeFromCart(index);
   }
 
-
   navigateToProductos(){
     this.router.navigate(['/listadoproducto']);
   }
   calcularTotal(): number {
     return this.carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
   }
-
 
   navigateToProfile() {
     this.router.navigate(['/perfil']); // Redirige a la página de perfil

@@ -50,14 +50,7 @@ export class ProductosComponent implements OnInit {
     this.cargarProductos();
   }
 
-  constructor(private productService: ProductService, private busquedaService: BusquedaService) {}
-
-  ngOnInit(): void {
-    this.cargarProductos();
-
-    this.productService.getProductos().subscribe((data: Producto[]) => {
-      this.productos = data.map((producto: Producto) => ({
-  constructor(private productService: ProductService,private valoracionesService: ValoracionesService) {}
+  constructor(private productService: ProductService, private busquedaService: BusquedaService,private valoracionesService: ValoracionesService) {}
 
   ngOnInit(): void {
     this.productService.getProductos().subscribe((data) => {
@@ -72,7 +65,6 @@ export class ProductosComponent implements OnInit {
       // Obtener los últimos 80 productos
       this.categorias["Nuevos Productos"] = this.productos.slice(0, 80);
 
-      this.productos.forEach(producto => {
       // Inicializar índices del carrusel
       this.productos.forEach((producto: Producto) => {
         this.currentIndexes[producto.id] = 0;
@@ -114,8 +106,6 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-
-
   verMas(categoria: string): void {
     this.productosVisibles[categoria] += this.productosPorPagina;
   }
@@ -124,16 +114,6 @@ export class ProductosComponent implements OnInit {
     if (this.productosVisibles[categoria] > this.productosPorPagina) {
       this.productosVisibles[categoria] -= this.productosPorPagina;
     }
-  }
-
-  prevSlide(productoId: number): void {
-    const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
-    this.currentIndexes[productoId] = this.currentIndexes[productoId] === 0 ? total - 1 : this.currentIndexes[productoId] - 1;
-  }
-
-  nextSlide(productoId: number): void {
-    const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
-    this.currentIndexes[productoId] = this.currentIndexes[productoId] === total - 1 ? 0 : this.currentIndexes[productoId] + 1;
   }
 
   ordenarCategorias(a: any, b: any): number {

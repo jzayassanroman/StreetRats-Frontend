@@ -15,14 +15,11 @@ import {EditarClienteComponent} from './features/editar-cliente/editar-cliente.c
   standalone: true,
   styleUrls: ['./app.component.css'],
   imports: [
-    CrearCuentaComponent,
     RouterOutlet,
     HttpClientModule,
     NavbarComponent,
     FooterComponent,
-    ProductosComponent,
     CommonModule,
-    EditarClienteComponent
 
     // LoginComponent
   ],
