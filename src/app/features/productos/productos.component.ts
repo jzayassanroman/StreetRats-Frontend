@@ -46,7 +46,6 @@ export class ProductosComponent implements OnInit {
         this.currentIndexes[producto.id] = 0;
       });
 
-      // Definir manualmente las categorías
       const productosStreetRats = [1, 2, 3, 4];
       const productosMejorValorados = [1, 2, 3, 4];
       const productosVerano = [1, 2, 3, 4];
@@ -75,7 +74,6 @@ export class ProductosComponent implements OnInit {
         }
       });
 
-      // Inicializar cantidad de productos visibles por categoría
       for (const key in this.categorias) {
         this.productosVisibles[key] = this.productosPorPagina;
       }

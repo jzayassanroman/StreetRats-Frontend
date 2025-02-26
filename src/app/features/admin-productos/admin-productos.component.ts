@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {ProductoServiceService} from '../../services/producto-service.service';
 import {CommonModule} from '@angular/common';
@@ -15,7 +15,8 @@ import {PreloaderComponent} from '../preloader/preloader.component';
   templateUrl: './admin-productos.component.html',
   standalone: true,
   styleUrl: './admin-productos.component.css',
-  providers: [ProductoServiceService]
+  providers: [ProductoServiceService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AdminProductosComponent implements OnInit {
