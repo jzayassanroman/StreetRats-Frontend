@@ -1,9 +1,9 @@
 <div class="navbar grid grid-cols-3 items-center border-b border-black bg-white">
   <!-- Left section -->
   <div class="pages flex p-8 ml-14 gap-12 text-lg">
-    <a (click)="navigateToProductos()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">SHOP</a>
-    <a (click)="navigateToTiendas()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">TIENDAS</a>
-    <a (click)="navigateToAbout()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">ABOUT US</a>
+    <a (click)="navigateToProductos()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300 cursor-pointer w-32" >SHOP</a>
+    <a (click)="navigateToTiendas()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300 cursor-pointer w-32">TIENDAS</a>
+    <a (click)="navigateToAbout()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300 cursor-pointer w-32">ABOUT US</a>
   </div>
 
   <!-- Center section with logo -->
@@ -14,7 +14,7 @@
   <div class="flex flex-row p-8 gap-12 items-center justify-end">
     <!-- Componente de búsqueda animado nuevo -->
     <div class="relative">
-      <div [ngClass]="{'w-64': showSearch, 'w-10': !showSearch}" class="flex items-center h-10 transition-all duration-300 border rounded-full overflow-hidden" [class.border-gray-300]="showSearch" [class.border-transparent]="!showSearch">
+      <div [ngClass]="{'w-64 ml-[-2rem]': showSearch, 'w-10': !showSearch}" class="flex items-center h-10 transition-all duration-300 border rounded-full overflow-hidden" [class.border-gray-300]="showSearch" [class.border-transparent]="!showSearch">
         <!-- Ícono de búsqueda siempre visible -->
         <div class="flex-shrink-0 flex justify-center items-center w-10 h-full cursor-pointer" (click)="toggleSearch()">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 50 50" class="text-gray-900">

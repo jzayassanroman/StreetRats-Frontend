@@ -36,6 +36,8 @@ export class HomeComponent implements OnInit{
   productoIndices: { [key: number]: number } = {};
   showError: boolean = false;
   searchAttempted: boolean = false; // Variable para indicar si se ha intentado buscar
+  currentIndexes: { [key: number]: number } = {}; // Índices para las imágenes
+
 
 
   constructor(private productoService: ProductService,private router: Router, private cdr: ChangeDetectorRef,private busquedaService: BusquedaService) {
@@ -54,6 +56,10 @@ export class HomeComponent implements OnInit{
         console.log("📩 Evento recibido en HomeComponent:", nombre);
         this.cargarProductos(nombre); // Llamar solo esta función
       });
+    this.productos.forEach(producto => {
+      this.productoIndices[producto.id] = 0;  // Inicializa en la primera imagen
+      this.currentIndexes[producto.id] = 0;
+    });
   }
 
   cargarProductos(nombre: string) {
@@ -123,21 +129,35 @@ export class HomeComponent implements OnInit{
   }
   // Funciones para controlar el carrusel de cada producto
   prevSlideProducto(productoId: number) {
-    if (this.productoIndices[productoId] > 0) {
-      this.productoIndices[productoId]--;
+    const producto = this.getProductoById(productoId);
+    if (!producto || !producto.imagenes || producto.imagenes.length === 0) return; // Verifica que el producto existe
+
+    if (this.currentIndexes[productoId] === undefined) {
+      this.currentIndexes[productoId] = 0;
+    }
+
+    if (this.currentIndexes[productoId] > 0) {
+      this.currentIndexes[productoId]--;
     } else {
-      this.productoIndices[productoId] = this.getProductoById(productoId).imagenes.length - 1;
+      this.currentIndexes[productoId] = producto.imagenes.length - 1;
     }
   }
 
   nextSlideProducto(productoId: number) {
-    debugger;
-    if (this.productoIndices[productoId] < this.getProductoById(productoId).imagenes.length - 1) {
-      this.productoIndices[productoId]++;
+    const producto = this.getProductoById(productoId);
+    if (!producto || !producto.imagenes || producto.imagenes.length === 0) return; // Verifica que el producto existe
+
+    if (this.currentIndexes[productoId] === undefined) {
+      this.currentIndexes[productoId] = 0;
+    }
+
+    if (this.currentIndexes[productoId] < producto.imagenes.length - 1) {
+      this.currentIndexes[productoId]++;
     } else {
-      this.productoIndices[productoId] = 0;
+      this.currentIndexes[productoId] = 0;
     }
   }
+
 
   ngOnDestroy() {
     clearInterval(this.autoSlideInterval);
@@ -157,10 +177,9 @@ export class HomeComponent implements OnInit{
     );
   }
 
-  getProductoById(productoId: number): Producto {
-    return this.productosFiltrados.find(producto => producto.id === productoId) || {} as Producto;
+  getProductoById(productoId: number): Producto | null {
+    return this.productos.find(producto => producto.id === productoId) || null;
   }
-
 
 
   protected readonly TipoProducto = TipoProducto;

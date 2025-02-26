@@ -73,7 +73,7 @@ export class ProductService {
       map((productos) => {
         return productos.map((producto) => ({
           ...producto,
-          imagenes: Array.isArray(producto.imagenes) ? producto.imagenes : [producto.imagenes]
+          imagenes: Array.isArray(producto.imagenes) ? producto.imagenes : (producto.imagenes ? [producto.imagenes] : [])
         }));
       }),
       tap((productos) => {
@@ -81,6 +81,7 @@ export class ProductService {
       })
     );
   }
+
   filtrarProductos(tipo ?:string,sexo?: string, talla?: string, precioMin?: number, precioMax?: number): Observable<Producto[]> {
     let params = new HttpParams();
     // @ts-ignore
@@ -93,6 +94,19 @@ export class ProductService {
 
     return this.http.get<Producto[]>(`${this.apiUrl}/filtros`, { params });
   }
+  filtros(sexo?: string, talla?: string, precioMin?: number, precioMax?: number): Observable<Producto[]> {
+    let params = new HttpParams();
+    if (sexo) params = params.set('sexo', sexo);
+    if (talla) params = params.set('talla', talla);
+    if (precioMin !== undefined) params = params.set('precioMin', precioMin.toString());
+    if (precioMax !== undefined) params = params.set('precioMax', precioMax.toString());
+
+    return this.http.get<Producto[]>(`${this.apiUrl}/filtrosshop`, { params });
+  }
+
+
+
+
 
 
   // Método para obtener productos desde la API

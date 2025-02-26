@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Producto, ProductService, TipoProducto} from '../../services/producto.service';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import {BusquedaService} from '../../services/busqueda.service';
@@ -11,12 +11,23 @@ import {ValoracionesService} from '../../services/valoraciones.service';
   selector: 'app-productos',
   templateUrl: './productos.component.html',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, RouterLink, FormsModule],
   styleUrls: ['./productos.component.css'],
   providers: [ProductService]
 })
 export class ProductosComponent implements OnInit {
+  filtroSexo: string = '';
+  filtroTalla: string = '';
+  precioMin!: number;
+  precioMax!: number;
   productos: Producto[] = [];
+  sexos: string[] = [];
+  loading: boolean = false;
+  searchAttempted: boolean = false;
+  tallas: any[] = [];  // Cambiado a cualquier tipo para manejar los objetos con id y descripción
+  preciosMinimos: number[] = [];
+  preciosMaximos: number[] = [];
+  productosFiltrados: any[] = [];
   @Input() productos1: Producto[] = [];
   tiposDisponibles = Object.values(TipoProducto);
   tipoSeleccionado: TipoProducto | null = null;
@@ -53,6 +64,7 @@ export class ProductosComponent implements OnInit {
   constructor(private productService: ProductService, private busquedaService: BusquedaService,private valoracionesService: ValoracionesService) {}
 
   ngOnInit(): void {
+    this.cargarFiltros();
     this.productService.getProductos().subscribe((data) => {
       this.productos = data.map(producto => ({
         ...producto,
@@ -140,4 +152,43 @@ export class ProductosComponent implements OnInit {
     const total = this.productos.find(p => p.id === productoId)?.imagenes.length ?? 0;
     this.currentIndexes[productoId] = this.currentIndexes[productoId] === total - 1 ? 0 : this.currentIndexes[productoId] + 1;
   }
+
+  cargarFiltros() {
+    this.productService.getSexos().subscribe(sexos => this.sexos = sexos);
+    this.productService.getTallas().subscribe(tallas => this.tallas = tallas);
+    this.productService.getPrecios().subscribe(precios => {
+      this.preciosMinimos = [precios.precioMin, precios.precioMin + 10, precios.precioMin + 20, precios.precioMin + 50];
+      this.preciosMaximos = [precios.precioMax, precios.precioMax - 50, precios.precioMax - 20, precios.precioMax - 10].reverse();
+    });
+  }
+
+
+  aplicarFiltros() {
+    this.loading = true; // Establece la carga a "true"
+
+    console.log('Filtros aplicados:', {
+      sexo: this.filtroSexo,
+      talla: this.filtroTalla,
+      precioMin: this.precioMin,
+      precioMax: this.precioMax
+    });
+
+    this.productService.filtros(
+      this.filtroSexo,
+      this.filtroTalla,
+      this.precioMin,
+      this.precioMax
+    ).subscribe((productos: Producto[]) => {
+      this.loading = false; // Establece la carga a "false" una vez se obtienen los productos
+      console.log('Productos recibidos:', productos);
+      this.productos = productos.map((producto: Producto) => ({
+        ...producto,
+        imagenes: producto.imagenes ?? []
+      }));
+    }, error => {
+      this.loading = false; // También ponemos loading en false si ocurre un error
+      console.error('Error al obtener productos:', error);
+    });
+  }
+
 }

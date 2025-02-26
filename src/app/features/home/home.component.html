@@ -13,10 +13,10 @@
   <div class="relative w-full mx-auto overflow-hidden rounded-lg shadow-lg">
     <div class="relative w-full h-[680px] bg-gray-200 overflow-hidden">
       <div class="flex transition-transform duration-700 ease-in-out"
-           [ngStyle]="{'transform': 'translateX(' + (-productoIndices * 100) + '%)', 'transition': smoothTransition ? 'transform 0.7s ease-in-out' : 'none'}">
-        <img *ngIf="images && images.length > 0" [src]="images[images.length - 1]" class="w-full h-[700px] flex-shrink-0 object-fill" />
+           [ngStyle]="{'transform': 'translateX(' + (-currentIndex * 100) + '%)', 'transition': smoothTransition ? 'transform 0.7s ease-in-out' : 'none'}">
+        <img [src]="images[images.length - 1]" class="w-full h-[700px] flex-shrink-0 object-fill" />
         <img *ngFor="let image of images" [src]="image" class="w-full h-[700px] object-fill flex-shrink-0" />
-        <img *ngIf="images && images.length > 0" [src]="images[0]" class="w-full h-[700px] object-fill flex-shrink-0" />
+        <img [src]="images[0]" class="w-full h-[700px] object-fill flex-shrink-0" />
       </div>
     </div>
   </div>
@@ -26,36 +26,30 @@
     <p>No se han realizado búsquedas aún.</p>
   </div>
 
-<!--  &lt;!&ndash; Mostrar productos filtrados &ndash;&gt;-->
-<!--  <div *ngIf="productos.length > 0" class="w-full flex flex-wrap justify-center gap-4 mt-4">-->
-<!--    <div *ngFor="let producto of productos" class="border p-4 rounded-lg shadow-lg w-60 text-center">-->
-<!--      <h3 class="font-bold">{{ producto.nombre }}</h3>-->
-<!--      <p>Precio: {{ producto.precio }}€</p>-->
-<!--      &lt;!&ndash; Mostrar solo la primera imagen &ndash;&gt;-->
-<!--      <img *ngIf="producto.imagenes && producto.imagenes"-->
-<!--           [src]="producto.imagenes[0]"-->
-<!--           alt="{{ producto.nombre }}"-->
-<!--           class="w-full h-40 object-cover mt-2" />-->
-<!--    </div>-->
-<!--  </div>-->
 
   <!-- Carrusel de imágenes por producto -->
   <div *ngIf="productos.length > 0" class="flex flex-wrap justify-center gap-4 mt-4 w-full">
     <div *ngFor="let producto of productos" class="cursor-pointer flex flex-col items-center">
-      <div class="bg-gray-100 shadow-lg p-4 w-[300px] h-[420px] flex flex-col items-center justify-center"
+      <div class="bg-white shadow-md hover:shadow-xl transition-shadow duration-300 p-6 w-[300px] h-[420px] flex flex-col items-center justify-center"
            [routerLink]="['/productoin', producto.id]">
-        <div class="relative w-[270px] h-[350px] overflow-hidden bg-white flex items-center justify-center">
-          <button (click)="prevSlide(); $event.stopPropagation()" class="absolute left-2 text-black text-2xl font-bold z-10">‹</button>
-          <img *ngIf="producto.imagenes && producto.imagenes"
-               [src]="producto.imagenes[productoIndices[producto.id]]"
+        <div class="relative w-[270px] h-[350px] overflow-hidden bg-gray-50 flex items-center justify-center">
+          <button *ngIf="producto.imagenes && producto.imagenes.length > 0"
+                  (click)="prevSlideProducto(producto.id); $event.stopPropagation()"
+                  class="absolute left-2 text-black text-2xl font-bold z-10">
+            ‹
+          </button>
+          <img *ngIf="producto.imagenes?.length > 0"
+               [src]="producto.imagenes[currentIndexes[producto.id] || 0]"
                alt="{{ producto.nombre }}"
                class="w-full h-full object-cover transition-opacity duration-500">
-          <button (click)="nextSlide(); $event.stopPropagation()" class="absolute right-2 text-black text-2xl font-bold z-10">›</button>
+          <button (click)="nextSlideProducto(producto.id); $event.stopPropagation()" class="absolute right-2 text-black text-2xl font-bold z-10">
+            ›
+          </button>
         </div>
         <div class="flex justify-center mt-2">
           <span *ngFor="let img of producto.imagenes; let idx = index"
                 class="h-2 w-2 mx-1 rounded-full"
-                [ngClass]="idx === productoIndices[producto.id] ? 'bg-black' : 'bg-gray-400'">
+                [ngClass]="idx === currentIndexes[producto.id] ? 'bg-black' : 'bg-gray-400'">
           </span>
         </div>
       </div>
@@ -69,6 +63,6 @@
 
   <!-- Expande el contenedor de productos -->
   <div class="w-full flex justify-center">
-    <app-productos [productos1]="productosFiltrados" class="w-full max-w-screen-xl"></app-productos>
+    <app-productos [productos1]="productos" class="w-full max-w-screen-xl"></app-productos>
   </div>
 </div>

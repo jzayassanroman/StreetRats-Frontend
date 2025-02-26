@@ -1,4 +1,5 @@
 <div class="container mx-auto px-4 py-16 flex flex-col items-center">
+  <!-- 🔥 Listado de productos por categoría -->
   <div *ngFor="let categoria of categorias | keyvalue: ordenarCategorias; let i = index"
        class="w-full mb-12">
     <h2 class="text-4xl font-serif text-center mb-12 border-b border-gray-200 pb-6 tracking-wider uppercase">
@@ -10,6 +11,7 @@
            class="cursor-pointer flex flex-col items-center group">
         <div class="bg-white shadow-md hover:shadow-xl transition-shadow duration-300 p-6 w-[300px] h-[420px] flex flex-col items-center justify-center"
              [routerLink]="['/productoin', producto.id]">
+          <!-- 🔥 Slider de imágenes de productos -->
           <div class="relative w-[270px] h-[350px] overflow-hidden bg-gray-50 flex items-center justify-center">
             <button (click)="prevSlide(producto.id); $event.stopPropagation()"
                     class="absolute left-2 text-black text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:text-gray-600">
@@ -23,6 +25,8 @@
               ›
             </button>
           </div>
+
+          <!-- 🔥 Indicadores de imágenes -->
           <div class="flex justify-center mt-3">
             <span *ngFor="let img of producto.imagenes; let idx = index"
                   class="h-1.5 w-1.5 mx-1 rounded-full transition-colors duration-300"
@@ -30,12 +34,16 @@
             </span>
           </div>
         </div>
+
+        <!-- 🔥 Información del producto -->
         <div class="text-center mt-6 w-full space-y-2">
           <h3 class="text-xl font-serif tracking-wider">{{ producto.nombre }}</h3>
           <p class="text-lg font-serif text-gray-900">{{ producto.precio }}€</p>
         </div>
       </div>
     </div>
+
+    <!-- 🔥 Botones para mostrar más/menos productos -->
     <div class="flex space-x-6 mt-12 justify-center">
       <button *ngIf="categoria.value.length > productosVisibles[categoria.key]"
               (click)="verMas(categoria.key)"
