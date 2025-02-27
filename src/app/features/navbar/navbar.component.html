@@ -1,9 +1,9 @@
 <div class="navbar grid grid-cols-3 items-center border-b border-black bg-white">
   <!-- Left section -->
   <div class="pages flex p-8 ml-14 gap-12 text-lg">
-    <a (click)="navigateToProductos()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">SHOP</a>
-    <a (click)="navigateToTiendas()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">TIENDAS</a>
-    <a (click)="navigateToAbout()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300">ABOUT US</a>
+    <a (click)="navigateToProductos()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300 cursor-pointer w-32" >SHOP</a>
+    <a (click)="navigateToTiendas()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300 cursor-pointer w-32">TIENDAS</a>
+    <a (click)="navigateToAbout()" class="font-light tracking-widest hover:text-gray-600 transition-colors duration-300 cursor-pointer w-32">ABOUT US</a>
   </div>
 
   <!-- Center section with logo -->
@@ -11,13 +11,39 @@
     <img (click)="navigateToHome()" src="assets/Logo.png" alt="Logo" class="cursor-pointer w-32">
   </div>
 
-  <!-- Right section -->
   <div class="flex flex-row p-8 gap-12 items-center justify-end">
-    <a routerLink="/search" class="hover:opacity-70 transition-opacity duration-300">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 50 50" class="fill-black">
-        <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"></path>
-      </svg>
-    </a>
+    <!-- Componente de búsqueda animado nuevo -->
+    <div class="relative">
+      <div [ngClass]="{'w-64 ml-[-2rem]': showSearch, 'w-10': !showSearch}" class="flex items-center h-10 transition-all duration-300 border rounded-full overflow-hidden" [class.border-gray-300]="showSearch" [class.border-transparent]="!showSearch">
+        <!-- Ícono de búsqueda siempre visible -->
+        <div class="flex-shrink-0 flex justify-center items-center w-10 h-full cursor-pointer" (click)="toggleSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 50 50" class="text-gray-900">
+            <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"></path>
+          </svg>
+        </div>
+
+        <!-- Input que se expande -->
+        <div class="flex-grow flex items-center" *ngIf="showSearch">
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            class="w-full bg-transparent p-2 border-none focus:outline-none focus:ring-0"
+            placeholder="Buscar producto..."
+            #searchInput
+          >
+          <button
+            *ngIf="searchTerm"
+            (click)="buscar()"
+            class="flex-shrink-0 p-2 mr-1 bg-black text-white rounded-full h-8 w-8 flex items-center justify-center hover:bg-gray-800 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
 
     <a *ngIf="!isLoggedIn" (click)="navigateToLogin()"
        class="font-light tracking-widest text-sm hover:text-gray-600 transition-colors duration-300">
@@ -85,6 +111,7 @@
             PAGAR AHORA
           </button>
         </div>
+        <!-- Total del Carrito -->
       </div>
 
       <ng-template #carritoVacio>

@@ -20,6 +20,7 @@ import { TiendasComponent } from './features/tiendas/tiendas.component';
 import { AdminDashboardComponent } from './features/admin-dashboard/admin-dashboard.component';
 import {HistorialPedidosComponent} from './features/historial-pedidos/historial-pedidos.component';
 import {GestionPedidosComponent} from './features/gestion-pedidos/gestion-pedidos.component';
+import {ProductosFiltradosComponent} from './features/productos-filtrados/productos-filtrados.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -33,6 +34,7 @@ export const routes: Routes = [
   { path: 'payment', component: PaymentComponent },
   { path: 'editar-cliente', component: EditarClienteComponent},
   {path: 'historial-pedidos',component:HistorialPedidosComponent},
+  {path: 'productos-filtrados', component: ProductosFiltradosComponent},
 
   //Rutas de Admin
   {
