@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {ProductoServiceService} from '../../services/producto-service.service';
 import {CommonModule} from '@angular/common';
@@ -10,14 +10,18 @@ import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-admin-productos',
-  imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule,],
   templateUrl: './admin-productos.component.html',
   standalone: true,
   styleUrl: './admin-productos.component.css',
-  providers: [ProductoServiceService]
+  providers: [ProductoServiceService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AdminProductosComponent implements OnInit {
+  cargando: boolean = true; // Nueva propiedad para controlar el estado de carga
+
+
   tipos: string[] = [];
   mostrarFormulario: boolean = false;
   mostrarFormularioTalla: boolean = false;
@@ -72,6 +76,9 @@ export class AdminProductosComponent implements OnInit {
   }
 
   cargarProductos() {
+    this.cargando = true;
+    this.cdRef.detectChanges();  // 🔹 Forzar actualización inmediata
+
     forkJoin({
       tallas: this.productoService.getTallas(),
       colores: this.productoService.getColores(),
@@ -79,7 +86,7 @@ export class AdminProductosComponent implements OnInit {
       tipos: this.productoService.getTipos(),
       productos: this.productoService.getProductos()
     }).subscribe(({ tallas, colores, sexos, tipos, productos }) => {
-      console.log("Productos recibidos:", productos);
+
       this.talla = tallas;
       this.color = colores;
       this.sexos = sexos;
@@ -87,15 +94,21 @@ export class AdminProductosComponent implements OnInit {
       this.productos = productos.map(producto => ({
         ...producto,
         descripcion: producto.descripcion || 'Sin descripción',
-        imagenes: producto.imagenes || [] // Asegúrate de que imagenes es un array
+        imagenes: producto.imagenes || []
       }));
       this.productosFiltrados = [...this.productos];
 
-      console.log('Productos final:', this.productosFiltrados);
-
-      this.cdRef.detectChanges(); // 🔹 Forzar actualización en la vista
+      setTimeout(() => {
+        this.cargando = false;
+        this.cdRef.detectChanges(); // 🔹 Forzar actualización en la vista
+      }, 500); // Agregar un pequeño retraso para permitir la visualización del preloader
+    }, error => {
+      console.error("Error cargando productos:", error);
+      this.cargando = false;
+      this.cdRef.detectChanges();
     });
   }
+
 
 
 

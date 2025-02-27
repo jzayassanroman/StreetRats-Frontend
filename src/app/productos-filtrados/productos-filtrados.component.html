@@ -10,13 +10,6 @@
       </select>
     </div>
 
-    <div class="filter-group">
-      <label class="block text-gray-800 text-sm font-medium mb-2">Talla</label>
-      <select [(ngModel)]="filtroTalla" class="w-full min-w-[200px] p-3 border border-gray-300 rounded-md bg-white text-gray-800 shadow-sm focus:border-black focus:ring-1 focus:ring-black focus:outline-none transition-colors">
-        <option value="">Todas las tallas</option>
-        <option *ngFor="let talla of tallas" [value]="talla.id">{{ talla.descripcion }}</option>
-      </select>
-    </div>
 
     <!-- Price range slider with refined styling -->
     <div class="filter-group w-full flex flex-col items-center">
