@@ -8,7 +8,6 @@ import {Producto} from '../../Modelos/producto';
 import { Location } from '@angular/common';
 import {PreloaderComponent} from '../preloader/preloader.component';
 
-
 @Component({
   selector: 'app-admin-productos',
   imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule, PreloaderComponent],
@@ -21,7 +20,6 @@ import {PreloaderComponent} from '../preloader/preloader.component';
 
 export class AdminProductosComponent implements OnInit {
   cargando: boolean = true; // Nueva propiedad para controlar el estado de carga
-
 
   tipos: string[] = [];
   mostrarFormulario: boolean = false;
@@ -55,8 +53,7 @@ export class AdminProductosComponent implements OnInit {
   @ViewChild('selectTalla') selectTalla: ElementRef | undefined;
   @ViewChild('selectColor') selectColor: ElementRef | undefined;
 
-
-  constructor(private productoService: ProductoServiceService, private fb: FormBuilder,private cdRef: ChangeDetectorRef, private location: Location) {
+  constructor(private productoService: ProductoServiceService, private fb: FormBuilder, private cdRef: ChangeDetectorRef, private location: Location) {
     // Inicializa el formulario aquí
     this.productoForm = this.fb.group({
       id: [this.productoSeleccionado ? this.productoSeleccionado.id : null],
@@ -69,7 +66,6 @@ export class AdminProductosComponent implements OnInit {
       talla: ['', Validators.required],
       color: ['', Validators.required]
     });
-
   }
 
   ngOnInit() {
@@ -87,7 +83,6 @@ export class AdminProductosComponent implements OnInit {
       tipos: this.productoService.getTipos(),
       productos: this.productoService.getProductos()
     }).subscribe(({ tallas, colores, sexos, tipos, productos }) => {
-
       this.talla = tallas;
       this.color = colores;
       this.sexos = sexos;
@@ -110,10 +105,6 @@ export class AdminProductosComponent implements OnInit {
     });
   }
 
-
-
-
-
   agregarProducto() {
     console.log("Datos enviados:", this.nuevoProducto);  // Verificar los datos antes de enviarlos
 
@@ -132,15 +123,12 @@ export class AdminProductosComponent implements OnInit {
     // Enviar los datos convertidos al backend
     this.productoService.crearProducto(producto).subscribe(response => {
       console.log('Producto creado exitosamente:', response);
-
       this.cargarProductos();  // Recargar la lista de productos
-
       this.cancelarFormulario();  // Limpiar el formulario
     }, error => {
       console.error('Error al crear producto:', error);
     });
   }
-
 
   cancelarFormulario() {
     this.mostrarFormulario = false;
@@ -172,7 +160,6 @@ export class AdminProductosComponent implements OnInit {
     }
   }
 
-
   editarProducto(producto: Producto) {
     this.productoSeleccionado = { ...producto }; // Clone the selected product
     this.mostrarFormulario = true;
@@ -200,10 +187,6 @@ export class AdminProductosComponent implements OnInit {
     console.log('Imágenes del producto:', this.productoSeleccionado.imagenes);
   }
 
-
-
-
-
   guardarCambios() {
     if (this.productoSeleccionado) {
       const productoEditado = {
@@ -224,7 +207,6 @@ export class AdminProductosComponent implements OnInit {
       });
     }
   }
-
 
   // Método para aplicar los filtros
   aplicarFiltros() {
@@ -259,6 +241,9 @@ export class AdminProductosComponent implements OnInit {
         });
 
         console.log('Productos filtrados:', this.productosFiltrados);
+        this.cdRef.detectChanges(); // Forzar la detección de cambios
+      }, error => {
+        console.error('Error al aplicar filtros:', error);
       });
   }
 
@@ -289,6 +274,7 @@ export class AdminProductosComponent implements OnInit {
           };
         });
         console.log('Productos con imágenes:', this.productosFiltrados);
+        this.cdRef.detectChanges(); // Forzar la detección de cambios
       },
       (error) => console.error('Error al buscar productos:', error)
     );
@@ -302,7 +288,6 @@ export class AdminProductosComponent implements OnInit {
     // Recargar la lista de productos
     this.cargarProductos();
   }
-
 
   agregarColor() {
     if (this.nuevoColor.trim() !== '') {
@@ -320,10 +305,8 @@ export class AdminProductosComponent implements OnInit {
         this.nuevaTalla = ''; // Limpiar el campo después de agregarlo
       });
     }
-
-
-
   }
+
   prevSlide(carouselId: number) {
     const carousel = document.getElementById(`carouselAdmin${carouselId}`);
     if (carousel) {
@@ -350,21 +333,22 @@ export class AdminProductosComponent implements OnInit {
     }
   }
 
-
-
   setActiveSlide(items: HTMLCollectionOf<Element>, newIndex: number) {
     Array.from(items).forEach((item, index) => {
       item.classList.toggle('active', index === newIndex);
     });
   }
+
   cancelarFormularioTalla() {
     this.mostrarFormularioTalla = false;
     this.nuevaTalla = '';
   }
+
   cancelarFormularioColor() {
     this.mostrarFormularioColor = false;
     this.nuevoColor = '';
   }
+
   guardarTalla() {
     if (this.nuevaTalla.trim() !== '') {
       this.productoService.crearTalla({descripcion: this.nuevaTalla}).subscribe(() => {
@@ -374,6 +358,7 @@ export class AdminProductosComponent implements OnInit {
       });
     }
   }
+
   guardarColor() {
     if (this.nuevoColor.trim() !== '') {
       this.productoService.crearColor({descripcion: this.nuevoColor}).subscribe(() => {
@@ -383,8 +368,8 @@ export class AdminProductosComponent implements OnInit {
       });
     }
   }
+
   volverAtras() {
     this.location.back();
   }
-
 }

@@ -159,7 +159,7 @@ export class NavbarComponent implements OnInit {
 
 
   navigateToProfile() {
-    this.router.navigate(['/perfil']); // Redirige a la página de perfil
+    this.router.navigate(['/editar-cliente']); // Redirige a la página de perfil
   }
 
   navigateToHome() {
