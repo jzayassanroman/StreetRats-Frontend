@@ -13,10 +13,6 @@ import {EditarClienteComponent} from './features/editar-cliente/editar-cliente.c
 import {roleGuardGuard} from './services/role-guard';
 import {Rol} from './entity/Rol';
 
-
-
-
-import { TiendasComponent } from './features/tiendas/tiendas.component';
 import { AdminDashboardComponent } from './features/admin-dashboard/admin-dashboard.component';
 import {HistorialPedidosComponent} from './features/historial-pedidos/historial-pedidos.component';
 import {GestionPedidosComponent} from './features/gestion-pedidos/gestion-pedidos.component';
@@ -24,7 +20,6 @@ import {ProductosFiltradosComponent} from './features/productos-filtrados/produc
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'tiendas', component: TiendasComponent },
   { path: 'about-us', component: AboutUsComponent },
   { path: 'crear-cuenta', component: CrearCuentaComponent },
   { path: 'login', component: LoginComponent },
