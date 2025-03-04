@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {environment} from '../../enviroments/enviroments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ValoracionesService {
+  private baseUrl = environment.baseURL;
+
   private apiUrl = '/api/valoraciones';
 
   constructor(private http: HttpClient) {}

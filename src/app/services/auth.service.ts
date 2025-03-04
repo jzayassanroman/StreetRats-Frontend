@@ -4,6 +4,7 @@ import {BehaviorSubject, Observable, tap} from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
+import {environment} from '../../enviroments/enviroments';
 
 enum Rol {
   ADMIN = 'admin',
@@ -14,6 +15,8 @@ enum Rol {
   providedIn: 'root'
 })
 export class AuthService {
+
+  private baseUrl = environment.baseURL;
   private jwtHelper = new JwtHelperService();
   private apiUrl = '/api/api/login_check';
   private isLoggedInSubject = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));

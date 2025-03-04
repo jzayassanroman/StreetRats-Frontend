@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
 import {CrearProducto, Producto} from '../Modelos/producto';
+import {environment} from '../../enviroments/enviroments';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductoServiceService {
+  private baseUrl = environment.baseURL;
+
 
   private apiUrl = '/api/productos/all';
 

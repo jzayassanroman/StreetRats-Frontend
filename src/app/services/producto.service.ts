@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {catchError, map, Observable, of, tap} from 'rxjs';
+import {environment} from '../../enviroments/enviroments';
 
 export interface Producto {
   id: number;
@@ -27,6 +28,8 @@ export enum TipoProducto {
   providedIn: 'root'
 })
 export class ProductService {
+  private baseUrl = environment.baseURL;
+
   private apiUrl = '/api/productos';
   productos: Producto[] = [];
 

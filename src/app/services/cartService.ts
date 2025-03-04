@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import Swal from 'sweetalert2';
+import {environment} from '../../enviroments/enviroments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
+  private baseUrl = environment.baseURL;
+
   private cart = new BehaviorSubject<any[]>(this.loadCart());
   cart$ = this.cart.asObservable();
 

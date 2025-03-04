@@ -3,11 +3,14 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {AuthService} from './auth.service';
+import {environment} from '../../enviroments/enviroments';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClienteService {
+  private baseUrl = environment.baseURL;
+
   private apiUrl = '/api/clientes';
 
   constructor(private http: HttpClient, private authService:AuthService) {}
