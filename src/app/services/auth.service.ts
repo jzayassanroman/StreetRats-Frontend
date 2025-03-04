@@ -26,7 +26,7 @@ export class AuthService {
   http = inject(HttpClient);
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, { username, password }).pipe(
+    return this.http.post<any>(this.baseUrl , { username, password }).pipe(
       tap(response => {
         console.log('Response:', response);
 
@@ -105,9 +105,7 @@ export class AuthService {
     this.isLoggedInSubject.next(false);
   }
 
-  getUser() {
-    return this.http.get<{ id: number }>('http://localhost:8000/usuarios/api/user');
-  }
+
   getClienteId(): number | null {
     const decodedToken = this.decodeToken();
     return decodedToken ? decodedToken.id_cliente : null; // Asegúrate de usar "id_cliente"

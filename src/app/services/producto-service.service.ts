@@ -12,37 +12,37 @@ export class ProductoServiceService {
   private baseUrl = environment.baseURL;
 
 
-  private apiUrl = '/api/productos/all';
+  private apiUrl = '/api/productos';
 
   constructor(private http: HttpClient) {}
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiUrl+"?XDEBUG_SESSION_START=15597");
+    return this.http.get<Producto[]>(this.baseUrl+'/all');
   }
 
   crearProducto(producto: CrearProducto): Observable<any> {
-    return this.http.post<any>('/api/productos/crear', producto);
+    return this.http.post<any>(this.baseUrl+'crear', producto);
   }
 
   // 🔹 Agregar estos métodos si no están en tu servicio
   getTallas(): Observable<any[]> {
-    return this.http.get<any[]>('/api/tallas/all');
+    return this.http.get<any[]>(this.baseUrl+'/tallas/all');
   }
 
 
   getColores(): Observable<any[]> {
-    return this.http.get<any[]>(`/api/color/all`);
+    return this.http.get<any[]>(this.baseUrl+`/color/all`);
   }
 
   getSexos(): Observable<any[]> {
-    return this.http.get<any[]>(`/api/productos/sexos`);
+    return this.http.get<any[]>(this.baseUrl+`/productos/sexos`);
   }
   getTipos(): Observable<string[]> {
-    return this.http.get<string[]>('/api/productos/tipos');
+    return this.http.get<string[]>(this.baseUrl+'/productos/tipos');
   }
   // Método para eliminar un producto
   eliminarProducto(id: number): Observable<void> {
-    const url = `/api/productos/eliminar/${id}`;
+    const url = this.baseUrl+`/eliminar/${id}`;
     return this.http.delete<void>(url).pipe(
       catchError((error: HttpErrorResponse) => {
         console.error('Error al eliminar el producto:', error);
@@ -63,7 +63,7 @@ export class ProductoServiceService {
     talla: number
   }) {
     console.log('ID del producto a editar:', producto.id);
-    return this.http.put(`/api/productos/editar/${producto.id}`+"?XDEBUG_SESSION_START=11833", producto);
+    return this.http.put(this.baseUrl+`/productos/editar/${producto.id}`+"?XDEBUG_SESSION_START=11833", producto);
   }
   // Método para realizar búsqueda con filtros
   buscarProductos(busqueda: string, filtroTipo: string, filtroSexo: string): Observable<Producto[]> {
@@ -77,7 +77,7 @@ export class ProductoServiceService {
 
     console.log('Parámetros enviados a la API:', params);
 
-    return this.http.get<Producto[]>('/api/productos/buscar', { params }).pipe(
+    return this.http.get<Producto[]>(this.baseUrl+'/productos/buscar', { params }).pipe(
       catchError((error: HttpErrorResponse) => {
         console.error('Error al buscar productos:', error);
         return throwError(error);
@@ -86,11 +86,11 @@ export class ProductoServiceService {
   }
   // Método para crear una nueva talla
   crearColor(color: { descripcion: string }): Observable<any> {
-    return this.http.post('/api/color/crear', color);
+    return this.http.post(this.baseUrl+'/color/crear', color);
   }
 
   crearTalla(talla: { descripcion: string }): Observable<any> {
-    return this.http.post('/api/tallas/crear', talla);
+    return this.http.post(this.baseUrl+'/tallas/crear', talla);
   }
 
 

@@ -14,20 +14,20 @@ export class PedidoService {
   constructor(private http: HttpClient) {}
 
   guardarPedido(pedido: any): Observable<any> {
-    return this.http.post(this.apiUrl+'/crear', pedido);
+    return this.http.post(this.baseUrl+'/crear', pedido);
   }
   getPedidos(clienteId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/cliente/${clienteId}`);
+    return this.http.get(`${this.baseUrl}/cliente/${clienteId}`);
   }
 
   findall():Observable<any> {
-    return this.http.get(this.apiUrl+'/all');
+    return this.http.get(this.baseUrl+'/all');
   }
   deletePedido(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/eliminar/${id}`);
+    return this.http.delete(`${this.baseUrl}/eliminar/${id}`);
   }
   actualizarEstado(id: number, estado: string): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}/estado`, { estado });
+    return this.http.put<any>(`${this.baseUrl}/${id}/estado`, { estado });
   }
 
 }

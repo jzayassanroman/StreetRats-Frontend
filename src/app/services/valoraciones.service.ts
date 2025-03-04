@@ -14,11 +14,11 @@ export class ValoracionesService {
   constructor(private http: HttpClient) {}
 
   obtenerValoraciones(idProducto: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${idProducto}`);
+    return this.http.get<any[]>(`${this.baseUrl}/${idProducto}`);
   }
 
   enviarValoracion(valoracionData: any, token: string | null) {
-    return this.http.post(`${this.apiUrl}/nueva`, valoracionData, {
+    return this.http.post(`${this.baseUrl}/nueva`, valoracionData, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`
       })

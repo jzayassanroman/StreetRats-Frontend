@@ -14,6 +14,6 @@ export class VerificacionService {
   constructor(private http: HttpClient) {}
 
   verificarCodigo(email: string, codigo: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, { email, codigo });
+    return this.http.post<any>(this.baseUrl+'/clientes/clientes/verificar-codigo', { email, codigo });
   }
 }

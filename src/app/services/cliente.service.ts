@@ -11,19 +11,19 @@ import {environment} from '../../enviroments/enviroments';
 export class ClienteService {
   private baseUrl = environment.baseURL;
 
-  private apiUrl = '/api/clientes';
+  private apiUrl = '/clientes';
 
   constructor(private http: HttpClient, private authService:AuthService) {}
 
   crearCliente(data: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl+'/crear', data);
+    return this.http.post<any>(this.baseUrl+'/crear', data);
   }
 
   obtenerClientePorUsuario(): Observable<any> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<any>(`${this.apiUrl}/usuario`, { headers });
+    return this.http.get<any>(`${this.baseUrl}/usuario`, { headers });
   }
 
 
@@ -46,7 +46,7 @@ export class ClienteService {
     const token = this.authService.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.put(`${this.apiUrl}/editar`, body, { headers });
+    return this.http.put(`${this.baseUrl}/editar`, body, { headers });
   }
 
 
