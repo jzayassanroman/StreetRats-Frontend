@@ -132,6 +132,8 @@ export class AdminProductosComponent implements OnInit {
 
   cancelarFormulario() {
     this.mostrarFormulario = false;
+    this.productoSeleccionado = null; // Limpiar el producto seleccionado
+    this.productoForm.reset(); // Restablecer el formulario
     this.nuevoProducto = {
       nombre: '',
       descripcion: '',
