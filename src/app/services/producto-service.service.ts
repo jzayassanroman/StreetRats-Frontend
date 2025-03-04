@@ -17,11 +17,11 @@ export class ProductoServiceService {
   constructor(private http: HttpClient) {}
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.baseUrl+'/all');
+    return this.http.get<Producto[]>(this.baseUrl+'/productos/all');
   }
 
   crearProducto(producto: CrearProducto): Observable<any> {
-    return this.http.post<any>(this.baseUrl+'crear', producto);
+    return this.http.post<any>(this.baseUrl+'/productos/crear', producto);
   }
 
   // 🔹 Agregar estos métodos si no están en tu servicio
@@ -42,7 +42,7 @@ export class ProductoServiceService {
   }
   // Método para eliminar un producto
   eliminarProducto(id: number): Observable<void> {
-    const url = this.baseUrl+`/eliminar/${id}`;
+    const url = this.baseUrl+`/productos/eliminar/${id}`;
     return this.http.delete<void>(url).pipe(
       catchError((error: HttpErrorResponse) => {
         console.error('Error al eliminar el producto:', error);

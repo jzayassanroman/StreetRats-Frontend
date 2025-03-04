@@ -26,7 +26,7 @@ export class AuthService {
   http = inject(HttpClient);
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(this.baseUrl , { username, password }).pipe(
+    return this.http.post<any>(this.baseUrl+'/api/login_check' , { username, password }).pipe(
       tap(response => {
         console.log('Response:', response);
 

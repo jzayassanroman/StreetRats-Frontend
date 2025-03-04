@@ -36,7 +36,7 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(`${this.baseUrl}/all`);
+    return this.http.get<Producto[]>(`${this.baseUrl}/productos/all`);
   }
 
   getProductosData(): void {
@@ -47,7 +47,7 @@ export class ProductService {
   }
 
   getProductoById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/find/${id}`);
+    return this.http.get<any>(`${this.baseUrl}/productos/find/${id}`);
   }
   getProductosPorTipo(tipo: TipoProducto): Observable<Producto[]> {
     if (!tipo) {
@@ -55,7 +55,7 @@ export class ProductService {
       return of([]);
     }
 
-    return this.http.get<Producto[]>(`${this.baseUrl}/tipos1?tipo=${tipo.toLowerCase()}`)
+    return this.http.get<Producto[]>(`${this.baseUrl}/productos/tipos1?tipo=${tipo.toLowerCase()}`)
       .pipe(
         catchError(error => {
           console.error('Error al obtener productos por tipo:', error);
@@ -65,7 +65,7 @@ export class ProductService {
   }
 
   buscarProductos(nombre: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/buscador?nombre=${nombre}`).pipe(
+    return this.http.get<any[]>(`${this.baseUrl}/productos/buscador?nombre=${nombre}`).pipe(
       map((productos) => {
         return productos.map((producto) => ({
           ...producto,
@@ -88,7 +88,7 @@ export class ProductService {
     if (precioMin) params = params.set('precioMin', precioMin.toString());
     if (precioMax) params = params.set('precioMax', precioMax.toString());
 
-    return this.http.get<Producto[]>(`${this.baseUrl}/filtros`, { params });
+    return this.http.get<Producto[]>(`${this.baseUrl}/productos/filtros`, { params });
   }
   filtros(sexo?: string, talla?: string, precioMin?: number, precioMax?: number): Observable<Producto[]> {
     let params = new HttpParams();
@@ -97,7 +97,7 @@ export class ProductService {
     if (precioMin !== undefined) params = params.set('precioMin', precioMin.toString());
     if (precioMax !== undefined) params = params.set('precioMax', precioMax.toString());
 
-    return this.http.get<Producto[]>(`${this.baseUrl}/filtrosshop`, { params });
+    return this.http.get<Producto[]>(`${this.baseUrl}/productos/filtrosshop`, { params });
   }
 
 
@@ -107,21 +107,21 @@ export class ProductService {
 
   // Método para obtener productos desde la API
   obtenerProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>('/api/productos');
+    return this.http.get<Producto[]>(this.baseUrl+'/productos');
   }
 
   // 🔹 Agregar estos métodos si no están en tu servicio
   getTallas(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8001/tallas/all');
+    return this.http.get<any[]>(this.baseUrl+'/tallas/all');
   }
 
   getSexos(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/sexos`);
+    return this.http.get<any[]>(`${this.baseUrl}/productos/sexos`);
   }
   //
   // }
   getPrecios(): Observable<{ precioMin: number; precioMax: number }> {
-    return this.http.get<{ precioMin: number; precioMax: number }>(`${this.apiUrl}/precios-min-max`);
+    return this.http.get<{ precioMin: number; precioMax: number }>(`${this.baseUrl}/productos/precios-min-max`);
   }
 
 
